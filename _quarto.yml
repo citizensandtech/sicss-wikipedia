@@ -1,0 +1,37 @@
+project:
+  type: website
+
+website:
+  site-url: https://citizensandtech.github.io/sicss-wikipedia
+  title: "SICSS: Using Wikipedia"
+  description: "Teaching materials Wikipedia for CSS"
+  navbar:
+    left:
+      #- href: index.qmd
+      #  text: Home
+      - 02-pywikibot.ipynb
+      - 03-wikidata.ipynb
+      - about.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true
+
+babelquarto:
+  languagelinks: navbar
+  languagecodes:
+  - name: fr
+    text: "Français"
+  - name: en
+    text: "English"
+  mainlanguage: 'en'
+  languages: ['fr']
+title-fr: "SICSS : Utilisation de Wikipédia"
+description-fr: description in fr
+author-fr: author in fr
+lang: en
+

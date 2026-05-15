@@ -1,0 +1,5 @@
+---
+title: "À propos"
+---
+
+Ces ressources ont été élaborées dans le cadre du projet de recherche Wikimedia [*Wikimedia aux Summer Institutes in Computational Social Science*](https://meta.wikimedia.org/wiki/Research:Wikimedia_at_Summer_Institutes_in_Computational_Social_Science)

@@ -1,0 +1,5 @@
+---
+title: "About"
+---
+
+These materials are developed as part of the Wikimedia Research project [*Wikimedia at Summer Institutes in Computational Social Science*](https://meta.wikimedia.org/wiki/Research:Wikimedia_at_Summer_Institutes_in_Computational_Social_Science)

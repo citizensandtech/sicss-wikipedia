@@ -1,0 +1,5 @@
+---
+title: "SICSS : Utilisation de Wikipédia"
+---
+
+Il s'agit d'une version provisoire de supports pédagogiques expliquant comment Wikipédia (et les projets frères de Wikimedia), ainsi que leurs API, peuvent être utilisés pour obtenir des données intéressantes destinées à la recherche en sciences sociales computationnelles.

@@ -1,0 +1,5 @@
+---
+title: "SICSS: Using Wikipedia"
+---
+
+This is a work-in-progress version of teaching materials which explain how Wikipedia (and the sister Wikimedia-projects) along with their APIs can be used to get interesting data for use in Computational Social Sciences research.
