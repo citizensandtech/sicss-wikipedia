@@ -9,6 +9,7 @@ website:
     left:
       #- href: index.qmd
       #  text: Home
+      - 01-intro-wikipedia-data.ipynb
       - 02-pywikibot.ipynb
       - 03-wikidata.ipynb
       - about.qmd

@@ -111,6 +111,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <button class="btn btn-primary dropdown-toggle babelquarto-languages-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="languages-button"><i class="bi bi-globe2"></i> English</button><ul class="dropdown-menu" id="languages-links"><li><a class="dropdown-item" href="https://citizensandtech.github.io/sicss-wikipedia/fr/02-pywikibot.html" id="language-link-fr">Français</a></li></ul>
 </div></li>
 <li class="nav-item">
+    <a class="nav-link" href="./01-intro-wikipedia-data.html"> 
+<span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link active" href="./02-pywikibot.html" aria-current="page"> 
 <span class="menu-text">Accessing data from Wiki projects</span></a>
   </li>  
@@ -217,7 +221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>It creates a small <code>user-config.py</code> file in which we add the configuration details. This file should be <strong>located in the same folder from which you will run your Python scripts</strong>.</p>
 <p>You can now start a Jupyter notebook and start interacting with the API.</p>
 <p>First, to confirm that the config is found in the notebook, we run the following.</p>
-<div id="8a6498ae-e76b-4e6c-bb53-119a6d587ba0" class="cell" data-execution_count="84">
+<div id="8a6498ae-e76b-4e6c-bb53-119a6d587ba0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat user<span class="op">-</span>config.py</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
@@ -226,6 +230,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>family = 'wikipedia'
 mylang = 'en'
 usernames['wikipedia']['en'] = 'Gedankenstuecke'
+usernames['wikipedia']['de'] = 'Gedankenstuecke'
+usernames['wikipedia']['es'] = 'Gedankenstuecke'
+usernames['wikipedia']['fr'] = 'Gedankenstuecke'
+usernames['wikipedia']['it'] = 'Gedankenstuecke'
+usernames['wikidata']['wikidata'] = 'Gedankenstuecke'
 password_file = None</code></pre>
 </div>
 </div>
@@ -233,7 +242,7 @@ password_file = None</code></pre>
 <p>Now we can actually go ahead with loading the libary, confirming once more that the username was correctly set, and do our first query of Wikipedia through the library.</p>
 <p>For that, we create a <code>site</code> object, that tells <code>pywikibot</code> which Wikimedia project we want to interact with, by giving the same 2-letter acronym of the language, and the project itself.</p>
 <p>We can then use the site object to query through the <em>pywikibot</em>, for example for the page on computational social sciences:</p>
-<div id="c2181fb0-2726-4a24-9ddd-2257a6e6824b" class="cell" data-execution_count="110">
+<div id="c2181fb0-2726-4a24-9ddd-2257a6e6824b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -253,7 +262,7 @@ password_file = None</code></pre>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Config: defaultdict(&lt;class 'dict'&gt;, {'wikipedia': {'en': 'Gedankenstuecke'}, 'commons': {}})
+<pre><code>Config: defaultdict(&lt;class 'dict'&gt;, {'wikipedia': {'en': 'Gedankenstuecke', 'de': 'Gedankenstuecke', 'es': 'Gedankenstuecke', 'fr': 'Gedankenstuecke', 'it': 'Gedankenstuecke'}, 'wikidata': {'wikidata': 'Gedankenstuecke'}})
 
 Title: Computational social science
 
