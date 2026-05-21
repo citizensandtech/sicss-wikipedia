@@ -12,6 +12,7 @@ website:
       - 01-intro-wikipedia-data.ipynb
       - 02-pywikibot.ipynb
       - 03-wikidata.ipynb
+      - 04-full-example.ipynb
       - about.qmd
 
 format:
