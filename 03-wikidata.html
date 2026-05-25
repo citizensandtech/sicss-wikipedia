@@ -1,0 +1,3045 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Using Wikidata – SICSS: Using Wikipedia</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-73c880a72bf6022e65cfd02f19d274f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">SICSS: Using Wikipedia</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./01-intro-wikipedia-data.html"> 
+<span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./02-pywikibot.html"> 
+<span class="menu-text">Accessing data from Wiki projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./03-wikidata.html" aria-current="page"> 
+<span class="menu-text">Using Wikidata</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./04-full-example.html"> 
+<span class="menu-text">Full example</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#main-concepts" id="toc-main-concepts" class="nav-link active" data-scroll-target="#main-concepts">Main concepts</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
+  <li><a href="#wikidata-queries-to-find-all-pages-of-a-type" id="toc-wikidata-queries-to-find-all-pages-of-a-type" class="nav-link" data-scroll-target="#wikidata-queries-to-find-all-pages-of-a-type">Wikidata queries to find all pages of a type</a></li>
+  <li><a href="#writing-a-query" id="toc-writing-a-query" class="nav-link" data-scroll-target="#writing-a-query">Writing a query</a></li>
+  <li><a href="#querying-using-pywikibot" id="toc-querying-using-pywikibot" class="nav-link" data-scroll-target="#querying-using-pywikibot">Querying using <code>pywikibot</code></a></li>
+  <li><a href="#exploring-what-the-most-common-language-editions-are" id="toc-exploring-what-the-most-common-language-editions-are" class="nav-link" data-scroll-target="#exploring-what-the-most-common-language-editions-are">Exploring what the most common language editions are</a></li>
+  <li><a href="#working-with-claims" id="toc-working-with-claims" class="nav-link" data-scroll-target="#working-with-claims">Working with claims</a></li>
+  <li><a href="#bringing-it-together" id="toc-bringing-it-together" class="nav-link" data-scroll-target="#bringing-it-together">Bringing it together</a></li>
+  <li><a href="#exploring-the-difference-in-number-of-pages-by-gender" id="toc-exploring-the-difference-in-number-of-pages-by-gender" class="nav-link" data-scroll-target="#exploring-the-difference-in-number-of-pages-by-gender">Exploring the difference in number of pages by gender</a></li>
+  <li><a href="#using-some-very-basic-nlp-to-identify-a-gender-from-a-wikipedia-page" id="toc-using-some-very-basic-nlp-to-identify-a-gender-from-a-wikipedia-page" class="nav-link" data-scroll-target="#using-some-very-basic-nlp-to-identify-a-gender-from-a-wikipedia-page">Using some very basic NLP to identify a gender from a Wikipedia page</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Using Wikidata</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Wikidata is a collaboratively maintained knowledge-base that is part of the larger Wikimedia universe and that includes more than 120,000,000 data entities. This data is also used to cross-link pages about the same subject across Wiki projects (like different language versions).</p>
+<section id="main-concepts" class="level2">
+<h2 class="anchored" data-anchor-id="main-concepts">Main concepts</h2>
+<p>The knowledge-base of Wikidata consists of <strong>items</strong> that are further described by having <strong>properties</strong> which can have different <strong>values</strong> (these <strong>values</strong> in turn can be <strong>items</strong> too). Together <strong>properties</strong> and <strong>values</strong> make up statements about a given <strong>item</strong></p>
+<p>The <a href="https://www.wikidata.org/wiki/Wikidata:Introduction"><em>Introduction to Wikidata</em></a> uses this example to make it less abstract, using the British Science Fiction writer Douglas Adams as an example:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-wikidata_files/figure-html/91010b60-de7d-45f3-8807-1bf0e896a451-4-c89a05a0-17c3-4dda-8a2c-f9fde1715e7f.png" class="img-fluid figure-img"></p>
+<figcaption>image.png</figcaption>
+</figure>
+</div>
+<p>The highlighted statement (green) is about Adams’ education, shown as the <code>educated_at</code> property (violet) and gives two values for this, <code>St John's College</code> (demonstrated in orange) and <code>Brentwood School</code>. In this case, both of these values are Wikidata items themselves. But in other cases, this could also just be a simple value, e.g.&nbsp;a date for the birth date.</p>
+<p>Each of those statements can also be further qualified and supported by references, depending on the property in question. Qualifications, like seen here, could be start/end dates, degrees, titles and more.</p>
+<p>Wikidata can be queried using the <a href="https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/Wikidata_Query_Help">SPARQL query language</a>, which allows joining together required values for different properties to search for items.</p>
+</section>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>When we tried to find all Kenyan politicians, we used the <code>Category:Kenyan politicians</code> category of the English language Wikipedia as our starting point. But, this is not ideal as it will include false-positives, in the form of pages that are not actually articles that describe politicians, and false-negatives - that is actual pages from Kenyan politicians might be missing because they aren’t listed.</p>
+<p>As an example for a false-positive when using the Category namespace: As there are many sub-categories for our category, we used <code>recursion=True</code> on the <code>Category:Kenyan politicians</code>, to make sure we get all the pages of politicians. But, our resulting list of pages surprisingly <strong>also includes the page about the <a href="https://en.wikipedia.org/wiki/Jomo_Kenyatta_International_Airport">Jomo Kenyatta International Airport</a></strong>!</p>
+<p>Why? It’s because the page of the airport is part of the <code>Category:Jomo Kenyatta</code>, which in turn is part of <code>Category:Presidents of Kenya</code>, which in turn is part of <code>Category:Political office-holders in Kenya</code>, which - finally - is part of <code>Category:Kenyan politicians</code>.</p>
+</section>
+<section id="wikidata-queries-to-find-all-pages-of-a-type" class="level2">
+<h2 class="anchored" data-anchor-id="wikidata-queries-to-find-all-pages-of-a-type">Wikidata queries to find all pages of a type</h2>
+<p>By writing a more narrow query for Wikidata, we can avoid such false-positives – and also get a whole range of cross-links between the different Wiki projects, e.g.&nbsp;to find the English, and Swahili editions of the same article.</p>
+</section>
+<section id="writing-a-query" class="level2">
+<h2 class="anchored" data-anchor-id="writing-a-query">Writing a query</h2>
+<p>what properties and values could we use to find only Kenyan politicians?</p>
+<ol type="1">
+<li>The articles should be about <em>people</em>, not <em>airports</em>. So we can filter to find items that describe humans only. If we search for this in Wikidata, we find that the corresponding property/value translates to <code>P31</code> (<em>instance of</em>) and that <em>humans</em> are described by item <code>Q5</code>.</li>
+<li>Now, to find politicians, we can filter by finding items that additionally give the <em>occupation</em> <code>P106</code> as <em>politician</em> (<code>Q82955</code>).</li>
+<li>Lastly, we are looking for politicians that are from Kenya. One potential way to narrow it down to this could be filtering for the <em>country of citizenship</em> (<code>P27</code>) to be <em>Kenya</em> (<code>Q114</code>).</li>
+</ol>
+<p>If we look at the <a href="https://www.wikidata.org/wiki/Q173563">Wikidata item for Jomo Kenyatta</a>, we find those properties showing up like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-wikidata_files/figure-html/91010b60-de7d-45f3-8807-1bf0e896a451-2-3edd5ba7-37e9-4c0e-ba1e-e9244a7265bc.png" class="img-fluid figure-img"></p>
+<figcaption>image.png</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-wikidata_files/figure-html/91010b60-de7d-45f3-8807-1bf0e896a451-1-0a21c77b-e97e-411f-839f-8612d1a52618.png" class="img-fluid figure-img"></p>
+<figcaption>image.png</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="03-wikidata_files/figure-html/91010b60-de7d-45f3-8807-1bf0e896a451-3-72b2cd9b-96b0-49d4-8b66-17066120c8c6.png" class="img-fluid figure-img"></p>
+<figcaption>image.png</figcaption>
+</figure>
+</div>
+</section>
+<section id="querying-using-pywikibot" class="level2">
+<h2 class="anchored" data-anchor-id="querying-using-pywikibot">Querying using <code>pywikibot</code></h2>
+<p>Let’s now translate this into creating a SPARQL query that the <code>pywikibot</code> can run for us.</p>
+<p>First, we load the necessary library again, and then we write out the query using the SPARQL syntax:</p>
+<p>We use <code>SELECT DISTINCT</code> to avoid returning duplicate items, and use <code>?item</code> to get the whole Wikidata item returned for further processing.</p>
+<p>In the <code>WHERE</code> clause, we add our three distinct property/value pairs that we all want to be present, and ultimately give a <code>LIMIT</code> of how many Wikidata items we’d like to get returned.</p>
+<div id="4565514e-dcc0-47a6-926b-45493f758c4e" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot <span class="co"># load the whole library</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># then we specifically import the page generator so we can iterate over all returned items</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pywikibot <span class="im">import</span> pagegenerators <span class="im">as</span> pg </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># we query Wikidata directly, not the english language Wikipedia</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>wikidata_site <span class="op">=</span> pywikibot.Site(<span class="st">"wikidata"</span>, <span class="st">"wikidata"</span>) </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># let's translate our query into SPARQL</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>QUERY <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT DISTINCT ?item</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE {</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">    ?item wdt:P31 wd:Q5;  # Any instance of a human;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P106 wd:Q82955; # occupation politician;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P27 wd:Q114; # citizen of kenya;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="st">LIMIT 5</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Once we got this query written, we can now turn this into a generator, that will allow us to make a loop over all returned elements.</p>
+<p>We will alrady look at some of the data we get back:</p>
+<div id="3942819d-9ee6-4021-8e7b-f48efa183892" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>generator <span class="op">=</span> pg.WikidataSPARQLPageGenerator(QUERY, site<span class="op">=</span>wikidata_site)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> generator:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"item label (en): </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        item.labels[<span class="st">'en'</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"item description (en): </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        item.descriptions[<span class="st">'en'</span>]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"sitelinks: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="bu">list</span>(</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        item.sitelinks</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    )))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"sitelink to enwiki: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        item.sitelinks[<span class="st">"enwiki"</span>]))</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"----------"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>item label (en): Robert Ouko
+item description (en): politician (1931-1990)
+sitelinks: ['arwiki', 'arzwiki', 'cawiki', 'commonswiki', 'dewiki', 'enwiki', 'eswiki', 'fiwiki', 'frwiki', 'glwiki', 'swwiki']
+sitelink to enwiki: [[Robert Ouko (politician)]]
+----------
+item label (en): Mohamed Yusuf Haji
+item description (en): Kenyan politician (1940–2021)
+sitelinks: ['arwiki', 'dewiki', 'enwiki', 'swwiki', 'urwiki']
+sitelink to enwiki: [[Mohamed Yusuf Haji]]
+----------
+item label (en): David Musila
+item description (en): Kenyan politician
+sitelinks: ['dewiki', 'enwiki']
+sitelink to enwiki: [[David Musila]]
+----------
+item label (en): Elijah Masinde
+item description (en): Kenyan footballer
+sitelinks: ['dewiki', 'enwiki', 'swwiki']
+sitelink to enwiki: [[Elijah Masinde]]
+----------
+item label (en): Bildad Kaggia
+item description (en): Kenyan politician (1921-2005)
+sitelinks: ['arzwiki', 'commonswiki', 'dewiki', 'enwiki', 'hawiki', 'idwiki', 'itwikiquote', 'sowiki', 'swwiki']
+sitelink to enwiki: [[Bildad Kaggia]]
+----------</code></pre>
+</div>
+</div>
+<p>For many items, the labels and descriptions will be available in multiple languages. Here, we printed only the English one.</p>
+<p>And as you see in the <code>sitelinks</code>, Wikidata also returns the cross-links to other Wiki projects, like the English (<code>enwiki</code>) and Swahili (<code>swwiki</code>) language editions of Wikipedia. This allows us now to switch to Wikipedia and read the articles as before:</p>
+</section>
+<section id="exploring-what-the-most-common-language-editions-are" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-what-the-most-common-language-editions-are">Exploring what the most common language editions are</h2>
+<p>Let’s say we’re interested to explore how different politicians are represented (or not) across language editions. While there’s a large number of languages, let’s pick a small subset of languages to work with for this example. If you have languages you’re interest in, you can add them in the same format to the list, using the corresponding <a href="https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes">2-letter ISO 639 language code</a>.</p>
+<div id="10e48e81-50ca-4b90-9147-7677f402b160" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>languages <span class="op">=</span> [</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"enwiki"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"swwiki"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dewiki"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"frwiki"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eswiki"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s now expand our query a bit and get 10 entries for politicians instead of just 5, and then create a dataframe that contains the wiki-links for each of those combinations of politician &amp; language-edition if present:</p>
+<div id="f8d4630f-200f-4efd-b400-cace46dd1df6" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd <span class="co"># we'll need pandas to create the DF</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>QUERY <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT DISTINCT ?item</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE {</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">    ?item wdt:P31 wd:Q5;  # Any instance of a human;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P106 wd:Q82955; # occupation politician;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P27 wd:Q114; # citizen of kenya;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">LIMIT 20</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>generator <span class="op">=</span> pg.WikidataSPARQLPageGenerator(QUERY, site<span class="op">=</span>wikidata_site)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>politicians <span class="op">=</span> {} <span class="co"># create an empty dictionary that will hold the names as keys, and another dictionary with {'enwiki': '$pagename', …}</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> generator:</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    label <span class="op">=</span> item.labels[<span class="st">'en'</span>]</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    politicians[label] <span class="op">=</span> {}</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'get languages for </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(label))</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    sitelinks <span class="op">=</span> item.sitelinks</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> language <span class="kw">in</span> languages:</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> language <span class="kw">in</span> sitelinks.keys():</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>            politicians[label][language] <span class="op">=</span> sitelinks[language].canonical_title()</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>            politicians[label][language] <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>df_language_links <span class="op">=</span> pd.DataFrame(politicians).T <span class="co"># use .T to transpose, so that policians are rows and languages are columns</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>df_language_links</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>get languages for Robert Ouko
+get languages for McDonald Mariga
+get languages for Harry Thuku
+get languages for Richard Leakey
+get languages for Wangari Muta Maathai
+get languages for Bildad Kaggia
+get languages for William Ruto
+get languages for Uhuru Kenyatta
+get languages for Moses Mudavadi
+get languages for Mohamed Yusuf Haji
+get languages for Daniel arap Moi
+get languages for Elijah Lagat
+get languages for Elijah Masinde
+get languages for David Lelei
+get languages for Jomo Kenyatta
+get languages for Abdilatif Abdalla
+get languages for Wesley Korir
+get languages for David Musila
+get languages for Grace Emily Akinyi Ogot
+get languages for Newton Kulundu</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">enwiki</th>
+<th data-quarto-table-cell-role="th">swwiki</th>
+<th data-quarto-table-cell-role="th">dewiki</th>
+<th data-quarto-table-cell-role="th">frwiki</th>
+<th data-quarto-table-cell-role="th">eswiki</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Robert Ouko</th>
+<td>Robert Ouko (politician)</td>
+<td>Robert Ouko</td>
+<td>Robert Ouko (Politiker)</td>
+<td>Robert Ouko</td>
+<td>Robert Ouko (político)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">McDonald Mariga</th>
+<td>McDonald Mariga</td>
+<td>McDonald Mariga</td>
+<td>McDonald Mariga</td>
+<td>McDonald Mariga</td>
+<td>McDonald Mariga</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Harry Thuku</th>
+<td>Harry Thuku</td>
+<td></td>
+<td>Harry Thuku</td>
+<td>Harry Thuku</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Richard Leakey</th>
+<td>Richard Leakey</td>
+<td>Richard Leakey</td>
+<td>Richard Leakey</td>
+<td>Richard Leakey</td>
+<td>Richard Leakey</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Wangari Muta Maathai</th>
+<td>Wangarĩ Maathai</td>
+<td>Wangari Maathai</td>
+<td>Wangari Maathai</td>
+<td>Wangari Muta Maathai</td>
+<td>Wangari Maathai</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Bildad Kaggia</th>
+<td>Bildad Kaggia</td>
+<td>Bildad Kaggia</td>
+<td>Bildad Kaggia</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">William Ruto</th>
+<td>William Ruto</td>
+<td>William Ruto</td>
+<td>William Ruto</td>
+<td>William Ruto</td>
+<td>William Ruto</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Uhuru Kenyatta</th>
+<td>Uhuru Kenyatta</td>
+<td>Uhuru Kenyatta</td>
+<td>Uhuru Kenyatta</td>
+<td>Uhuru Kenyatta</td>
+<td>Uhuru Kenyatta</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Moses Mudavadi</th>
+<td>Moses Mudavadi</td>
+<td></td>
+<td>Moses Mudavadi</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Mohamed Yusuf Haji</th>
+<td>Mohamed Yusuf Haji</td>
+<td>Mohamed Yusuf Haji</td>
+<td>Yusuf Mohammed Haji</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Daniel arap Moi</th>
+<td>Daniel arap Moi</td>
+<td>Daniel Arap Moi</td>
+<td>Daniel arap Moi</td>
+<td>Daniel arap Moi</td>
+<td>Daniel arap Moi</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Elijah Lagat</th>
+<td>Elijah Lagat</td>
+<td>Elijah Lagat</td>
+<td>Elijah Lagat</td>
+<td></td>
+<td>Elijah Lagat</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Elijah Masinde</th>
+<td>Elijah Masinde</td>
+<td>Elijah Masinde</td>
+<td>Elijah Masinde</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">David Lelei</th>
+<td>David Lelei</td>
+<td></td>
+<td>David Lelei</td>
+<td>David Lelei</td>
+<td>David Lelei</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Jomo Kenyatta</th>
+<td>Jomo Kenyatta</td>
+<td>Jomo Kenyatta</td>
+<td>Jomo Kenyatta</td>
+<td>Jomo Kenyatta</td>
+<td>Jomo Kenyatta</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Abdilatif Abdalla</th>
+<td>Abdilatif Abdalla</td>
+<td>Abdilatif Abdalla</td>
+<td>Abdilatif Abdalla</td>
+<td>Abdilatif Abdalla</td>
+<td>Abdilatif Abdalla</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Wesley Korir</th>
+<td>Wesley Korir</td>
+<td></td>
+<td>Wesley Korir</td>
+<td>Wesley Korir</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">David Musila</th>
+<td>David Musila</td>
+<td></td>
+<td>David Musila</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Grace Emily Akinyi Ogot</th>
+<td>Grace Ogot</td>
+<td>Grace Ogot</td>
+<td>Grace Ogot</td>
+<td>Grace Ogot</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Newton Kulundu</th>
+<td>Newton Kulundu</td>
+<td></td>
+<td>Newton Kulundu</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>This gives us a nice data frame that includes all the links to the different pages acrosst the target languages. Why did we decide to keep the actual links as values instead of directly just making a binary “yes/no” evaluation?</p>
+<p>Because the actual names of the pages can differ between language editions, e.g.&nbsp;<em>Jaramogi Oginga Odinga</em> is the page name in the English Wikipedia, but in French &amp; Spanish it’s <em>Oginga Odinga</em>. Which means if we want to keep working with the actual pages, we should keep those names to be able to query them.</p>
+<p>But let’s now make a small presence/absence Matrix:</p>
+<div id="e6b11459-14a7-451d-b0a0-d77363de092f" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pam_df <span class="op">=</span> df_language_links.<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="bu">int</span>(<span class="bu">bool</span>(x))) <span class="co"># create presence/absence matrix</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>pam_df.style.background_gradient(cmap <span class="op">=</span><span class="st">'viridis'</span>,axis<span class="op">=</span><span class="va">None</span>) <span class="co"># use axis=None to display heatmap calculated across whole DF</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<style type="text/css">
+#T_29892_row0_col0, #T_29892_row0_col1, #T_29892_row0_col2, #T_29892_row0_col3, #T_29892_row0_col4, #T_29892_row1_col0, #T_29892_row1_col1, #T_29892_row1_col2, #T_29892_row1_col3, #T_29892_row1_col4, #T_29892_row2_col0, #T_29892_row2_col2, #T_29892_row2_col3, #T_29892_row3_col0, #T_29892_row3_col1, #T_29892_row3_col2, #T_29892_row3_col3, #T_29892_row3_col4, #T_29892_row4_col0, #T_29892_row4_col1, #T_29892_row4_col2, #T_29892_row4_col3, #T_29892_row4_col4, #T_29892_row5_col0, #T_29892_row5_col1, #T_29892_row5_col2, #T_29892_row6_col0, #T_29892_row6_col1, #T_29892_row6_col2, #T_29892_row6_col3, #T_29892_row6_col4, #T_29892_row7_col0, #T_29892_row7_col1, #T_29892_row7_col2, #T_29892_row7_col3, #T_29892_row7_col4, #T_29892_row8_col0, #T_29892_row8_col2, #T_29892_row9_col0, #T_29892_row9_col1, #T_29892_row9_col2, #T_29892_row10_col0, #T_29892_row10_col1, #T_29892_row10_col2, #T_29892_row10_col3, #T_29892_row10_col4, #T_29892_row11_col0, #T_29892_row11_col1, #T_29892_row11_col2, #T_29892_row11_col4, #T_29892_row12_col0, #T_29892_row12_col1, #T_29892_row12_col2, #T_29892_row13_col0, #T_29892_row13_col2, #T_29892_row13_col3, #T_29892_row13_col4, #T_29892_row14_col0, #T_29892_row14_col1, #T_29892_row14_col2, #T_29892_row14_col3, #T_29892_row14_col4, #T_29892_row15_col0, #T_29892_row15_col1, #T_29892_row15_col2, #T_29892_row15_col3, #T_29892_row15_col4, #T_29892_row16_col0, #T_29892_row16_col2, #T_29892_row16_col3, #T_29892_row17_col0, #T_29892_row17_col2, #T_29892_row18_col0, #T_29892_row18_col1, #T_29892_row18_col2, #T_29892_row18_col3, #T_29892_row19_col0, #T_29892_row19_col2 {
+  background-color: #fde725;
+  color: #000000;
+}
+#T_29892_row2_col1, #T_29892_row2_col4, #T_29892_row5_col3, #T_29892_row5_col4, #T_29892_row8_col1, #T_29892_row8_col3, #T_29892_row8_col4, #T_29892_row9_col3, #T_29892_row9_col4, #T_29892_row11_col3, #T_29892_row12_col3, #T_29892_row12_col4, #T_29892_row13_col1, #T_29892_row16_col1, #T_29892_row16_col4, #T_29892_row17_col1, #T_29892_row17_col3, #T_29892_row17_col4, #T_29892_row18_col4, #T_29892_row19_col1, #T_29892_row19_col3, #T_29892_row19_col4 {
+  background-color: #440154;
+  color: #f1f1f1;
+}
+</style>
+
+<table id="T_29892" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_29892_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">enwiki</th>
+<th id="T_29892_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">swwiki</th>
+<th id="T_29892_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">dewiki</th>
+<th id="T_29892_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">frwiki</th>
+<th id="T_29892_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">eswiki</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_29892_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Robert Ouko</th>
+<td id="T_29892_row0_col0" class="data row0 col0">1</td>
+<td id="T_29892_row0_col1" class="data row0 col1">1</td>
+<td id="T_29892_row0_col2" class="data row0 col2">1</td>
+<td id="T_29892_row0_col3" class="data row0 col3">1</td>
+<td id="T_29892_row0_col4" class="data row0 col4">1</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">McDonald Mariga</th>
+<td id="T_29892_row1_col0" class="data row1 col0">1</td>
+<td id="T_29892_row1_col1" class="data row1 col1">1</td>
+<td id="T_29892_row1_col2" class="data row1 col2">1</td>
+<td id="T_29892_row1_col3" class="data row1 col3">1</td>
+<td id="T_29892_row1_col4" class="data row1 col4">1</td>
+</tr>
+<tr class="odd">
+<th id="T_29892_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">Harry Thuku</th>
+<td id="T_29892_row2_col0" class="data row2 col0">1</td>
+<td id="T_29892_row2_col1" class="data row2 col1">0</td>
+<td id="T_29892_row2_col2" class="data row2 col2">1</td>
+<td id="T_29892_row2_col3" class="data row2 col3">1</td>
+<td id="T_29892_row2_col4" class="data row2 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">Richard Leakey</th>
+<td id="T_29892_row3_col0" class="data row3 col0">1</td>
+<td id="T_29892_row3_col1" class="data row3 col1">1</td>
+<td id="T_29892_row3_col2" class="data row3 col2">1</td>
+<td id="T_29892_row3_col3" class="data row3 col3">1</td>
+<td id="T_29892_row3_col4" class="data row3 col4">1</td>
+</tr>
+<tr class="odd">
+<th id="T_29892_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">Wangari Muta Maathai</th>
+<td id="T_29892_row4_col0" class="data row4 col0">1</td>
+<td id="T_29892_row4_col1" class="data row4 col1">1</td>
+<td id="T_29892_row4_col2" class="data row4 col2">1</td>
+<td id="T_29892_row4_col3" class="data row4 col3">1</td>
+<td id="T_29892_row4_col4" class="data row4 col4">1</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">Bildad Kaggia</th>
+<td id="T_29892_row5_col0" class="data row5 col0">1</td>
+<td id="T_29892_row5_col1" class="data row5 col1">1</td>
+<td id="T_29892_row5_col2" class="data row5 col2">1</td>
+<td id="T_29892_row5_col3" class="data row5 col3">0</td>
+<td id="T_29892_row5_col4" class="data row5 col4">0</td>
+</tr>
+<tr class="odd">
+<th id="T_29892_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">William Ruto</th>
+<td id="T_29892_row6_col0" class="data row6 col0">1</td>
+<td id="T_29892_row6_col1" class="data row6 col1">1</td>
+<td id="T_29892_row6_col2" class="data row6 col2">1</td>
+<td id="T_29892_row6_col3" class="data row6 col3">1</td>
+<td id="T_29892_row6_col4" class="data row6 col4">1</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">Uhuru Kenyatta</th>
+<td id="T_29892_row7_col0" class="data row7 col0">1</td>
+<td id="T_29892_row7_col1" class="data row7 col1">1</td>
+<td id="T_29892_row7_col2" class="data row7 col2">1</td>
+<td id="T_29892_row7_col3" class="data row7 col3">1</td>
+<td id="T_29892_row7_col4" class="data row7 col4">1</td>
+</tr>
+<tr class="odd">
+<th id="T_29892_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">Moses Mudavadi</th>
+<td id="T_29892_row8_col0" class="data row8 col0">1</td>
+<td id="T_29892_row8_col1" class="data row8 col1">0</td>
+<td id="T_29892_row8_col2" class="data row8 col2">1</td>
+<td id="T_29892_row8_col3" class="data row8 col3">0</td>
+<td id="T_29892_row8_col4" class="data row8 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">Mohamed Yusuf Haji</th>
+<td id="T_29892_row9_col0" class="data row9 col0">1</td>
+<td id="T_29892_row9_col1" class="data row9 col1">1</td>
+<td id="T_29892_row9_col2" class="data row9 col2">1</td>
+<td id="T_29892_row9_col3" class="data row9 col3">0</td>
+<td id="T_29892_row9_col4" class="data row9 col4">0</td>
+</tr>
+<tr class="odd">
+<th id="T_29892_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">Daniel arap Moi</th>
+<td id="T_29892_row10_col0" class="data row10 col0">1</td>
+<td id="T_29892_row10_col1" class="data row10 col1">1</td>
+<td id="T_29892_row10_col2" class="data row10 col2">1</td>
+<td id="T_29892_row10_col3" class="data row10 col3">1</td>
+<td id="T_29892_row10_col4" class="data row10 col4">1</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">Elijah Lagat</th>
+<td id="T_29892_row11_col0" class="data row11 col0">1</td>
+<td id="T_29892_row11_col1" class="data row11 col1">1</td>
+<td id="T_29892_row11_col2" class="data row11 col2">1</td>
+<td id="T_29892_row11_col3" class="data row11 col3">0</td>
+<td id="T_29892_row11_col4" class="data row11 col4">1</td>
+</tr>
+<tr class="odd">
+<th id="T_29892_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">Elijah Masinde</th>
+<td id="T_29892_row12_col0" class="data row12 col0">1</td>
+<td id="T_29892_row12_col1" class="data row12 col1">1</td>
+<td id="T_29892_row12_col2" class="data row12 col2">1</td>
+<td id="T_29892_row12_col3" class="data row12 col3">0</td>
+<td id="T_29892_row12_col4" class="data row12 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">David Lelei</th>
+<td id="T_29892_row13_col0" class="data row13 col0">1</td>
+<td id="T_29892_row13_col1" class="data row13 col1">0</td>
+<td id="T_29892_row13_col2" class="data row13 col2">1</td>
+<td id="T_29892_row13_col3" class="data row13 col3">1</td>
+<td id="T_29892_row13_col4" class="data row13 col4">1</td>
+</tr>
+<tr class="odd">
+<th id="T_29892_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">Jomo Kenyatta</th>
+<td id="T_29892_row14_col0" class="data row14 col0">1</td>
+<td id="T_29892_row14_col1" class="data row14 col1">1</td>
+<td id="T_29892_row14_col2" class="data row14 col2">1</td>
+<td id="T_29892_row14_col3" class="data row14 col3">1</td>
+<td id="T_29892_row14_col4" class="data row14 col4">1</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row15" class="row_heading level0 row15" data-quarto-table-cell-role="th">Abdilatif Abdalla</th>
+<td id="T_29892_row15_col0" class="data row15 col0">1</td>
+<td id="T_29892_row15_col1" class="data row15 col1">1</td>
+<td id="T_29892_row15_col2" class="data row15 col2">1</td>
+<td id="T_29892_row15_col3" class="data row15 col3">1</td>
+<td id="T_29892_row15_col4" class="data row15 col4">1</td>
+</tr>
+<tr class="odd">
+<th id="T_29892_level0_row16" class="row_heading level0 row16" data-quarto-table-cell-role="th">Wesley Korir</th>
+<td id="T_29892_row16_col0" class="data row16 col0">1</td>
+<td id="T_29892_row16_col1" class="data row16 col1">0</td>
+<td id="T_29892_row16_col2" class="data row16 col2">1</td>
+<td id="T_29892_row16_col3" class="data row16 col3">1</td>
+<td id="T_29892_row16_col4" class="data row16 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row17" class="row_heading level0 row17" data-quarto-table-cell-role="th">David Musila</th>
+<td id="T_29892_row17_col0" class="data row17 col0">1</td>
+<td id="T_29892_row17_col1" class="data row17 col1">0</td>
+<td id="T_29892_row17_col2" class="data row17 col2">1</td>
+<td id="T_29892_row17_col3" class="data row17 col3">0</td>
+<td id="T_29892_row17_col4" class="data row17 col4">0</td>
+</tr>
+<tr class="odd">
+<th id="T_29892_level0_row18" class="row_heading level0 row18" data-quarto-table-cell-role="th">Grace Emily Akinyi Ogot</th>
+<td id="T_29892_row18_col0" class="data row18 col0">1</td>
+<td id="T_29892_row18_col1" class="data row18 col1">1</td>
+<td id="T_29892_row18_col2" class="data row18 col2">1</td>
+<td id="T_29892_row18_col3" class="data row18 col3">1</td>
+<td id="T_29892_row18_col4" class="data row18 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_29892_level0_row19" class="row_heading level0 row19" data-quarto-table-cell-role="th">Newton Kulundu</th>
+<td id="T_29892_row19_col0" class="data row19 col0">1</td>
+<td id="T_29892_row19_col1" class="data row19 col1">0</td>
+<td id="T_29892_row19_col2" class="data row19 col2">1</td>
+<td id="T_29892_row19_col3" class="data row19 col3">0</td>
+<td id="T_29892_row19_col4" class="data row19 col4">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This shows us some differences, both between individual politicians and the language editions, e.g.&nbsp;both the Spanish and Italian Wikipedias have fewer articles for this set of politicians.</p>
+<p>But how long are those articles? Let’s convert this into looking at length, instead of presence/absence. First we need to set up the different <code>Site</code> objects for the different languages, so that we can query those.</p>
+<p>And then we re-use our existing <code>politicians</code> dictionary to query the WP API for the corresponding page lengths, and save those in a dictionary that we can ultimately convert into a <code>DataFrame</code>.</p>
+<p><strong>Note:</strong> Querying all of those pages across language editions can take some time due to API limits.</p>
+<div id="aee9d5b5-2e95-4b96-9de5-9fd55845d85a" class="cell" data-execution_count="33">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>language_sites <span class="op">=</span> {} <span class="co"># let's store the site objects in a dict, so we can use them for our queries</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> language <span class="kw">in</span> languages:</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    language_sites[language] <span class="op">=</span> pywikibot.Site(language[:<span class="dv">2</span>], <span class="st">'wikipedia'</span>) <span class="co"># [:2] to get the language prefix</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># for now we store the article lengths in a dict</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>article_lengths <span class="op">=</span> {}</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> politician <span class="kw">in</span> politicians:</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    article_lengths[politician] <span class="op">=</span> {}</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> language <span class="kw">in</span> politicians[politician]:</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> politicians[politician][language]:</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>            page <span class="op">=</span> pywikibot.Page(language_sites[language], politicians[politician][language])</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            article_lengths[politician][language] <span class="op">=</span> <span class="bu">len</span>(page.text)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>: <span class="co"># don't have a page, so length is zero</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>            article_lengths[politician][language] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>df_article_length <span class="op">=</span> pd.DataFrame(article_lengths).T</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now that we got the data frame with article lengths, we can plot it as a heat map again. The heatmap was done over all cells. To better compare the lengths within a language, we now instead color by column, i.e.&nbsp;language edition:</p>
+<div id="fc1a956f-205f-455a-831e-7e771d15261a" class="cell" data-execution_count="34">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_article_length.style.background_gradient(cmap <span class="op">=</span><span class="st">'viridis'</span>,axis<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<style type="text/css">
+#T_a4478_row0_col0, #T_a4478_row4_col1 {
+  background-color: #34608d;
+  color: #f1f1f1;
+}
+#T_a4478_row0_col1 {
+  background-color: #4cc26c;
+  color: #000000;
+}
+#T_a4478_row0_col2 {
+  background-color: #470d60;
+  color: #f1f1f1;
+}
+#T_a4478_row0_col3 {
+  background-color: #1e9b8a;
+  color: #f1f1f1;
+}
+#T_a4478_row0_col4, #T_a4478_row9_col2, #T_a4478_row17_col2 {
+  background-color: #471063;
+  color: #f1f1f1;
+}
+#T_a4478_row1_col0 {
+  background-color: #472c7a;
+  color: #f1f1f1;
+}
+#T_a4478_row1_col1 {
+  background-color: #2a788e;
+  color: #f1f1f1;
+}
+#T_a4478_row1_col2, #T_a4478_row4_col3, #T_a4478_row4_col4, #T_a4478_row10_col1, #T_a4478_row14_col0 {
+  background-color: #fde725;
+  color: #000000;
+}
+#T_a4478_row1_col3 {
+  background-color: #375a8c;
+  color: #f1f1f1;
+}
+#T_a4478_row1_col4 {
+  background-color: #3a548c;
+  color: #f1f1f1;
+}
+#T_a4478_row2_col0, #T_a4478_row13_col4 {
+  background-color: #481d6f;
+  color: #f1f1f1;
+}
+#T_a4478_row2_col1, #T_a4478_row2_col4, #T_a4478_row5_col3, #T_a4478_row5_col4, #T_a4478_row8_col0, #T_a4478_row8_col1, #T_a4478_row8_col2, #T_a4478_row8_col3, #T_a4478_row8_col4, #T_a4478_row9_col3, #T_a4478_row9_col4, #T_a4478_row11_col3, #T_a4478_row12_col3, #T_a4478_row12_col4, #T_a4478_row13_col1, #T_a4478_row16_col1, #T_a4478_row16_col4, #T_a4478_row17_col1, #T_a4478_row17_col3, #T_a4478_row17_col4, #T_a4478_row18_col4, #T_a4478_row19_col1, #T_a4478_row19_col3, #T_a4478_row19_col4 {
+  background-color: #440154;
+  color: #f1f1f1;
+}
+#T_a4478_row2_col2 {
+  background-color: #482878;
+  color: #f1f1f1;
+}
+#T_a4478_row2_col3 {
+  background-color: #24868e;
+  color: #f1f1f1;
+}
+#T_a4478_row3_col0 {
+  background-color: #375b8d;
+  color: #f1f1f1;
+}
+#T_a4478_row3_col1, #T_a4478_row18_col3 {
+  background-color: #355e8d;
+  color: #f1f1f1;
+}
+#T_a4478_row3_col2 {
+  background-color: #2c728e;
+  color: #f1f1f1;
+}
+#T_a4478_row3_col3 {
+  background-color: #355f8d;
+  color: #f1f1f1;
+}
+#T_a4478_row3_col4 {
+  background-color: #31688e;
+  color: #f1f1f1;
+}
+#T_a4478_row4_col0 {
+  background-color: #218e8d;
+  color: #f1f1f1;
+}
+#T_a4478_row4_col2 {
+  background-color: #b8de29;
+  color: #000000;
+}
+#T_a4478_row5_col0 {
+  background-color: #481668;
+  color: #f1f1f1;
+}
+#T_a4478_row5_col1 {
+  background-color: #481c6e;
+  color: #f1f1f1;
+}
+#T_a4478_row5_col2, #T_a4478_row15_col2 {
+  background-color: #482979;
+  color: #f1f1f1;
+}
+#T_a4478_row6_col0 {
+  background-color: #1fa088;
+  color: #f1f1f1;
+}
+#T_a4478_row6_col1 {
+  background-color: #81d34d;
+  color: #000000;
+}
+#T_a4478_row6_col2 {
+  background-color: #4ac16d;
+  color: #000000;
+}
+#T_a4478_row6_col3 {
+  background-color: #44bf70;
+  color: #f1f1f1;
+}
+#T_a4478_row6_col4 {
+  background-color: #287c8e;
+  color: #f1f1f1;
+}
+#T_a4478_row7_col0 {
+  background-color: #6ece58;
+  color: #000000;
+}
+#T_a4478_row7_col1 {
+  background-color: #93d741;
+  color: #000000;
+}
+#T_a4478_row7_col2 {
+  background-color: #efe51c;
+  color: #000000;
+}
+#T_a4478_row7_col3 {
+  background-color: #e2e418;
+  color: #000000;
+}
+#T_a4478_row7_col4 {
+  background-color: #424086;
+  color: #f1f1f1;
+}
+#T_a4478_row9_col0 {
+  background-color: #481769;
+  color: #f1f1f1;
+}
+#T_a4478_row9_col1 {
+  background-color: #481a6c;
+  color: #f1f1f1;
+}
+#T_a4478_row10_col0 {
+  background-color: #2e6e8e;
+  color: #f1f1f1;
+}
+#T_a4478_row10_col2 {
+  background-color: #2e6f8e;
+  color: #f1f1f1;
+}
+#T_a4478_row10_col3 {
+  background-color: #33628d;
+  color: #f1f1f1;
+}
+#T_a4478_row10_col4 {
+  background-color: #443b84;
+  color: #f1f1f1;
+}
+#T_a4478_row11_col0 {
+  background-color: #481b6d;
+  color: #f1f1f1;
+}
+#T_a4478_row11_col1, #T_a4478_row16_col0 {
+  background-color: #482576;
+  color: #f1f1f1;
+}
+#T_a4478_row11_col2 {
+  background-color: #453581;
+  color: #f1f1f1;
+}
+#T_a4478_row11_col4 {
+  background-color: #482071;
+  color: #f1f1f1;
+}
+#T_a4478_row12_col0 {
+  background-color: #46075a;
+  color: #f1f1f1;
+}
+#T_a4478_row12_col1 {
+  background-color: #29798e;
+  color: #f1f1f1;
+}
+#T_a4478_row12_col2 {
+  background-color: #39558c;
+  color: #f1f1f1;
+}
+#T_a4478_row13_col0, #T_a4478_row19_col0 {
+  background-color: #460a5d;
+  color: #f1f1f1;
+}
+#T_a4478_row13_col2 {
+  background-color: #460b5e;
+  color: #f1f1f1;
+}
+#T_a4478_row13_col3 {
+  background-color: #46327e;
+  color: #f1f1f1;
+}
+#T_a4478_row14_col1 {
+  background-color: #1f948c;
+  color: #f1f1f1;
+}
+#T_a4478_row14_col2 {
+  background-color: #f6e620;
+  color: #000000;
+}
+#T_a4478_row14_col3 {
+  background-color: #228d8d;
+  color: #f1f1f1;
+}
+#T_a4478_row14_col4 {
+  background-color: #3c508b;
+  color: #f1f1f1;
+}
+#T_a4478_row15_col0 {
+  background-color: #46085c;
+  color: #f1f1f1;
+}
+#T_a4478_row15_col1 {
+  background-color: #46337f;
+  color: #f1f1f1;
+}
+#T_a4478_row15_col3, #T_a4478_row17_col0 {
+  background-color: #470e61;
+  color: #f1f1f1;
+}
+#T_a4478_row15_col4 {
+  background-color: #471365;
+  color: #f1f1f1;
+}
+#T_a4478_row16_col2 {
+  background-color: #482677;
+  color: #f1f1f1;
+}
+#T_a4478_row16_col3 {
+  background-color: #2f6b8e;
+  color: #f1f1f1;
+}
+#T_a4478_row18_col0 {
+  background-color: #482475;
+  color: #f1f1f1;
+}
+#T_a4478_row18_col1 {
+  background-color: #27808e;
+  color: #f1f1f1;
+}
+#T_a4478_row18_col2 {
+  background-color: #463480;
+  color: #f1f1f1;
+}
+#T_a4478_row19_col2 {
+  background-color: #482374;
+  color: #f1f1f1;
+}
+</style>
+
+<table id="T_a4478" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_a4478_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">enwiki</th>
+<th id="T_a4478_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">swwiki</th>
+<th id="T_a4478_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">dewiki</th>
+<th id="T_a4478_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">frwiki</th>
+<th id="T_a4478_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">eswiki</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_a4478_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Robert Ouko</th>
+<td id="T_a4478_row0_col0" class="data row0 col0">47295</td>
+<td id="T_a4478_row0_col1" class="data row0 col1">7637</td>
+<td id="T_a4478_row0_col2" class="data row0 col2">1867</td>
+<td id="T_a4478_row0_col3" class="data row0 col3">14852</td>
+<td id="T_a4478_row0_col4" class="data row0 col4">2641</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">McDonald Mariga</th>
+<td id="T_a4478_row1_col0" class="data row1 col0">19981</td>
+<td id="T_a4478_row1_col1" class="data row1 col1">4250</td>
+<td id="T_a4478_row1_col2" class="data row1 col2">25325</td>
+<td id="T_a4478_row1_col3" class="data row1 col3">7607</td>
+<td id="T_a4478_row1_col4" class="data row1 col4">15887</td>
+</tr>
+<tr class="odd">
+<th id="T_a4478_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">Harry Thuku</th>
+<td id="T_a4478_row2_col0" class="data row2 col0">13230</td>
+<td id="T_a4478_row2_col1" class="data row2 col1">0</td>
+<td id="T_a4478_row2_col2" class="data row2 col2">3704</td>
+<td id="T_a4478_row2_col3" class="data row2 col3">12453</td>
+<td id="T_a4478_row2_col4" class="data row2 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">Richard Leakey</th>
+<td id="T_a4478_row3_col0" class="data row3 col0">44530</td>
+<td id="T_a4478_row3_col1" class="data row3 col1">3165</td>
+<td id="T_a4478_row3_col2" class="data row3 col2">10229</td>
+<td id="T_a4478_row3_col3" class="data row3 col3">8184</td>
+<td id="T_a4478_row3_col4" class="data row3 col4">20600</td>
+</tr>
+<tr class="odd">
+<th id="T_a4478_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">Wangari Muta Maathai</th>
+<td id="T_a4478_row4_col0" class="data row4 col0">76445</td>
+<td id="T_a4478_row4_col1" class="data row4 col1">3211</td>
+<td id="T_a4478_row4_col2" class="data row4 col2">22759</td>
+<td id="T_a4478_row4_col3" class="data row4 col3">27246</td>
+<td id="T_a4478_row4_col4" class="data row4 col4">61486</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">Bildad Kaggia</th>
+<td id="T_a4478_row5_col0" class="data row5 col0">9495</td>
+<td id="T_a4478_row5_col1" class="data row5 col1">823</td>
+<td id="T_a4478_row5_col2" class="data row5 col2">3845</td>
+<td id="T_a4478_row5_col3" class="data row5 col3">0</td>
+<td id="T_a4478_row5_col4" class="data row5 col4">0</td>
+</tr>
+<tr class="odd">
+<th id="T_a4478_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">William Ruto</th>
+<td id="T_a4478_row6_col0" class="data row6 col0">87709</td>
+<td id="T_a4478_row6_col1" class="data row6 col1">8643</td>
+<td id="T_a4478_row6_col2" class="data row6 col2">18334</td>
+<td id="T_a4478_row6_col3" class="data row6 col3">19112</td>
+<td id="T_a4478_row6_col4" class="data row6 col4">25521</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">Uhuru Kenyatta</th>
+<td id="T_a4478_row7_col0" class="data row7 col0">120665</td>
+<td id="T_a4478_row7_col1" class="data row7 col1">8931</td>
+<td id="T_a4478_row7_col2" class="data row7 col2">24740</td>
+<td id="T_a4478_row7_col3" class="data row7 col3">26056</td>
+<td id="T_a4478_row7_col4" class="data row7 col4">11713</td>
+</tr>
+<tr class="odd">
+<th id="T_a4478_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">Moses Mudavadi</th>
+<td id="T_a4478_row8_col0" class="data row8 col0">985</td>
+<td id="T_a4478_row8_col1" class="data row8 col1">0</td>
+<td id="T_a4478_row8_col2" class="data row8 col2">1033</td>
+<td id="T_a4478_row8_col3" class="data row8 col3">0</td>
+<td id="T_a4478_row8_col4" class="data row8 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">Mohamed Yusuf Haji</th>
+<td id="T_a4478_row9_col0" class="data row9 col0">10269</td>
+<td id="T_a4478_row9_col1" class="data row9 col1">729</td>
+<td id="T_a4478_row9_col2" class="data row9 col2">2022</td>
+<td id="T_a4478_row9_col3" class="data row9 col3">0</td>
+<td id="T_a4478_row9_col4" class="data row9 col4">0</td>
+</tr>
+<tr class="odd">
+<th id="T_a4478_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">Daniel arap Moi</th>
+<td id="T_a4478_row10_col0" class="data row10 col0">55812</td>
+<td id="T_a4478_row10_col1" class="data row10 col1">10665</td>
+<td id="T_a4478_row10_col2" class="data row10 col2">9839</td>
+<td id="T_a4478_row10_col3" class="data row10 col3">8431</td>
+<td id="T_a4478_row10_col4" class="data row10 col4">10622</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">Elijah Lagat</th>
+<td id="T_a4478_row11_col0" class="data row11 col0">12397</td>
+<td id="T_a4478_row11_col1" class="data row11 col1">1091</td>
+<td id="T_a4478_row11_col2" class="data row11 col2">4760</td>
+<td id="T_a4478_row11_col3" class="data row11 col3">0</td>
+<td id="T_a4478_row11_col4" class="data row11 col4">5463</td>
+</tr>
+<tr class="odd">
+<th id="T_a4478_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">Elijah Masinde</th>
+<td id="T_a4478_row12_col0" class="data row12 col0">3430</td>
+<td id="T_a4478_row12_col1" class="data row12 col1">4331</td>
+<td id="T_a4478_row12_col2" class="data row12 col2">7478</td>
+<td id="T_a4478_row12_col3" class="data row12 col3">0</td>
+<td id="T_a4478_row12_col4" class="data row12 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">David Lelei</th>
+<td id="T_a4478_row13_col0" class="data row13 col0">5151</td>
+<td id="T_a4478_row13_col1" class="data row13 col1">0</td>
+<td id="T_a4478_row13_col2" class="data row13 col2">1779</td>
+<td id="T_a4478_row13_col3" class="data row13 col3">3847</td>
+<td id="T_a4478_row13_col4" class="data row13 col4">4818</td>
+</tr>
+<tr class="odd">
+<th id="T_a4478_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">Jomo Kenyatta</th>
+<td id="T_a4478_row14_col0" class="data row14 col0">154801</td>
+<td id="T_a4478_row14_col1" class="data row14 col1">5528</td>
+<td id="T_a4478_row14_col2" class="data row14 col2">25027</td>
+<td id="T_a4478_row14_col3" class="data row14 col3">13234</td>
+<td id="T_a4478_row14_col4" class="data row14 col4">15096</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row15" class="row_heading level0 row15" data-quarto-table-cell-role="th">Abdilatif Abdalla</th>
+<td id="T_a4478_row15_col0" class="data row15 col0">4222</td>
+<td id="T_a4478_row15_col1" class="data row15 col1">1564</td>
+<td id="T_a4478_row15_col2" class="data row15 col2">3818</td>
+<td id="T_a4478_row15_col3" class="data row15 col3">1056</td>
+<td id="T_a4478_row15_col4" class="data row15 col4">3112</td>
+</tr>
+<tr class="odd">
+<th id="T_a4478_level0_row16" class="row_heading level0 row16" data-quarto-table-cell-role="th">Wesley Korir</th>
+<td id="T_a4478_row16_col0" class="data row16 col0">16755</td>
+<td id="T_a4478_row16_col1" class="data row16 col1">0</td>
+<td id="T_a4478_row16_col2" class="data row16 col2">3663</td>
+<td id="T_a4478_row16_col3" class="data row16 col3">9470</td>
+<td id="T_a4478_row16_col4" class="data row16 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row17" class="row_heading level0 row17" data-quarto-table-cell-role="th">David Musila</th>
+<td id="T_a4478_row17_col0" class="data row17 col0">6949</td>
+<td id="T_a4478_row17_col1" class="data row17 col1">0</td>
+<td id="T_a4478_row17_col2" class="data row17 col2">1982</td>
+<td id="T_a4478_row17_col3" class="data row17 col3">0</td>
+<td id="T_a4478_row17_col4" class="data row17 col4">0</td>
+</tr>
+<tr class="odd">
+<th id="T_a4478_level0_row18" class="row_heading level0 row18" data-quarto-table-cell-role="th">Grace Emily Akinyi Ogot</th>
+<td id="T_a4478_row18_col0" class="data row18 col0">16605</td>
+<td id="T_a4478_row18_col1" class="data row18 col1">4621</td>
+<td id="T_a4478_row18_col2" class="data row18 col2">4682</td>
+<td id="T_a4478_row18_col3" class="data row18 col3">8000</td>
+<td id="T_a4478_row18_col4" class="data row18 col4">0</td>
+</tr>
+<tr class="even">
+<th id="T_a4478_level0_row19" class="row_heading level0 row19" data-quarto-table-cell-role="th">Newton Kulundu</th>
+<td id="T_a4478_row19_col0" class="data row19 col0">4786</td>
+<td id="T_a4478_row19_col1" class="data row19 col1">0</td>
+<td id="T_a4478_row19_col2" class="data row19 col2">3386</td>
+<td id="T_a4478_row19_col3" class="data row19 col3">0</td>
+<td id="T_a4478_row19_col4" class="data row19 col4">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="working-with-claims" class="level2">
+<h2 class="anchored" data-anchor-id="working-with-claims">Working with claims</h2>
+<p>Now that we have seen how we can bridge between Wikidata items and Wikipedia pages, let us see how we can explore the Wikidata knowledge graph a bit more beyond just getting the objects and cross-links.</p>
+<p>One thing that many Wikidata items about people contain, is the gender of the person they describe, which we need if we want to explore if Wikipedia articles describing people’s biographies differ between gender of the person. Inferring a person’s gender is a fraught effort, and <a href="https://www.nature.com/articles/s41562-023-01587-9">misclassifications are not distributed amongst race or ethnicity</a>. In Wikidata knowledge graph, gender is <a href="https://www.wikidata.org/wiki/Property:P21">represented by property <code>P21</code></a> (technically, Wikidata translates that to <code>sex or gender</code>), which would allow</p>
+<p>To get explore this, let’s query a single politician using the same query as before and use that Wikidata item to explore the knowledge graph:</p>
+<div id="a45bd742-ab09-4478-bf15-3f66471abe44" class="cell" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>QUERY <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT DISTINCT ?item</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE {</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">    ?item wdt:P31 wd:Q5;  # Any instance of a human;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P106 wd:Q82955; # occupation politician;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P27 wd:Q114; # citizen of kenya;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="st">LIMIT 1</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>generator <span class="op">=</span> pg.WikidataSPARQLPageGenerator(QUERY, site<span class="op">=</span>wikidata_site)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>wikidata_item <span class="op">=</span> generator.<span class="fu">__next__</span>() <span class="co"># to just emit the single response</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'got </span><span class="sc">{}</span><span class="st"> as politician'</span>.<span class="bu">format</span>(wikidata_item.labels[<span class="st">'en'</span>]))   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>got Bildad Kaggia as politician</code></pre>
+</div>
+</div>
+<p>Now that we got our wikidata item, let’s find out if it contains claim about the person’s gender:</p>
+<div id="f1562576-b9e0-4afb-ac0c-78340231d886" class="cell" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># p21: gender</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># [0] get the first claim for this property - for some properties there could be multiple claims!</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># target: Get the value of that claim - can be an item too</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># label: get english name of item, i.e. gender marker in english</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>wikidata_item.claims[<span class="st">'P21'</span>][<span class="dv">0</span>].target.labels[<span class="st">'en'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>'male'</code></pre>
+</div>
+</div>
+<p>Let’s look at this step by step:</p>
+<ul>
+<li>`.claims[‘P21’] asks to get <strong>all</strong> values of this property for our Wikidata item of interest. Items can have zero to many claims for a given property. We need to consider this when doing error handling.</li>
+<li><code>[0]</code> - we are interested in only looking at the first value for this property, in case there’d be multiple. Of course, depending on the property, we could be interested at looking at all of them!</li>
+<li><code>.target</code> gives us the actual value of that claim. For <code>gender</code> this will be another Wikidata item, which has translatable labels</li>
+</ul>
+</section>
+<section id="bringing-it-together" class="level2">
+<h2 class="anchored" data-anchor-id="bringing-it-together">Bringing it together</h2>
+<p>Now, let’s try to get a set of politicians, their gender according to Wikidata and then get the page lengths for the diferrent language editions. We can then do a simple comparison between article length and gender in those languages:</p>
+<div id="4c216758-d970-4fe0-a9a5-424dcf7e6189" class="cell" data-execution_count="38">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>QUERY <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT DISTINCT ?item</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE {</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="st">    ?item wdt:P31 wd:Q5;  # Any instance of a human;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P106 wd:Q82955; # occupation politician;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P27 wd:Q114; # citizen of kenya;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="st">LIMIT 10</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>LANGUAGES <span class="op">=</span> [</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"enwiki"</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"swwiki"</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dewiki"</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"frwiki"</span>,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eswiki"</span>,</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>LANGUAGE_SITES <span class="op">=</span> {} <span class="co"># let's store the site objects in a dict, so we can use them for our queries</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> language <span class="kw">in</span> LANGUAGES:</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    LANGUAGE_SITES[language] <span class="op">=</span> pywikibot.Site(language[:<span class="dv">2</span>], <span class="st">'wikipedia'</span>) <span class="co"># [:2] to get the language prefix</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's wrap some of the code we wrote above into functions, to make it easier to call and ultimately merge it into a dataframe at the end!</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_gender(wikidata_item):</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">"P21"</span> <span class="kw">in</span> wikidata_item.claims.keys():</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> wikidata_item.claims[<span class="st">'P21'</span>][<span class="dv">0</span>].target.labels[<span class="st">'en'</span>]</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"unknown"</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_query(QUERY):</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>    generator <span class="op">=</span> pg.WikidataSPARQLPageGenerator(QUERY, site<span class="op">=</span>wikidata_site)</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>    politician_data <span class="op">=</span> {}</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> generator:</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>        qid <span class="op">=</span> item.getID() <span class="co"># get unique ID</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>        politician_data[qid] <span class="op">=</span> {} <span class="co"># initialize dictionary </span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>        politician_data[qid][<span class="st">'gender'</span>] <span class="op">=</span> get_gender(item) <span class="co"># add gender</span></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>        politician_data[qid][<span class="st">'label'</span>] <span class="op">=</span> item.labels[<span class="st">'en'</span>] <span class="co"># add english label</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'get languages for </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(qid))</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>        sitelinks <span class="op">=</span> item.sitelinks</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> language <span class="kw">in</span> LANGUAGES:</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> language <span class="kw">in</span> sitelinks.keys():</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>                page_title <span class="op">=</span> sitelinks[language].canonical_title()</span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>                page <span class="op">=</span> pywikibot.Page(LANGUAGE_SITES[language], page_title)</span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>                politician_data[qid][language] <span class="op">=</span> <span class="bu">len</span>(page.text)</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>: <span class="co"># don't have a page, so length is zero</span></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>                politician_data[qid][language] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> politician_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="08356b66-3388-4ab0-a919-e9981a3999d6" class="cell" data-execution_count="39">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>politician_data <span class="op">=</span> run_query(QUERY)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(politician_data).T</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>get languages for Q469641
+get languages for Q982715
+get languages for Q457713
+get languages for Q1030776
+get languages for Q447119
+get languages for Q1175814
+get languages for Q346046
+get languages for Q1121940
+get languages for Q860562
+get languages for Q456466</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th">label</th>
+<th data-quarto-table-cell-role="th">enwiki</th>
+<th data-quarto-table-cell-role="th">swwiki</th>
+<th data-quarto-table-cell-role="th">dewiki</th>
+<th data-quarto-table-cell-role="th">frwiki</th>
+<th data-quarto-table-cell-role="th">eswiki</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q469641</th>
+<td>female</td>
+<td>Grace Emily Akinyi Ogot</td>
+<td>16605</td>
+<td>4621</td>
+<td>4682</td>
+<td>8000</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q982715</th>
+<td>male</td>
+<td>Robert Ouko</td>
+<td>47295</td>
+<td>7637</td>
+<td>1867</td>
+<td>14852</td>
+<td>2641</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q457713</th>
+<td>male</td>
+<td>Newton Kulundu</td>
+<td>4786</td>
+<td>0</td>
+<td>3386</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q1030776</th>
+<td>male</td>
+<td>Mohamed Yusuf Haji</td>
+<td>10269</td>
+<td>729</td>
+<td>2022</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q447119</th>
+<td>male</td>
+<td>Wesley Korir</td>
+<td>16755</td>
+<td>0</td>
+<td>3663</td>
+<td>9470</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q1175814</th>
+<td>male</td>
+<td>David Musila</td>
+<td>6949</td>
+<td>0</td>
+<td>1982</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q346046</th>
+<td>male</td>
+<td>Elijah Lagat</td>
+<td>12397</td>
+<td>1091</td>
+<td>4760</td>
+<td>0</td>
+<td>5463</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q1121940</th>
+<td>male</td>
+<td>Elijah Masinde</td>
+<td>3430</td>
+<td>4331</td>
+<td>7478</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q860562</th>
+<td>male</td>
+<td>Bildad Kaggia</td>
+<td>9495</td>
+<td>823</td>
+<td>3845</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q456466</th>
+<td>male</td>
+<td>David Lelei</td>
+<td>5151</td>
+<td>0</td>
+<td>1779</td>
+<td>3847</td>
+<td>4818</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>While this form of querying works, it shows quite a heavy gender bias (which could be in politics, in Wikipedia, or both?). Either way, by querying without gender, we end up with an overwhelmingly male data set.</p>
+<p>To be able to actually make a comparison, let’s do two queries instead, one for male and one for female politicians:</p>
+<div id="483aa6ae-1355-4937-83cf-1d8930a4eeca" class="cell" data-execution_count="70">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>male_query <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT DISTINCT ?item</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE {</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="st">    ?item wdt:P31 wd:Q5;  # Any instance of a human;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P106 wd:Q82955; # occupation politician;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P27 wd:Q114; # citizen of kenya;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P21 wd:Q6581097; # male</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="st">LIMIT 20</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>female_query <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT DISTINCT ?item</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE {</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="st">    ?item wdt:P31 wd:Q5;  # Any instance of a human;</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P106 wd:Q82955; # occupation politician;</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P27 wd:Q114; # citizen of kenya;</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="st">          wdt:P21 wd:Q6581072; # female</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="st">LIMIT 20</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>male_politicians <span class="op">=</span> run_query(male_query)</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>female_politicians <span class="op">=</span> run_query(female_query)</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>get languages for Q1372633
+get languages for Q313893
+get languages for Q733180
+get languages for Q58188
+get languages for Q57657
+get languages for Q202077
+get languages for Q733817
+get languages for Q645228
+get languages for Q1395018
+get languages for Q318960
+get languages for Q593552
+get languages for Q710549
+get languages for Q195725
+get languages for Q196070
+get languages for Q121708
+get languages for Q57291
+get languages for Q193492
+get languages for Q173563
+get languages for Q308189
+get languages for Q1441663
+get languages for Q111188237
+get languages for Q111188303
+get languages for Q20022486
+get languages for Q110612580
+get languages for Q7966924
+get languages for Q111188275
+get languages for Q21064137
+get languages for Q21062983
+get languages for Q539821
+get languages for Q111188214
+get languages for Q46795
+get languages for Q565671
+get languages for Q111188217
+get languages for Q111188213
+get languages for Q111188327
+get languages for Q8025655
+get languages for Q12170059
+get languages for Q110160494
+get languages for Q111188215
+get languages for Q469641</code></pre>
+</div>
+</div>
+<p>Now we can merge the two dictionaries and create one dataframe:</p>
+<div id="3e6f8e96-351e-4c16-9d99-c0f0680c1edf" class="cell" data-execution_count="71">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>all_politicians <span class="op">=</span> female_politicians <span class="op">|</span> male_politicians</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>df_all_politicians <span class="op">=</span> pd.DataFrame(all_politicians).T</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>df_all_politicians</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="71">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th">label</th>
+<th data-quarto-table-cell-role="th">enwiki</th>
+<th data-quarto-table-cell-role="th">swwiki</th>
+<th data-quarto-table-cell-role="th">dewiki</th>
+<th data-quarto-table-cell-role="th">frwiki</th>
+<th data-quarto-table-cell-role="th">eswiki</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q111188237</th>
+<td>female</td>
+<td>Hellen Sambili</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q111188303</th>
+<td>female</td>
+<td>Mary Emaase Otuch</td>
+<td>3305</td>
+<td>1227</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q20022486</th>
+<td>female</td>
+<td>Rosalyn Nandwa</td>
+<td>2875</td>
+<td>1197</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q110612580</th>
+<td>female</td>
+<td>Josephine Sinyo</td>
+<td>4408</td>
+<td>1265</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q7966924</th>
+<td>female</td>
+<td>Wambui Otieno</td>
+<td>27335</td>
+<td>1700</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q111188275</th>
+<td>female</td>
+<td>Jane Agnes Wanjira Machira</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q21064137</th>
+<td>female</td>
+<td>Rachel Ruto</td>
+<td>6247</td>
+<td>0</td>
+<td>0</td>
+<td>10030</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q21062983</th>
+<td>female</td>
+<td>Marianne Jebet Kitany</td>
+<td>6520</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q539821</th>
+<td>female</td>
+<td>Charity Ngilu</td>
+<td>23356</td>
+<td>1772</td>
+<td>2740</td>
+<td>10607</td>
+<td>1800</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q111188214</th>
+<td>female</td>
+<td>Alice Wambui Ng'ang'a</td>
+<td>3519</td>
+<td>1291</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q46795</th>
+<td>female</td>
+<td>Wangari Muta Maathai</td>
+<td>76445</td>
+<td>3211</td>
+<td>22759</td>
+<td>27246</td>
+<td>61486</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q565671</th>
+<td>female</td>
+<td>Anne Nyokabi Muhoho</td>
+<td>2144</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q111188217</th>
+<td>female</td>
+<td>Annah Nyokabi Gathecha</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q111188213</th>
+<td>female</td>
+<td>Alice Nyanchoka Chae</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q111188327</th>
+<td>female</td>
+<td>Rachel Ameso Amolo</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q8025655</th>
+<td>female</td>
+<td>Winnie Kaburu</td>
+<td>2716</td>
+<td>677</td>
+<td>0</td>
+<td>2247</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q12170059</th>
+<td>female</td>
+<td>Raychelle Omamo</td>
+<td>6308</td>
+<td>2236</td>
+<td>5774</td>
+<td>4634</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q110160494</th>
+<td>female</td>
+<td>Catherine Omanyo</td>
+<td>11491</td>
+<td>10534</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q111188215</th>
+<td>female</td>
+<td>Amina Abdalla</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q469641</th>
+<td>female</td>
+<td>Grace Emily Akinyi Ogot</td>
+<td>16605</td>
+<td>4621</td>
+<td>4682</td>
+<td>8000</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q1372633</th>
+<td>male</td>
+<td>Gitobu Imanyara</td>
+<td>4593</td>
+<td>4758</td>
+<td>0</td>
+<td>1856</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q313893</th>
+<td>male</td>
+<td>McDonald Mariga</td>
+<td>19981</td>
+<td>4250</td>
+<td>25325</td>
+<td>7607</td>
+<td>15887</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q733180</th>
+<td>male</td>
+<td>Tom Mboya</td>
+<td>24593</td>
+<td>10552</td>
+<td>6843</td>
+<td>18019</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q58188</th>
+<td>male</td>
+<td>Moses Wetangula</td>
+<td>19496</td>
+<td>2758</td>
+<td>4878</td>
+<td>2891</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q57657</th>
+<td>male</td>
+<td>Raila A Odinga</td>
+<td>123308</td>
+<td>10775</td>
+<td>30587</td>
+<td>53369</td>
+<td>6078</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q202077</th>
+<td>male</td>
+<td>Harry Thuku</td>
+<td>13230</td>
+<td>0</td>
+<td>3704</td>
+<td>12453</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q733817</th>
+<td>male</td>
+<td>George Saitoti</td>
+<td>50502</td>
+<td>5149</td>
+<td>3978</td>
+<td>6445</td>
+<td>1868</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q645228</th>
+<td>male</td>
+<td>Jaramogi Oginga Odinga</td>
+<td>14768</td>
+<td>4219</td>
+<td>3711</td>
+<td>15220</td>
+<td>2581</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q1395018</th>
+<td>male</td>
+<td>Kalonzo Musyoka</td>
+<td>28477</td>
+<td>2510</td>
+<td>2659</td>
+<td>5503</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q318960</th>
+<td>male</td>
+<td>Richard Leakey</td>
+<td>44530</td>
+<td>3165</td>
+<td>10229</td>
+<td>8184</td>
+<td>20600</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q593552</th>
+<td>male</td>
+<td>Michael Kijana Wamalwa</td>
+<td>8368</td>
+<td>5503</td>
+<td>3166</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q710549</th>
+<td>male</td>
+<td>Arthur Magugu</td>
+<td>1125</td>
+<td>920</td>
+<td>1201</td>
+<td>0</td>
+<td>1835</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q195725</th>
+<td>male</td>
+<td>William Ruto</td>
+<td>87709</td>
+<td>8643</td>
+<td>18334</td>
+<td>19112</td>
+<td>25521</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q196070</th>
+<td>male</td>
+<td>Uhuru Kenyatta</td>
+<td>120665</td>
+<td>8931</td>
+<td>24740</td>
+<td>26056</td>
+<td>11713</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q121708</th>
+<td>male</td>
+<td>Moses Mudavadi</td>
+<td>985</td>
+<td>0</td>
+<td>1033</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q57291</th>
+<td>male</td>
+<td>Mwai Kibaki</td>
+<td>89793</td>
+<td>10254</td>
+<td>13499</td>
+<td>9307</td>
+<td>7643</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q193492</th>
+<td>male</td>
+<td>Daniel arap Moi</td>
+<td>55812</td>
+<td>10665</td>
+<td>9839</td>
+<td>8431</td>
+<td>10622</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q173563</th>
+<td>male</td>
+<td>Jomo Kenyatta</td>
+<td>154801</td>
+<td>5528</td>
+<td>25027</td>
+<td>13234</td>
+<td>15096</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q308189</th>
+<td>male</td>
+<td>Abdilatif Abdalla</td>
+<td>4222</td>
+<td>1564</td>
+<td>3818</td>
+<td>1056</td>
+<td>3112</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q1441663</th>
+<td>male</td>
+<td>Francis Muthaura</td>
+<td>11033</td>
+<td>0</td>
+<td>2896</td>
+<td>1359</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Now let’s try plotting this as a boxplot, grouping by gender for each of the languages:</p>
+<div id="8b36085c-be44-453a-8558-4f88b004ce8f" class="cell" data-execution_count="72">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df_all_politicians.plot(kind<span class="op">=</span><span class="st">'box'</span>,column<span class="op">=</span>LANGUAGES, by<span class="op">=</span>[<span class="st">"gender"</span>],layout<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">1</span>),figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">15</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="72">
+<pre><code>dewiki    Axes(0.125,0.747241;0.775x0.132759)
+enwiki    Axes(0.125,0.587931;0.775x0.132759)
+eswiki    Axes(0.125,0.428621;0.775x0.132759)
+frwiki     Axes(0.125,0.26931;0.775x0.132759)
+swwiki        Axes(0.125,0.11;0.775x0.132759)
+dtype: object</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03-wikidata_files/figure-html/cell-15-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exploring-the-difference-in-number-of-pages-by-gender" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-the-difference-in-number-of-pages-by-gender">Exploring the difference in number of pages by gender</h2>
+<p>Let’s also investigate how large the difference in number of recorded items is for male &amp; female politicians in Wikidata. For that we can run two queries to just get the number of items:</p>
+<pre><code>SELECT DISTINCT (COUNT(?item) as ?count) # get count of items instead of actual pages
+WHERE {
+    ?item wdt:P31 wd:Q5;  # Any instance of a human;
+          wdt:P106 wd:Q82955; # occupation politician;
+          wdt:P27 wd:Q114; # citizen of kenya;
+          wdt:P21 wd:Q6581097; # male
+}</code></pre>
+<p>and</p>
+<pre><code>SELECT DISTINCT (COUNT(?item) as ?count) # get count of items instead of actual pages
+WHERE {
+    ?item wdt:P31 wd:Q5;  # Any instance of a human;
+          wdt:P106 wd:Q82955; # occupation politician;
+          wdt:P27 wd:Q114; # citizen of kenya;
+          wdt:P21 wd:Q6581072; # female
+}</code></pre>
+<p>We can run these directly using the Wikidata Query Service, without having to write code (e.g.&nbsp;for <a href="https://query.wikidata.org/#SELECT%20DISTINCT%20%28COUNT%28%3Fitem%29%20as%20%3Fcount%29%0AWHERE%20%7B%0A%20%20%20%20%3Fitem%20wdt%3AP31%20wd%3AQ5%3B%20%20%23%20Any%20instance%20of%20a%20human%3B%0A%20%20%20%20%20%20%20%20%20%20wdt%3AP106%20wd%3AQ82955%3B%20%23%20occupation%20politician%3B%0A%20%20%20%20%20%20%20%20%20%20wdt%3AP27%20wd%3AQ114%3B%20%23%20citizen%20of%20kenya%3B%0A%20%20%20%20%20%20%20%20%20%20wdt%3AP21%20wd%3AQ6581097%3B%20%23%20male%0A%7D">male</a> and <a href="https://query.wikidata.org/#SELECT%20DISTINCT%20%28COUNT%28%3Fitem%29%20as%20%3Fcount%29%0AWHERE%20%7B%0A%20%20%20%20%3Fitem%20wdt%3AP31%20wd%3AQ5%3B%20%20%23%20Any%20instance%20of%20a%20human%3B%0A%20%20%20%20%20%20%20%20%20%20wdt%3AP106%20wd%3AQ82955%3B%20%23%20occupation%20politician%3B%0A%20%20%20%20%20%20%20%20%20%20wdt%3AP27%20wd%3AQ114%3B%20%23%20citizen%20of%20kenya%3B%0A%20%20%20%20%20%20%20%20%20%20wdt%3AP21%20wd%3AQ6581072%3B%20%23%20female%0A%7D">female</a> politicians): This shows us that there are 224 items for female politicians, and 915 items for male politicians.</p>
+</section>
+<section id="using-some-very-basic-nlp-to-identify-a-gender-from-a-wikipedia-page" class="level2">
+<h2 class="anchored" data-anchor-id="using-some-very-basic-nlp-to-identify-a-gender-from-a-wikipedia-page">Using some very basic NLP to identify a gender from a Wikipedia page</h2>
+<p>So far, we have used the gender information as directly supplied by Wikidata (and even explicitly filtered for the presence of the information). But potentially this information is not present in all Wikidata items describing politicians.</p>
+<p>Plus, if we think back to just querying category pages - we might want to also use Wikipedia pages directly, without expecting or needing a corresponding Wikidata item. How could we assign gender in that case? A ver simple example would be to <a href="https://en.wikipedia.org/wiki/Pronouns_in_English">count the pronouns</a> in each page and use those to assign gender.</p>
+<p>We can try to explore how well such an approach would work by using our existing set of politicians, loading the (English) articles and giving it a try:</p>
+<div id="e2e57c55-4c2d-4e07-b2b8-1eac0efa21f3" class="cell" data-execution_count="74">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>wikidata_site <span class="op">=</span> language_sites[<span class="st">'enwiki'</span>].data_repository() <span class="co"># setup wikidata site object</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>pronouns_female <span class="op">=</span> [<span class="st">'she'</span>, <span class="st">'her'</span>, <span class="st">'herself'</span>, <span class="st">'hers'</span>]</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>pronouns_male <span class="op">=</span> [<span class="st">'he'</span>, <span class="st">'him'</span>, <span class="st">'himself'</span>, <span class="st">'his'</span>]</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>pronoun_female_count <span class="op">=</span> []</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>pronoun_male_count <span class="op">=</span> []</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> qid <span class="kw">in</span> df_all_politicians.index: <span class="co"># iterate over all qid which we so far used as df index</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">'enwiki'</span> <span class="kw">in</span> pywikibot.ItemPage(wikidata_site, qid).sitelinks.keys(): <span class="co"># not all wikidata items have english language articles</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        article_title <span class="op">=</span> pywikibot.ItemPage(wikidata_site, qid).sitelinks[<span class="st">'enwiki'</span>].canonical_title() <span class="co"># get english page title</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> pywikibot.Page(LANGUAGE_SITES[<span class="st">'enwiki'</span>], article_title) <span class="co"># get article text </span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>        page_text <span class="op">=</span> page.text.lower() <span class="co"># make lower case to simplify matching</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># sum up female pronoun counts, add to list </span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>        counts_female <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> p <span class="kw">in</span> pronouns_female:</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>            counts_female <span class="op">+=</span> page_text.count(<span class="st">" </span><span class="sc">{}</span><span class="st"> "</span>.<span class="bu">format</span>(p)) <span class="co"># require space before/after pronoun</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>        pronoun_female_count.append(counts_female)</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># sum up female pronoun counts, add to list</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>        counts_male <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> p <span class="kw">in</span> pronouns_male:</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>            counts_male <span class="op">+=</span> page_text.count(<span class="st">" </span><span class="sc">{}</span><span class="st"> "</span>.<span class="bu">format</span>(p))</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>        pronoun_male_count.append(counts_male)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>        pronoun_female_count.append(<span class="dv">0</span>)</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>        pronoun_male_count.append(<span class="dv">0</span>)</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="co"># add pronouns to DF</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>df_all_politicians[<span class="st">'pronoun_female_count'</span>] <span class="op">=</span> pronoun_female_count</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>df_all_politicians[<span class="st">'pronoun_male_count'</span>] <span class="op">=</span> pronoun_male_count</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="9e3a3f21-b4bd-43f9-8b22-b0cdf2a18f8f" class="cell" data-execution_count="86">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df_all_politicians</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="86">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th">label</th>
+<th data-quarto-table-cell-role="th">enwiki</th>
+<th data-quarto-table-cell-role="th">swwiki</th>
+<th data-quarto-table-cell-role="th">dewiki</th>
+<th data-quarto-table-cell-role="th">frwiki</th>
+<th data-quarto-table-cell-role="th">eswiki</th>
+<th data-quarto-table-cell-role="th">pronoun_female_count</th>
+<th data-quarto-table-cell-role="th">pronoun_male_count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q111188237</th>
+<td>female</td>
+<td>Hellen Sambili</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q111188303</th>
+<td>female</td>
+<td>Mary Emaase Otuch</td>
+<td>3305</td>
+<td>1227</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>15</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q20022486</th>
+<td>female</td>
+<td>Rosalyn Nandwa</td>
+<td>2875</td>
+<td>1197</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>6</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q110612580</th>
+<td>female</td>
+<td>Josephine Sinyo</td>
+<td>4408</td>
+<td>1265</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q7966924</th>
+<td>female</td>
+<td>Wambui Otieno</td>
+<td>27335</td>
+<td>1700</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>75</td>
+<td>65</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q111188275</th>
+<td>female</td>
+<td>Jane Agnes Wanjira Machira</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q21064137</th>
+<td>female</td>
+<td>Rachel Ruto</td>
+<td>6247</td>
+<td>0</td>
+<td>0</td>
+<td>10030</td>
+<td>0</td>
+<td>13</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q21062983</th>
+<td>female</td>
+<td>Marianne Jebet Kitany</td>
+<td>6520</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>17</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q539821</th>
+<td>female</td>
+<td>Charity Ngilu</td>
+<td>23356</td>
+<td>1772</td>
+<td>2740</td>
+<td>10607</td>
+<td>1800</td>
+<td>45</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q111188214</th>
+<td>female</td>
+<td>Alice Wambui Ng'ang'a</td>
+<td>3519</td>
+<td>1291</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>9</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q46795</th>
+<td>female</td>
+<td>Wangari Muta Maathai</td>
+<td>76445</td>
+<td>3211</td>
+<td>22759</td>
+<td>27246</td>
+<td>61486</td>
+<td>193</td>
+<td>13</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q565671</th>
+<td>female</td>
+<td>Anne Nyokabi Muhoho</td>
+<td>2144</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q111188217</th>
+<td>female</td>
+<td>Annah Nyokabi Gathecha</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q111188213</th>
+<td>female</td>
+<td>Alice Nyanchoka Chae</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q111188327</th>
+<td>female</td>
+<td>Rachel Ameso Amolo</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q8025655</th>
+<td>female</td>
+<td>Winnie Kaburu</td>
+<td>2716</td>
+<td>677</td>
+<td>0</td>
+<td>2247</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q12170059</th>
+<td>female</td>
+<td>Raychelle Omamo</td>
+<td>6308</td>
+<td>2236</td>
+<td>5774</td>
+<td>4634</td>
+<td>0</td>
+<td>10</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q110160494</th>
+<td>female</td>
+<td>Catherine Omanyo</td>
+<td>11491</td>
+<td>10534</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>33</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q111188215</th>
+<td>female</td>
+<td>Amina Abdalla</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q469641</th>
+<td>female</td>
+<td>Grace Emily Akinyi Ogot</td>
+<td>16605</td>
+<td>4621</td>
+<td>4682</td>
+<td>8000</td>
+<td>0</td>
+<td>40</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q1372633</th>
+<td>male</td>
+<td>Gitobu Imanyara</td>
+<td>4593</td>
+<td>4758</td>
+<td>0</td>
+<td>1856</td>
+<td>0</td>
+<td>0</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q313893</th>
+<td>male</td>
+<td>McDonald Mariga</td>
+<td>19981</td>
+<td>4250</td>
+<td>25325</td>
+<td>7607</td>
+<td>15887</td>
+<td>0</td>
+<td>47</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q733180</th>
+<td>male</td>
+<td>Tom Mboya</td>
+<td>24593</td>
+<td>10552</td>
+<td>6843</td>
+<td>18019</td>
+<td>0</td>
+<td>0</td>
+<td>65</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q58188</th>
+<td>male</td>
+<td>Moses Wetangula</td>
+<td>19496</td>
+<td>2758</td>
+<td>4878</td>
+<td>2891</td>
+<td>0</td>
+<td>0</td>
+<td>46</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q57657</th>
+<td>male</td>
+<td>Raila A Odinga</td>
+<td>123308</td>
+<td>10775</td>
+<td>30587</td>
+<td>53369</td>
+<td>6078</td>
+<td>1</td>
+<td>185</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q202077</th>
+<td>male</td>
+<td>Harry Thuku</td>
+<td>13230</td>
+<td>0</td>
+<td>3704</td>
+<td>12453</td>
+<td>0</td>
+<td>0</td>
+<td>27</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q733817</th>
+<td>male</td>
+<td>George Saitoti</td>
+<td>50502</td>
+<td>5149</td>
+<td>3978</td>
+<td>6445</td>
+<td>1868</td>
+<td>0</td>
+<td>86</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q645228</th>
+<td>male</td>
+<td>Jaramogi Oginga Odinga</td>
+<td>14768</td>
+<td>4219</td>
+<td>3711</td>
+<td>15220</td>
+<td>2581</td>
+<td>0</td>
+<td>42</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q1395018</th>
+<td>male</td>
+<td>Kalonzo Musyoka</td>
+<td>28477</td>
+<td>2510</td>
+<td>2659</td>
+<td>5503</td>
+<td>0</td>
+<td>0</td>
+<td>56</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q318960</th>
+<td>male</td>
+<td>Richard Leakey</td>
+<td>44530</td>
+<td>3165</td>
+<td>10229</td>
+<td>8184</td>
+<td>20600</td>
+<td>3</td>
+<td>90</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q593552</th>
+<td>male</td>
+<td>Michael Kijana Wamalwa</td>
+<td>8368</td>
+<td>5503</td>
+<td>3166</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>38</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q710549</th>
+<td>male</td>
+<td>Arthur Magugu</td>
+<td>1125</td>
+<td>920</td>
+<td>1201</td>
+<td>0</td>
+<td>1835</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q195725</th>
+<td>male</td>
+<td>William Ruto</td>
+<td>87709</td>
+<td>8643</td>
+<td>18334</td>
+<td>19112</td>
+<td>25521</td>
+<td>1</td>
+<td>129</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q196070</th>
+<td>male</td>
+<td>Uhuru Kenyatta</td>
+<td>120665</td>
+<td>8931</td>
+<td>24740</td>
+<td>26056</td>
+<td>11713</td>
+<td>1</td>
+<td>147</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q121708</th>
+<td>male</td>
+<td>Moses Mudavadi</td>
+<td>985</td>
+<td>0</td>
+<td>1033</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q57291</th>
+<td>male</td>
+<td>Mwai Kibaki</td>
+<td>89793</td>
+<td>10254</td>
+<td>13499</td>
+<td>9307</td>
+<td>7643</td>
+<td>2</td>
+<td>168</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q193492</th>
+<td>male</td>
+<td>Daniel arap Moi</td>
+<td>55812</td>
+<td>10665</td>
+<td>9839</td>
+<td>8431</td>
+<td>10622</td>
+<td>5</td>
+<td>88</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q173563</th>
+<td>male</td>
+<td>Jomo Kenyatta</td>
+<td>154801</td>
+<td>5528</td>
+<td>25027</td>
+<td>13234</td>
+<td>15096</td>
+<td>12</td>
+<td>490</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q308189</th>
+<td>male</td>
+<td>Abdilatif Abdalla</td>
+<td>4222</td>
+<td>1564</td>
+<td>3818</td>
+<td>1056</td>
+<td>3112</td>
+<td>0</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q1441663</th>
+<td>male</td>
+<td>Francis Muthaura</td>
+<td>11033</td>
+<td>0</td>
+<td>2896</td>
+<td>1359</td>
+<td>0</td>
+<td>0</td>
+<td>28</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Now we got the absolute counts. For demonstration purposes, let’s now just make a very simple classifer, in which we assign the gender based on simple majority:</p>
+<div id="35871c46-93a5-4319-94e1-e400c27604a7" class="cell" data-execution_count="88">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> assign_gender(row):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row[<span class="st">'pronoun_male_count'</span>] <span class="op">!=</span> <span class="dv">0</span> <span class="kw">and</span> row[<span class="st">'pronoun_male_count'</span>] <span class="op">!=</span> <span class="dv">0</span>: </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>        ratio <span class="op">=</span> row[<span class="st">'pronoun_female_count'</span>] <span class="op">/</span> row[<span class="st">'pronoun_male_count'</span>]</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> ratio <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">'female'</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">'male'</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> row[<span class="st">'pronoun_male_count'</span>] <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'male'</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'female'</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>df_all_politicians[<span class="st">'gender_nlp'</span>] <span class="op">=</span> df_all_politicians.<span class="bu">apply</span>(assign_gender,axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can now compare if the wikidata label and our prediction agree:</p>
+<div id="05fd1b39-f018-4c34-b165-975e88119436" class="cell" data-execution_count="89">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_all_politicians[<span class="st">'gender'</span>] <span class="op">==</span> df_all_politicians[<span class="st">'gender_nlp'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="89">
+<pre><code>Q111188237    True
+Q111188303    True
+Q20022486     True
+Q110612580    True
+Q7966924      True
+Q111188275    True
+Q21064137     True
+Q21062983     True
+Q539821       True
+Q111188214    True
+Q46795        True
+Q565671       True
+Q111188217    True
+Q111188213    True
+Q111188327    True
+Q8025655      True
+Q12170059     True
+Q110160494    True
+Q111188215    True
+Q469641       True
+Q1372633      True
+Q313893       True
+Q733180       True
+Q58188        True
+Q57657        True
+Q202077       True
+Q733817       True
+Q645228       True
+Q1395018      True
+Q318960       True
+Q593552       True
+Q710549       True
+Q195725       True
+Q196070       True
+Q121708       True
+Q57291        True
+Q193492       True
+Q173563       True
+Q308189       True
+Q1441663      True
+dtype: bool</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/citizensandtech\.github\.io\/sicss-wikipedia");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
