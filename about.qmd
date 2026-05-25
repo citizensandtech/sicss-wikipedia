@@ -3,3 +3,17 @@ title: "About"
 ---
 
 These materials are developed as part of the Wikimedia Research project [*Wikimedia at Summer Institutes in Computational Social Science*](https://meta.wikimedia.org/wiki/Research:Wikimedia_at_Summer_Institutes_in_Computational_Social_Science)
+
+## Authors
+
+
+### Dr. Bastian Greshake Tzovaras
+
+[https://tzovar.as/](https://tzovar.as/)
+[@gedankenstuecke@scholar.social](https://scholar.social/@gedankenstuecke/)
+
+Bastian (he/him) is an interdisciplinary researcher working on the theory and practice of co-created participatory science and peer production. His work intersects with open source/science technologies and how they can be in service of individuals & communities that want to engage in knowledge production, bringing together applied and theoretical methods from computer/data science, human-computer-interaction and critical science & technology studies.
+
+Bastian’s prior academic postings include being a senior researcher at the Alan Turing Institute in London and being the team-lead of the Peer-Produced Research Lab as part of an INSERM unit at Université Paris Cité. His academic journey started in biology/bioinformatics, with a PhD on how symbiotic relationships influence genomic evolution. 
+
+In the realm of participatory science, he was the co-founder and lead of openSNP, a crowdsourced/citizen science open data project that ran between 2011-2025. Since 2017, he also acts as the Director of Research for Open Humans – a non-profit that provides digital & social infrastructures for individual & community-driven citizen science and self-research. 
