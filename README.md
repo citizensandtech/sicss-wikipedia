@@ -49,4 +49,5 @@ Once the files exist, they can be added to the menu bar by adding them to the `n
 
 ## Deployment
 
-For now, just copy the content of the `_site/` folder into `docs/` for the simplest GH pages deployment.
+The live pages are deployed from the `gh-pages` branch of this repository.
+The build using `babelquarto` happens automatically from the `main` branch via a GitHub action.
