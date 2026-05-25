@@ -172,12 +172,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#getting-the-articles" id="toc-getting-the-articles" class="nav-link" data-scroll-target="#getting-the-articles">Getting the articles</a>
   <ul class="collapse">
   <li><a href="#some-initial-setup" id="toc-some-initial-setup" class="nav-link" data-scroll-target="#some-initial-setup">Some initial setup</a></li>
+  <li><a href="#reminder-the-ethics-of-working-with-wikipedia-data" id="toc-reminder-the-ethics-of-working-with-wikipedia-data" class="nav-link" data-scroll-target="#reminder-the-ethics-of-working-with-wikipedia-data">Reminder: The ethics of working with Wikipedia data</a></li>
+  <li><a href="#classifying-accounts-as-bots" id="toc-classifying-accounts-as-bots" class="nav-link" data-scroll-target="#classifying-accounts-as-bots">Classifying accounts as bots</a></li>
   <li><a href="#writing-our-queries-and-executing-them" id="toc-writing-our-queries-and-executing-them" class="nav-link" data-scroll-target="#writing-our-queries-and-executing-them">Writing our queries and executing them</a></li>
   </ul></li>
-  <li><a href="#classifying-contributros" id="toc-classifying-contributros" class="nav-link" data-scroll-target="#classifying-contributros">Classifying contributros</a></li>
+  <li><a href="#classifying-contributors" id="toc-classifying-contributors" class="nav-link" data-scroll-target="#classifying-contributors">Classifying contributors</a></li>
   <li><a href="#classify-articles-by-mean-specialisation-score" id="toc-classify-articles-by-mean-specialisation-score" class="nav-link" data-scroll-target="#classify-articles-by-mean-specialisation-score">Classify articles by mean specialisation score</a></li>
   <li><a href="#specialisation-depending-on-gender-of-biography" id="toc-specialisation-depending-on-gender-of-biography" class="nav-link" data-scroll-target="#specialisation-depending-on-gender-of-biography">Specialisation depending on gender of biography</a></li>
-  <li><a href="#gender-specialisation-and-quality" id="toc-gender-specialisation-and-quality" class="nav-link" data-scroll-target="#gender-specialisation-and-quality">Gender, specialisation and quality</a></li>
+  <li><a href="#gender-specialisation-and-quality" id="toc-gender-specialisation-and-quality" class="nav-link" data-scroll-target="#gender-specialisation-and-quality">Gender, specialisation and quality</a>
+  <ul class="collapse">
+  <li><a href="#statistical-testing" id="toc-statistical-testing" class="nav-link" data-scroll-target="#statistical-testing">Statistical testing</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -217,82 +222,107 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>As we have seen before, there are around 1,000 Wikidata entries about Kenyan politicians. To keep things manageable for our test. Let’s start with a smaller number, and let’s also again try to get a more balanced sample of pages with respect to gender.</p>
 <section id="some-initial-setup" class="level3">
 <h3 class="anchored" data-anchor-id="some-initial-setup">Some initial setup</h3>
-<p>Let’s load our libraries and prepare some functions we’ll be using to get this data:</p>
-<div id="475d2525-604d-4d96-8d3a-869c6fbbd307" class="cell" data-execution_count="229">
+<p>Let’s load our libraries and prepare some functions we’ll be using to get this data.</p>
+</section>
+<section id="reminder-the-ethics-of-working-with-wikipedia-data" class="level3">
+<h3 class="anchored" data-anchor-id="reminder-the-ethics-of-working-with-wikipedia-data">Reminder: The ethics of working with Wikipedia data</h3>
+<p>Most contributions to Wikipedia are made by real human beings – and even the bots that edit are run by people. It’s important to keep this in mind when working with this data.</p>
+<p>While all user names, their edits etc. are publicly visible on Wikipedia, it’s still good practice to de-identify them when publishing things like scientific articles or teaching materials like these. For that reason, in our data gathering step below, we replace the Wikipedia usernames with unique identifiers.</p>
+</section>
+<section id="classifying-accounts-as-bots" class="level3">
+<h3 class="anchored" data-anchor-id="classifying-accounts-as-bots">Classifying accounts as bots</h3>
+<p>For some later steps, we will be interested in differentiating between Wikipedia edits made by accounts that are bots and those made by humans. As a first approach, we want to just classify accounts based on whether their name includes <em>bot</em> or not. As we anonymize the names of the contributors, we need to do this check at this stage already, you will see why later on.</p>
+<p><strong>Also note:</strong> For now we are using a very lazy approach of just checking if <code>bot</code> or <code>Bot</code> appears as a substring in the name of an account – this is <strong>not reliable</strong> - there will accidental mismatches (c.f. the <a href="https://en.wikipedia.org/wiki/Scunthorpe_problem">Scunthorpe problem</a>) and some bot accounts might not carry <em>bot</em> in the name. For a more rigorous check, you should check the Wikipedia user groups, as outlined in the introduction! Despite those caveats, we will use this as a first step, to avoid querying the API some thousands of times.</p>
+<div id="475d2525-604d-4d96-8d3a-869c6fbbd307" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot <span class="co"># loading the pywikibot library</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pywikibot <span class="im">import</span> pagegenerators <span class="im">as</span> pg <span class="co"># import the page generator so we can iterate over all returned Wikidata items</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd <span class="co"># loading pandas for data manipulation</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>WIKIPEDIA_SITE <span class="op">=</span> pywikibot.Site(<span class="st">"en"</span>, <span class="st">'wikipedia'</span>) <span class="co"># creating an English WP site object to get page details</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib <span class="co"># for de-identifying the contributors</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>WIKIDATA_SITE <span class="op">=</span> pywikibot.Site(<span class="st">"wikidata"</span>, <span class="st">'wikidata'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>WIKIPEDIA_SITE <span class="op">=</span> pywikibot.Site(<span class="st">"en"</span>, <span class="st">'wikipedia'</span>) <span class="co"># creating an English WP site object to get page details</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_gender(wikidata_item):</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Look at the property for gendre and return the</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">    english language gender label if present. If not,</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">    return "unknown" - useful when our queries do not</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">    presume the response</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">"P21"</span> <span class="kw">in</span> wikidata_item.claims.keys():</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> wikidata_item.claims[<span class="st">'P21'</span>][<span class="dv">0</span>].target.labels[<span class="st">'en'</span>]</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"unknown"</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_content_assessment(p):</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">    Takes a regular page object to first get the </span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">    associated talk page (assessments are on those)</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">    and then return the assessment found.</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    assessment <span class="op">=</span> [<span class="st">"FA"</span>, <span class="st">"FL"</span>, <span class="st">"FM"</span>, <span class="st">"A"</span>, <span class="st">"GA"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"Start"</span>, <span class="st">"Stub"</span>]</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    tpage <span class="op">=</span> p.toggleTalkPage()</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> tpage.categories(): <span class="co"># iterate over all categories</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> a <span class="kw">in</span> assessment: <span class="co"># iterate over possible asssements</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> c.title().startswith(<span class="st">"Category:</span><span class="sc">{}</span><span class="st">-Class"</span>.<span class="bu">format</span>(a)):</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> a <span class="co"># found assessment category and return  </span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span> <span class="co"># if none found, return None</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_query(QUERY):</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co">    Run's the handed query and returns a dictionary that contains</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co">    the following information, for politicians that have an article</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co">    in the English language wikipedia</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Item ID in wikidata</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co">    2. name of Wikipedia page</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">    3. gender of politician</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co">    4. number of unique editors</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="co">    5. quality rating</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    generator <span class="op">=</span> pg.WikidataSPARQLPageGenerator(QUERY, site<span class="op">=</span>WIKIDATA_SITE)</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    politician_data <span class="op">=</span> {}</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> generator:</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        qid <span class="op">=</span> item.getID() <span class="co"># get unique ID</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check that has english language article:</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'enwiki'</span> <span class="kw">in</span> item.sitelinks.keys():</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>            page_title <span class="op">=</span> item.sitelinks[<span class="st">'enwiki'</span>].canonical_title()</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>            page <span class="op">=</span> pywikibot.Page(WIKIPEDIA_SITE, page_title)</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>            politician_data[qid] <span class="op">=</span> {} <span class="co"># initialize dictionary </span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'gender'</span>] <span class="op">=</span> get_gender(item) <span class="co"># add gender</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'name'</span>] <span class="op">=</span> page_title <span class="co"># add english article name</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'content_assessment'</span>] <span class="op">=</span> get_content_assessment(page)</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>            contributors <span class="op">=</span> <span class="bu">list</span>(page.contributors())</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'contributor_count'</span>] <span class="op">=</span> <span class="bu">len</span>(contributors)</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'contributor_list'</span>] <span class="op">=</span> contributors</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> politician_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>WIKIDATA_SITE <span class="op">=</span> pywikibot.Site(<span class="st">"wikidata"</span>, <span class="st">'wikidata'</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_gender(wikidata_item):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">    Look at the property for gendre and return the</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">    english language gender label if present. If not,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">    return "unknown" - useful when our queries do not</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">    presume the response</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">"P21"</span> <span class="kw">in</span> wikidata_item.claims.keys():</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> wikidata_item.claims[<span class="st">'P21'</span>][<span class="dv">0</span>].target.labels[<span class="st">'en'</span>]</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"unknown"</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_content_assessment(p):</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">    Takes a regular page object to first get the </span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">    associated talk page (assessments are on those)</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">    and then return the assessment found.</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    assessment <span class="op">=</span> [<span class="st">"FA"</span>, <span class="st">"FL"</span>, <span class="st">"FM"</span>, <span class="st">"A"</span>, <span class="st">"GA"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"Start"</span>, <span class="st">"Stub"</span>]</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    tpage <span class="op">=</span> p.toggleTalkPage()</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> tpage.categories(): <span class="co"># iterate over all categories</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> a <span class="kw">in</span> assessment: <span class="co"># iterate over possible asssements</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> c.title().startswith(<span class="st">"Category:</span><span class="sc">{}</span><span class="st">-Class"</span>.<span class="bu">format</span>(a)):</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> a <span class="co"># found assessment category and return  </span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span> <span class="co"># if none found, return None</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> deidentify_contributors(contributors):</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co">    takes the contributor list with real</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co">    usernames and converts it into sha256</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">    hashes instead.</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    contributors <span class="op">=</span> <span class="bu">list</span>(contributors)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    contributors <span class="op">=</span> [hashlib.sha256(c.encode()).hexdigest() <span class="cf">for</span> c <span class="kw">in</span> contributors] </span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> contributors</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_query(QUERY):</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co">    Run's the handed query and returns a dictionary that contains</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co">    the following information, for politicians that have an article</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co">    in the English language wikipedia</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Item ID in wikidata</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="co">    2. name of Wikipedia page</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="co">    3. gender of politician</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="co">    4. number of unique editors</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="co">    5. quality rating</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    generator <span class="op">=</span> pg.WikidataSPARQLPageGenerator(QUERY, site<span class="op">=</span>WIKIDATA_SITE)</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    politician_data <span class="op">=</span> {}</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> generator:</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>        qid <span class="op">=</span> item.getID() <span class="co"># get unique ID</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check that has english language article:</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'enwiki'</span> <span class="kw">in</span> item.sitelinks.keys():</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>            page_title <span class="op">=</span> item.sitelinks[<span class="st">'enwiki'</span>].canonical_title()</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>            page <span class="op">=</span> pywikibot.Page(WIKIPEDIA_SITE, page_title)</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>            politician_data[qid] <span class="op">=</span> {} <span class="co"># initialize dictionary </span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'gender'</span>] <span class="op">=</span> get_gender(item) <span class="co"># add gender</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'name'</span>] <span class="op">=</span> page_title <span class="co"># add english article name</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'content_assessment'</span>] <span class="op">=</span> get_content_assessment(page)</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>            contributors <span class="op">=</span> <span class="bu">list</span>(page.contributors())</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'contributor_is_bot'</span>] <span class="op">=</span> [<span class="va">True</span> <span class="cf">if</span> <span class="st">'bot'</span> <span class="kw">in</span> c.lower() <span class="cf">else</span> <span class="va">False</span> <span class="cf">for</span> c <span class="kw">in</span> contributors] <span class="co"># mark if a contributor is a bot or not</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>            contributors <span class="op">=</span> deidentify_contributors(contributors)</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'contributor_count'</span>] <span class="op">=</span> <span class="bu">len</span>(contributors)</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'contributor_list'</span>] <span class="op">=</span> contributors</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> politician_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="writing-our-queries-and-executing-them" class="level3">
 <h3 class="anchored" data-anchor-id="writing-our-queries-and-executing-them">Writing our queries and executing them</h3>
 <p>For testing purposes and not waiting for a long time for the API, Let’s now get 50 articles each for male and female politicians to get us started:</p>
 <p>(<strong>note: currently the outputs below use <em>all</em> articles!</strong>)</p>
-<div id="c926b9bb-98ca-401b-943a-039e536140d1" class="cell" data-execution_count="230">
+<div id="c926b9bb-98ca-401b-943a-039e536140d1" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>male_query <span class="op">=</span> <span class="st">"""</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT DISTINCT ?item</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE {</span></span>
@@ -319,11 +349,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>page_data_female <span class="op">=</span> run_query(female_query)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now that we got our two dictionaries, we can merge them into a data frame as we’ve done before:</p>
-<div id="364e3055-596e-4f0a-bedb-95698a399194" class="cell" data-execution_count="231">
+<div id="364e3055-596e-4f0a-bedb-95698a399194" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>all_page_data <span class="op">=</span> page_data_male <span class="op">|</span> page_data_female</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_all_page_data <span class="op">=</span> pd.DataFrame(all_page_data).T</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df_all_page_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="231">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
 
@@ -334,50 +364,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th data-quarto-table-cell-role="th">gender</th>
 <th data-quarto-table-cell-role="th">name</th>
 <th data-quarto-table-cell-role="th">content_assessment</th>
+<th data-quarto-table-cell-role="th">contributor_is_bot</th>
 <th data-quarto-table-cell-role="th">contributor_count</th>
 <th data-quarto-table-cell-role="th">contributor_list</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Q19664415</th>
+<th data-quarto-table-cell-role="th">Q47493987</th>
 <td>male</td>
-<td>Humphrey Slade</td>
-<td>C</td>
-<td>28</td>
-<td>[PrimeBOT, Staryu, Dodszi gera, Dgp4004, Jevan...</td>
+<td>Samuel Atandi</td>
+<td>Stub</td>
+<td>[False, False, False, False, False, False, False]</td>
+<td>7</td>
+<td>[aac6535862797986f92095d0bab66e17b2f5082d17593...</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">Q6268381</th>
+<th data-quarto-table-cell-role="th">Q18207112</th>
 <td>male</td>
-<td>Johnson Muthama</td>
-<td>Stub</td>
-<td>90</td>
-<td>[TejasTann, JemimaV, ThePageFixer, Tgyatso, Ab...</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Q5482591</th>
-<td>male</td>
-<td>Francis Thombe Nyammo</td>
-<td>Stub</td>
-<td>22</td>
-<td>[Zackmann08, Robby.is.on, 68.6.135.88, Mohamad...</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Q593552</th>
-<td>male</td>
-<td>Michael Kijana Wamalwa</td>
-<td>C</td>
-<td>94</td>
-<td>[JemimaV, Zackmann08, SuperCode111, ~2025-3133...</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Q4680594</th>
-<td>male</td>
-<td>Adan Keynan Wehliye</td>
+<td>Samuel Moroto</td>
 <td>Start</td>
-<td>93</td>
-<td>[Explicit, Zackmann08, Masohpotato, DualeKenya...</td>
+<td>[False, False, False, False, False, False, Fal...</td>
+<td>27</td>
+<td>[6b3d3a51e8a069af399128515babe479c52425c14f740...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q136723142</th>
+<td>male</td>
+<td>John David Kali</td>
+<td>Start</td>
+<td>[False, False, False, False, False, False, Fal...</td>
+<td>17</td>
+<td>[5ce084c4f608ddd0a136a5fde56139021d6f84bbed732...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q5021394</th>
+<td>male</td>
+<td>Calist Andrew Mwatela</td>
+<td>Stub</td>
+<td>[True, False, False, False, True, False, False...</td>
+<td>32</td>
+<td>[f8db1742eb8022428024482fe02b73bd059ca55aab0f6...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q115690447</th>
+<td>male</td>
+<td>Joseph Cherorot</td>
+<td>Start</td>
+<td>[False, False, False]</td>
+<td>3</td>
+<td>[9ad3810b6c8eb6aa458a3fdc3bc7bfdd6894f7ea8de99...</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">...</th>
@@ -386,58 +422,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>...</td>
 <td>...</td>
 <td>...</td>
+<td>...</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Q47531099</th>
+<th data-quarto-table-cell-role="th">Q6297432</th>
 <td>female</td>
-<td>Monica Juma</td>
-<td>Start</td>
-<td>81</td>
-<td>[Briianbraiin, Tescoid, JJMC89 bot III, Editor...</td>
+<td>Joyce Laboso</td>
+<td>Stub</td>
+<td>[False, False, True, False, False, False, Fals...</td>
+<td>83</td>
+<td>[6b3d3a51e8a069af399128515babe479c52425c14f740...</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">Q7071124</th>
+<th data-quarto-table-cell-role="th">Q47494639</th>
 <td>female</td>
-<td>Nyiva Mwendwa</td>
+<td>Sara Korere</td>
 <td>Start</td>
-<td>37</td>
-<td>[PrimeBOT, JemimaV, Asamoah Daniel Kwame Oware...</td>
+<td>[True, False, True, True, False, False, False,...</td>
+<td>14</td>
+<td>[b2c8031262437b162a061954c6178b79c8603b80bec12...</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Q21062983</th>
+<th data-quarto-table-cell-role="th">Q47490065</th>
 <td>female</td>
-<td>Marianne Jebet Kitany</td>
+<td>Jerusha Mongina Momanyi</td>
 <td>Start</td>
-<td>37</td>
-<td>[JemimaV, Zackmann08, Masohpotato, TheMDC4, K-...</td>
+<td>[True, False, False, False, False, False, Fals...</td>
+<td>10</td>
+<td>[f8db1742eb8022428024482fe02b73bd059ca55aab0f6...</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">Q47490080</th>
+<th data-quarto-table-cell-role="th">Q47539824</th>
 <td>female</td>
-<td>Lilian Tomitom</td>
-<td>Stub</td>
-<td>4</td>
-<td>[Simeon, GrahamHardy, Bamyers99, Pi]</td>
+<td>Margaret Kobia</td>
+<td>Start</td>
+<td>[True, False, False, False, False, False, Fals...</td>
+<td>22</td>
+<td>[f8db1742eb8022428024482fe02b73bd059ca55aab0f6...</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Q47483883</th>
+<th data-quarto-table-cell-role="th">Q47495143</th>
 <td>female</td>
-<td>Elsie Busihile Muhanda</td>
-<td>Stub</td>
-<td>2</td>
-<td>[Jevansen, Ojewuyib]</td>
+<td>Janet Jepkemboi Sitienei</td>
+<td>Start</td>
+<td>[True, False, False, True, False, False, False...</td>
+<td>11</td>
+<td>[f8db1742eb8022428024482fe02b73bd059ca55aab0f6...</td>
 </tr>
 </tbody>
 </table>
 
-<p>646 rows × 5 columns</p>
+<p>646 rows × 6 columns</p>
 </div>
 </div>
 </div>
 <p>Let’s look at the gender breakdown of our sample now:</p>
-<div id="f2c4ce7b-2c64-4146-999c-08b130499511" class="cell" data-execution_count="256">
+<div id="f2c4ce7b-2c64-4146-999c-08b130499511" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.groupby([<span class="st">'gender'</span>])[<span class="st">'name'</span>].count()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="256">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>gender
 female    153
 male      493
@@ -448,10 +490,10 @@ Name: name, dtype: int64</code></pre>
 <p>Now we got the data frame with the information we want for each article so far, along with the list of contributors.</p>
 </section>
 </section>
-<section id="classifying-contributros" class="level2">
-<h2 class="anchored" data-anchor-id="classifying-contributros">Classifying contributros</h2>
+<section id="classifying-contributors" class="level2">
+<h2 class="anchored" data-anchor-id="classifying-contributors">Classifying contributors</h2>
 <p>This allows us to now aggregate the information about the contributors and how many male/female biographies they have contributed to. For this, we iterate over all the rows we have and count how many female or male articles they have contributed to:</p>
-<div id="6223465b-4068-4ffd-a320-e9e345ef6c88" class="cell" data-execution_count="232">
+<div id="6223465b-4068-4ffd-a320-e9e345ef6c88" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the default value for our dictionary is a sub-dictionary</span></span>
@@ -468,16 +510,17 @@ Name: name, dtype: int64</code></pre>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>editors <span class="op">=</span> defaultdict(<span class="bu">dict</span>)</span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, row <span class="kw">in</span> df_all_page_data.iterrows():</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> contributor <span class="kw">in</span> row[<span class="st">'contributor_list'</span>]:</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> row[<span class="st">'gender'</span>] <span class="kw">in</span> editors[contributor].keys():</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>            editors[contributor][row[<span class="st">'gender'</span>]] <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>            editors[contributor][row[<span class="st">'gender'</span>]] <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># let's convert it into a DF as well</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>df_editors <span class="op">=</span> pd.DataFrame(editors).T</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>df_editors</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="232">
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, contributor <span class="kw">in</span> <span class="bu">enumerate</span>(row[<span class="st">'contributor_list'</span>]):</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        editors[contributor][<span class="st">'is_bot'</span>] <span class="op">=</span> row[<span class="st">'contributor_is_bot'</span>][i]</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> row[<span class="st">'gender'</span>] <span class="kw">in</span> editors[contributor].keys():</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>            editors[contributor][row[<span class="st">'gender'</span>]] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>            editors[contributor][row[<span class="st">'gender'</span>]] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># let's convert it into a DF as well</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>df_editors <span class="op">=</span> pd.DataFrame(editors).T</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>df_editors</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 
 
@@ -485,84 +528,101 @@ Name: name, dtype: int64</code></pre>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">is_bot</th>
 <th data-quarto-table-cell-role="th">male</th>
 <th data-quarto-table-cell-role="th">female</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">PrimeBOT</th>
-<td>164.0</td>
-<td>47.0</td>
+<th data-quarto-table-cell-role="th">aac6535862797986f92095d0bab66e17b2f5082d175932ced9b41182423bb5e4</th>
+<td>False</td>
+<td>39</td>
+<td>14</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">Staryu</th>
-<td>3.0</td>
-<td>3.0</td>
+<th data-quarto-table-cell-role="th">b3ddd339ec4410022359ad3e679f8d9099fb6085ebd801e0d24d032306d7753c</th>
+<td>False</td>
+<td>118</td>
+<td>46</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Dodszi gera</th>
-<td>1.0</td>
+<th data-quarto-table-cell-role="th">6b3d3a51e8a069af399128515babe479c52425c14f740b24415c5f5aab3e8094</th>
+<td>False</td>
+<td>339</td>
+<td>67</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5bafe5a6cbc8384d6d24ef6a65085a96f0d4161a990ad01f8c15a57125e0f821</th>
+<td>False</td>
+<td>35</td>
+<td>24</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">e85a82ee1ee4dd63a355b1dab9124eb1586c820aaca002d5fbe6d8e659c39584</th>
+<td>False</td>
+<td>1</td>
 <td>NaN</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Dgp4004</th>
-<td>17.0</td>
-<td>2.0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Jevansen</th>
-<td>72.0</td>
-<td>55.0</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">...</th>
 <td>...</td>
 <td>...</td>
+<td>...</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Enos733</th>
+<th data-quarto-table-cell-role="th">9ecafb054e6dc53f21a03ceb3978eba7db9da2b661a09f7af06f5fbadc1200c8</th>
+<td>False</td>
 <td>NaN</td>
-<td>1.0</td>
+<td>1</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">102.69.224.26</th>
+<th data-quarto-table-cell-role="th">95492f277d4fe95767cb1fde4f94ac68bc1beb2025eef5a2a254b5851d103721</th>
+<td>False</td>
 <td>NaN</td>
-<td>1.0</td>
+<td>1</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">85.115.58.180</th>
+<th data-quarto-table-cell-role="th">ec53ffbdab898943e1181a32a9859747ea7c1010d84a69a2ded6d5d984ada4d5</th>
+<td>False</td>
 <td>NaN</td>
-<td>1.0</td>
+<td>1</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2A02:C7D:B8FB:F900:401F:D8DF:484:6AF0</th>
+<th data-quarto-table-cell-role="th">ab0f848f32cfa8207f76b4cc5971216b0d9f903285b10354c48ea5a08e3a6c2b</th>
+<td>False</td>
 <td>NaN</td>
-<td>1.0</td>
+<td>1</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Ojewuyib</th>
+<th data-quarto-table-cell-role="th">3a5fe294beb0eddb97841702345f608f917b4278e213cc751002b4cd8ee814d0</th>
+<td>False</td>
 <td>NaN</td>
-<td>1.0</td>
+<td>1</td>
 </tr>
 </tbody>
 </table>
 
-<p>16166 rows × 2 columns</p>
+<p>16170 rows × 3 columns</p>
 </div>
 </div>
 </div>
 <p>As we can see, some of those values wil be <code>NaN</code> (<em>not a number</em>) as the editors haven’t contributed to one of the two categories. In reality, those missing bits are <code>0</code>, so let’s replace those:</p>
-<div id="e5a6ee32-2474-4121-891c-dc231a72e807" class="cell" data-execution_count="233">
+<div id="e5a6ee32-2474-4121-891c-dc231a72e807" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_editors <span class="op">=</span> df_editors.fillna(<span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>WARNING: /tmp/ipykernel_5272/2745177195.py:1: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  df_editors = df_editors.fillna(0)
+</code></pre>
+</div>
 </div>
 <p>Now we can count the total number of pages the users edited (that is, pages in our sample, not the total pages they ever edited!) and then get the fraction of edits that went to male edits:</p>
-<div id="115705c2-6abf-47b6-8535-e412d474e8ce" class="cell" data-execution_count="234">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'total_pages'</span>] <span class="op">=</span> df_editors[<span class="st">'male'</span>] <span class="op">+</span> df_editors[<span class="st">'female'</span>]</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'percent_male'</span>] <span class="op">=</span> df_editors[<span class="st">'male'</span>] <span class="op">/</span>  df_editors[<span class="st">'total_pages'</span>]  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="115705c2-6abf-47b6-8535-e412d474e8ce" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'total_pages'</span>] <span class="op">=</span> df_editors[<span class="st">'male'</span>] <span class="op">+</span> df_editors[<span class="st">'female'</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'percent_male'</span>] <span class="op">=</span> df_editors[<span class="st">'male'</span>] <span class="op">/</span>  df_editors[<span class="st">'total_pages'</span>]  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="1f90215d-dcc5-4ed0-b248-58a0bd29cc00" class="cell" data-execution_count="235">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'percent_male'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="1f90215d-dcc5-4ed0-b248-58a0bd29cc00" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'percent_male'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -572,8 +632,8 @@ Name: name, dtype: int64</code></pre>
 </div>
 </div>
 <p>That looks very strongly bi-modal. But this could be an artifact, if we remember participation inequality in Wikipedia: The vast majority of users here will have likely only done a single edit, which by definition would end up in either in the 0% or 100% group. Let’s plot that number of edited pages to explore this:</p>
-<div id="09cb4b90-f856-4301-ad6b-809a6d8da8c4" class="cell" data-execution_count="236">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'total_pages'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>,bins<span class="op">=</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="09cb4b90-f856-4301-ad6b-809a6d8da8c4" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'total_pages'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>,bins<span class="op">=</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -582,9 +642,9 @@ Name: name, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<p>As expected, we see that the overwhemling majority of all 8000 editors only touched a single page, heavily biasing our results. Let’s require people to have at least edited 2 pages to avoid this and remove the outliers:</p>
-<div id="b4dc1d7a-568a-4032-9ae4-aa54479570b5" class="cell" data-execution_count="237">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_editors[df_editors[<span class="st">'total_pages'</span>]<span class="op">&gt;=</span><span class="dv">2</span>][<span class="st">'percent_male'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>As expected, we see that the overwhemling majority of all editors only touched a single page, heavily biasing our results. Let’s require people to have at least edited 2 pages to avoid this and remove the outliers:</p>
+<div id="b4dc1d7a-568a-4032-9ae4-aa54479570b5" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df_editors[df_editors[<span class="st">'total_pages'</span>]<span class="op">&gt;=</span><span class="dv">2</span>][<span class="st">'percent_male'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -597,35 +657,35 @@ Name: name, dtype: int64</code></pre>
 <section id="classify-articles-by-mean-specialisation-score" class="level2">
 <h2 class="anchored" data-anchor-id="classify-articles-by-mean-specialisation-score">Classify articles by mean specialisation score</h2>
 <p>While we still see a strong male-bias, this removes the large outliers that were purely a statistical artifact. We can now use those editor classifications to calculate the ‘specialisation’ score:</p>
-<div id="d9ce846b-3177-4724-93ac-6896bb921329" class="cell" data-execution_count="238">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_specialisation_score(row,df_editors):</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">    give average "specialisation" score</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">    for all contributors who touched article</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">    and edited 2+ articles in set</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    score <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    contribs <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> contributor <span class="kw">in</span> row[<span class="st">'contributor_list'</span>]:</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> contributor <span class="kw">in</span> df_editors.index:</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>            score <span class="op">+=</span> <span class="bu">float</span>(</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                df_editors.loc[[contributor]][<span class="st">'percent_male'</span>].iloc[<span class="dv">0</span>]</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>            contribs <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> contribs:</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> score <span class="op">/</span> contribs</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>filtered_editors <span class="op">=</span> df_editors[df_editors[<span class="st">'total_pages'</span>]<span class="op">&gt;=</span><span class="dv">2</span>]</span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>df_all_page_data[<span class="st">'specialisation_score'</span>] <span class="op">=</span> df_all_page_data.<span class="bu">apply</span>(</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    calculate_specialisation_score,</span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    axis<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>[filtered_editors])</span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>df_all_page_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="238">
+<div id="d9ce846b-3177-4724-93ac-6896bb921329" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_specialisation_score(row,df_editors):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">    give average "specialisation" score</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">    for all contributors who touched article</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">    and edited 2+ articles in set</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    score <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    contribs <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> contributor <span class="kw">in</span> row[<span class="st">'contributor_list'</span>]:</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> contributor <span class="kw">in</span> df_editors.index:</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>            score <span class="op">+=</span> <span class="bu">float</span>(</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>                df_editors.loc[[contributor]][<span class="st">'percent_male'</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>            contribs <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> contribs:</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> score <span class="op">/</span> contribs</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>filtered_editors <span class="op">=</span> df_editors[df_editors[<span class="st">'total_pages'</span>]<span class="op">&gt;=</span><span class="dv">2</span>]</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>df_all_page_data[<span class="st">'specialisation_score'</span>] <span class="op">=</span> df_all_page_data.<span class="bu">apply</span>(</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    calculate_specialisation_score,</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    axis<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>[filtered_editors])</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>df_all_page_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -636,6 +696,7 @@ Name: name, dtype: int64</code></pre>
 <th data-quarto-table-cell-role="th">gender</th>
 <th data-quarto-table-cell-role="th">name</th>
 <th data-quarto-table-cell-role="th">content_assessment</th>
+<th data-quarto-table-cell-role="th">contributor_is_bot</th>
 <th data-quarto-table-cell-role="th">contributor_count</th>
 <th data-quarto-table-cell-role="th">contributor_list</th>
 <th data-quarto-table-cell-role="th">specialisation_score</th>
@@ -643,49 +704,54 @@ Name: name, dtype: int64</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Q19664415</th>
+<th data-quarto-table-cell-role="th">Q47493987</th>
 <td>male</td>
-<td>Humphrey Slade</td>
-<td>C</td>
-<td>28</td>
-<td>[PrimeBOT, Staryu, Dodszi gera, Dgp4004, Jevan...</td>
-<td>0.847248</td>
+<td>Samuel Atandi</td>
+<td>Stub</td>
+<td>[False, False, False, False, False, False, False]</td>
+<td>7</td>
+<td>[aac6535862797986f92095d0bab66e17b2f5082d17593...</td>
+<td>0.675364</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">Q6268381</th>
+<th data-quarto-table-cell-role="th">Q18207112</th>
 <td>male</td>
-<td>Johnson Muthama</td>
-<td>Stub</td>
-<td>90</td>
-<td>[TejasTann, JemimaV, ThePageFixer, Tgyatso, Ab...</td>
-<td>0.870323</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Q5482591</th>
-<td>male</td>
-<td>Francis Thombe Nyammo</td>
-<td>Stub</td>
-<td>22</td>
-<td>[Zackmann08, Robby.is.on, 68.6.135.88, Mohamad...</td>
-<td>0.892372</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Q593552</th>
-<td>male</td>
-<td>Michael Kijana Wamalwa</td>
-<td>C</td>
-<td>94</td>
-<td>[JemimaV, Zackmann08, SuperCode111, ~2025-3133...</td>
-<td>0.905560</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Q4680594</th>
-<td>male</td>
-<td>Adan Keynan Wehliye</td>
+<td>Samuel Moroto</td>
 <td>Start</td>
-<td>93</td>
-<td>[Explicit, Zackmann08, Masohpotato, DualeKenya...</td>
-<td>0.838302</td>
+<td>[False, False, False, False, False, False, Fal...</td>
+<td>27</td>
+<td>[6b3d3a51e8a069af399128515babe479c52425c14f740...</td>
+<td>0.808488</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q136723142</th>
+<td>male</td>
+<td>John David Kali</td>
+<td>Start</td>
+<td>[False, False, False, False, False, False, Fal...</td>
+<td>17</td>
+<td>[5ce084c4f608ddd0a136a5fde56139021d6f84bbed732...</td>
+<td>0.824885</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Q5021394</th>
+<td>male</td>
+<td>Calist Andrew Mwatela</td>
+<td>Stub</td>
+<td>[True, False, False, False, True, False, False...</td>
+<td>32</td>
+<td>[f8db1742eb8022428024482fe02b73bd059ca55aab0f6...</td>
+<td>0.875989</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Q115690447</th>
+<td>male</td>
+<td>Joseph Cherorot</td>
+<td>Start</td>
+<td>[False, False, False]</td>
+<td>3</td>
+<td>[9ad3810b6c8eb6aa458a3fdc3bc7bfdd6894f7ea8de99...</td>
+<td>0.740038</td>
 </tr>
 </tbody>
 </table>
@@ -694,8 +760,8 @@ Name: name, dtype: int64</code></pre>
 </div>
 </div>
 <p>Now that we got the data frame above, we can actually plot our data, by comparing the specialisation score depending on the contributor count and the content assessment:</p>
-<div id="15ec78dd-164a-4065-b062-013cfd65e5d3" class="cell" data-execution_count="239">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(x<span class="op">=</span><span class="st">'contributor_count'</span>,y<span class="op">=</span><span class="st">'specialisation_score'</span>,kind<span class="op">=</span><span class="st">'scatter'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="15ec78dd-164a-4065-b062-013cfd65e5d3" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(x<span class="op">=</span><span class="st">'contributor_count'</span>,y<span class="op">=</span><span class="st">'specialisation_score'</span>,kind<span class="op">=</span><span class="st">'scatter'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -706,9 +772,9 @@ Name: name, dtype: int64</code></pre>
 </div>
 <p>We see how the articles specialisation score reaches the ‘average’ as the number of contributors grows, approximating the distribution of gender of politicians represented in Wikidata. But there are also some articles with a larger number of contributors, where the average specialisation score hovers around 0.6.</p>
 <p>When we look at the ’content assessment in relation to the average specialisation, we find that the articles classified as <em>start</em> have a slightly lower score.</p>
-<div id="a7ccd0c4-4afe-4105-a737-1cb3ee529d65" class="cell" data-execution_count="240">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="240">
+<div id="a7ccd0c4-4afe-4105-a737-1cb3ee529d65" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>specialisation_score    Axes(0.125,0.11;0.775x0.77)
 dtype: object</code></pre>
 </div>
@@ -721,9 +787,9 @@ dtype: object</code></pre>
 </div>
 </div>
 <p><em>Start</em>-classified articles are generally smaller (and are comparitively newer or with fewer editors), this might be an artifact of just approximating the number of contributors. Let’s see how the number of editors varies between those categories:</p>
-<div id="79c00bd1-6418-4649-9ec6-9ea1cd60e8ea" class="cell" data-execution_count="241">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'contributor_count'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="241">
+<div id="79c00bd1-6418-4649-9ec6-9ea1cd60e8ea" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'contributor_count'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>contributor_count    Axes(0.125,0.11;0.775x0.77)
 dtype: object</code></pre>
 </div>
@@ -735,198 +801,13 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>For the <em>stub</em> articles, we see that they indeed have the smallest number of contributors - while the <em>start</em> articles have more editors and <strong>still</strong> have a lower specialisation score? Why could that be? One thing that could happen is that we are seeing the impact of targeted editing, e.g.&nbsp;in <em>Editathons</em> in which people contribute more fleshed-out articles (i.e.&nbsp;more than just <em>stubs</em>) on a given topic. Was there maybe events for editing/adding missing pages for women in Kenya?</p>
+<p>For the <em>stub</em> articles, we see that they indeed have the smallest number of contributors - while the <em>start</em> articles have more editors and <strong>still</strong> have a lower specialisation score? Why could that be? One thing that could happen is that we are seeing the impact of targeted editing, e.g.&nbsp;in <em>Editathons</em> in which people contribute more fleshed-out articles (i.e.&nbsp;more than just <em>stubs</em>) on a given topic.</p>
+<p>Were there maybe events for editing/adding missing pages for women in Kenya? Those would likely be more fleshed out, immediately bypassing the <em>Stub</em> category and be at least classified as <em>Start</em>.</p>
 <p>One thing we didn’t take into account so far are bot accounts. What happens if we’d redo this whole work without bot accounts?</p>
-<p>Let’s remove them from our scoring too, similar how we removed the accounts with only a single edit.</p>
-<p><strong>Note:</strong> For now we are using a very lazy approach of just checking if <code>bot</code> or <code>Bot</code> appears as a substring in the name of an account – this is <strong>not reliable</strong> - there will accidental mismatches (c.f. the <a href="https://en.wikipedia.org/wiki/Scunthorpe_problem">Scunthorpe problem</a>) and some bot accounts might not carry <em>bot</em> in the name. For a more rigorous check, you should check the Wikipedia user groups, as outlined in the introduction!</p>
-<p>Despite those caveats, let’s try this as a first step, to avoid querying the API some thousands of times:</p>
-<div id="f570d37a-6a1a-40af-a0af-1541a64ce98c" class="cell" data-execution_count="242">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'is_bot'</span>] <span class="op">=</span> df_editors.<span class="bu">apply</span>(<span class="kw">lambda</span> x: (<span class="st">"bot"</span> <span class="kw">in</span> x.name) <span class="kw">or</span> (<span class="st">"Bot"</span> <span class="kw">in</span> x.name), axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>df_editors.head(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="242">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">male</th>
-<th data-quarto-table-cell-role="th">female</th>
-<th data-quarto-table-cell-role="th">total_pages</th>
-<th data-quarto-table-cell-role="th">percent_male</th>
-<th data-quarto-table-cell-role="th">is_bot</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">PrimeBOT</th>
-<td>164.0</td>
-<td>47.0</td>
-<td>211.0</td>
-<td>0.777251</td>
-<td>False</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Staryu</th>
-<td>3.0</td>
-<td>3.0</td>
-<td>6.0</td>
-<td>0.500000</td>
-<td>False</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Dodszi gera</th>
-<td>1.0</td>
-<td>0.0</td>
-<td>1.0</td>
-<td>1.000000</td>
-<td>False</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Dgp4004</th>
-<td>17.0</td>
-<td>2.0</td>
-<td>19.0</td>
-<td>0.894737</td>
-<td>False</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Jevansen</th>
-<td>72.0</td>
-<td>55.0</td>
-<td>127.0</td>
-<td>0.566929</td>
-<td>False</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Perspicax</th>
-<td>70.0</td>
-<td>14.0</td>
-<td>84.0</td>
-<td>0.833333</td>
-<td>False</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2A00:23C6:5408:2401:69EE:B427:1F08:D115</th>
-<td>1.0</td>
-<td>0.0</td>
-<td>1.0</td>
-<td>1.000000</td>
-<td>False</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Johnpacklambert</th>
-<td>44.0</td>
-<td>6.0</td>
-<td>50.0</td>
-<td>0.880000</td>
-<td>False</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Ser Amantio di Nicolao</th>
-<td>392.0</td>
-<td>103.0</td>
-<td>495.0</td>
-<td>0.791919</td>
-<td>False</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Chesiboi</th>
-<td>71.0</td>
-<td>12.0</td>
-<td>83.0</td>
-<td>0.855422</td>
-<td>False</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Rathfelder</th>
-<td>31.0</td>
-<td>18.0</td>
-<td>49.0</td>
-<td>0.632653</td>
-<td>False</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Atchom</th>
-<td>1.0</td>
-<td>0.0</td>
-<td>1.0</td>
-<td>1.000000</td>
-<td>False</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">SdkbBot</th>
-<td>255.0</td>
-<td>39.0</td>
-<td>294.0</td>
-<td>0.867347</td>
-<td>True</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">2A00:23C6:541B:BE01:138:ADF5:71F6:25CB</th>
-<td>1.0</td>
-<td>0.0</td>
-<td>1.0</td>
-<td>1.000000</td>
-<td>False</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">154.155.123.43</th>
-<td>1.0</td>
-<td>0.0</td>
-<td>1.0</td>
-<td>1.000000</td>
-<td>False</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Monkbot</th>
-<td>108.0</td>
-<td>27.0</td>
-<td>135.0</td>
-<td>0.800000</td>
-<td>True</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Citation bot</th>
-<td>200.0</td>
-<td>55.0</td>
-<td>255.0</td>
-<td>0.784314</td>
-<td>True</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Cheney123</th>
-<td>21.0</td>
-<td>2.0</td>
-<td>23.0</td>
-<td>0.913043</td>
-<td>False</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">InternetArchiveBot</th>
-<td>300.0</td>
-<td>63.0</td>
-<td>363.0</td>
-<td>0.826446</td>
-<td>True</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Hugo999</th>
-<td>3.0</td>
-<td>0.0</td>
-<td>3.0</td>
-<td>1.000000</td>
-<td>False</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
+<p>To account for this, we did a very basic classification above - based on the user names, to ID which accounts are bots and which ones aren’t.</p>
+<p>We can now use this contributor classification to remove them from the scoring, similar to how we removed accounts with only a single edit</p>
 <p>Now we can filter for accounts with edits to 2+ pages and not carrying <em>bot in the name</em>, redo our score calculation and plot the same curve:</p>
-<div id="500ec425-6113-4a4f-af20-60fe9b0ac8aa" class="cell" data-execution_count="243">
+<div id="500ec425-6113-4a4f-af20-60fe9b0ac8aa" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>filtered_editors <span class="op">=</span> df_editors.loc[(df_editors[<span class="st">'total_pages'</span>]<span class="op">&gt;=</span><span class="dv">2</span>) <span class="op">&amp;</span> (df_editors[<span class="st">'is_bot'</span>] <span class="op">!=</span> <span class="va">True</span>)]</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -939,27 +820,46 @@ dtype: object</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="04-full-example_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="04-full-example_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>This looks very similar to the picture we saw before!</p>
 <p>Let’s make a scatter plot to compare the per-page scores with or without bots:</p>
-<div id="3ea2ee68-1aee-4883-9276-16eca03636c8" class="cell" data-execution_count="250">
+<div id="3ea2ee68-1aee-4883-9276-16eca03636c8" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(x<span class="op">=</span><span class="st">'specialisation_score'</span>,y<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'scatter'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="04-full-example_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="04-full-example_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>For some entries that seems to drop the calculated scores a bit, but looks quite similar overall, and we can see the same for the content assessment:</p>
-<div id="2166bd29-8e98-4eb6-bd23-17c62f60a734" class="cell" data-execution_count="251">
+<div id="2166bd29-8e98-4eb6-bd23-17c62f60a734" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="251">
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
+dtype: object</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04-full-example_files/figure-html/cell-18-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This still approximates the same graph we saw before: <em>Start</em> articles are showing a less strong specialisation amongst editors.</p>
+</section>
+<section id="specialisation-depending-on-gender-of-biography" class="level2">
+<h2 class="anchored" data-anchor-id="specialisation-depending-on-gender-of-biography">Specialisation depending on gender of biography</h2>
+<p>Now, let’s look at the gender of the person a page is about, and see how the specialisation looks like there:</p>
+<div id="17e74f0f-d277-4f39-b8a3-79f90f03b3e8" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data[df_all_page_data[<span class="st">'contributor_count'</span>] <span class="op">&lt;</span><span class="dv">2000</span> ].plot(by<span class="op">=</span>[<span class="st">'gender'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
 dtype: object</code></pre>
 </div>
@@ -971,15 +871,13 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>This still approximates the same graph we saw before: <em>Start</em> articles are showing a less strong specialisation amongst editors.</p>
-</section>
-<section id="specialisation-depending-on-gender-of-biography" class="level2">
-<h2 class="anchored" data-anchor-id="specialisation-depending-on-gender-of-biography">Specialisation depending on gender of biography</h2>
-<p>Now, let’s look at the gender of the person a page is about, and see how the specialisation looks like there:</p>
-<div id="17e74f0f-d277-4f39-b8a3-79f90f03b3e8" class="cell" data-execution_count="245">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data[df_all_page_data[<span class="st">'contributor_count'</span>] <span class="op">&lt;</span><span class="dv">2000</span> ].plot(by<span class="op">=</span>[<span class="st">'gender'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="245">
-<pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
+<p>This shows us that biographies about women show a lot less specialisation - i.e.&nbsp;are by a mix of contributors who contribute to male &amp; female biographies.</p>
+<p>In contrast, the male biographies are mostly dominated by contributors that mostly contribute to biographies of men.</p>
+<p>Let’s double check if there is a clear bias in numbers of contributors between the male &amp; female articles?</p>
+<div id="e2cf6316-96fe-43fd-947f-a7799115817a" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'gender'</span>],column<span class="op">=</span><span class="st">'contributor_count'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>contributor_count    Axes(0.125,0.11;0.775x0.77)
 dtype: object</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -990,13 +888,15 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>This shows us that biographies about women show a lot less specialisation - i.e.&nbsp;are by a mix of contributors who contribute to male &amp; female biographies.</p>
-<p>In contrast, the male biographies are mostly dominated by contributors that mostly contribute to biographies of men.</p>
-<p>Let’s double check if there is a clear bias in numbers of contributors between the male &amp; female articles?</p>
-<div id="e2cf6316-96fe-43fd-947f-a7799115817a" class="cell" data-execution_count="246">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'gender'</span>],column<span class="op">=</span><span class="st">'contributor_count'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="246">
-<pre><code>contributor_count    Axes(0.125,0.11;0.775x0.77)
+<p>For the median, that does not seem to be the case, despite having some strong outliers with much larger contributor numbes for men.</p>
+</section>
+<section id="gender-specialisation-and-quality" class="level1">
+<h1>Gender, specialisation and quality</h1>
+<p>Lastly, let’s now combine it all and look at a per-gender breakdown and see if there are systematic differences. First for all pages, and then removing pages that had fewer than 200 editors, to remove large outliers</p>
+<div id="83264f3a-37b1-420d-ac3b-3ed8bd47708a" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'gender'</span>,<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>),title<span class="op">=</span><span class="st">'All contributors'</span>) <span class="co"># WITHOUT filter for articles with very large numbers of editors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
 dtype: object</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1007,14 +907,9 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>For the median, that does not seem to be the case, despite having some strong outliers with much larger contributor numbes for men.</p>
-</section>
-<section id="gender-specialisation-and-quality" class="level1">
-<h1>Gender, specialisation and quality</h1>
-<p>Lastly, let’s now combine it all and look at a per-gender breakdown and see if there are systematic differences. First for all pages, and then removing pages that had fewer than 200 editors, to remove large outliers</p>
-<div id="83264f3a-37b1-420d-ac3b-3ed8bd47708a" class="cell" data-execution_count="258">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'gender'</span>,<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>),title<span class="op">=</span><span class="st">'All contributors'</span>) <span class="co"># WITHOUT filter for articles with very large numbers of editors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="258">
+<div id="2f5452f0-d225-4df7-ab28-ff6627f8ab36" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data[df_all_page_data[<span class="st">'contributor_count'</span>] <span class="op">&lt;</span><span class="dv">200</span> ].plot(by<span class="op">=</span>[<span class="st">'gender'</span>,<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>),title<span class="op">=</span><span class="st">"Only articles with 200 or fewer contributors"</span>) <span class="co"># filter for articles with very large numbers of editors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
 dtype: object</code></pre>
 </div>
@@ -1026,10 +921,12 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<div id="2f5452f0-d225-4df7-ab28-ff6627f8ab36" class="cell" data-execution_count="259">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data[df_all_page_data[<span class="st">'contributor_count'</span>] <span class="op">&lt;</span><span class="dv">200</span> ].plot(by<span class="op">=</span>[<span class="st">'gender'</span>,<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>),title<span class="op">=</span><span class="st">"Only articles with 200 or fewer contributors"</span>) <span class="co"># filter for articles with very large numbers of editors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="259">
-<pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
+<p>The difference between the biography gender and the specialisation score generally holds across all article content ratings, but there doesn’t seem to be a strong impact or difference between the article ratings and the specialisation score.</p>
+<p>But, maybe there is one between the article quality and number of editors? Let’s make a plot for that too:</p>
+<div id="4bafd8db-57ef-444d-b1ff-a8f1dffc689f" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'gender'</span>,<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'contributor_count'</span>,kind<span class="op">=</span><span class="st">'box'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>)) <span class="co"># WITHOUT filter for articles with very large numbers of editors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>contributor_count    Axes(0.125,0.11;0.775x0.77)
 dtype: object</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1040,25 +937,71 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>The difference between the biography gender and the specialisation score generally holds across all article content ratings, but there doesn’t seem to be a strong impact or difference between the article ratings and the specialisation score.</p>
-<p>But, maybe there is one between the article quality and number of editors? Let’s make a plot for that too:</p>
-<div id="4bafd8db-57ef-444d-b1ff-a8f1dffc689f" class="cell" data-execution_count="260">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'gender'</span>,<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'contributor_count'</span>,kind<span class="op">=</span><span class="st">'box'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>)) <span class="co"># WITHOUT filter for articles with very large numbers of editors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="260">
-<pre><code>contributor_count    Axes(0.125,0.11;0.775x0.77)
-dtype: object</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="04-full-example_files/figure-html/cell-24-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
 <p>This seems to indeed be roughly the case: The ‘better’ an article, the more people have contributed to it!</p>
+<p>Overall, what we see is not so much of a <em>polarisation</em>, but two different editor communities:</p>
+<p>There are some contributors who mostly contribute to the biographies of men, while others contributors roughly equally contribute to male and female biographies. So we do not necessarily find a strong signal for a <em>battle of the sexes</em> in our data as is.</p>
+<p>When interpreting these findings, we should also keep a number of caveats in mind:</p>
+<ol type="1">
+<li>The APIs of Wikipedia only show us information about <strong>existing pages</strong>. Pages that were deleted, e.g.&nbsp;for a perceived lack of relevancy, would not be in our data</li>
+<li>Existing biases in media coverage: <a href="https://waccglobal.org/our-work/global-media-monitoring-project-gmmp/">According to the WACC Global Media Monitor</a> data from 2021, only 19% of news subjects in Kenya were woman. As Wikipedia articles should be referenced, a lack of news coverage makes it harder for female biographies to be added to Wikipedia.</li>
+</ol>
+<section id="statistical-testing" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-testing">Statistical testing</h2>
+<p>We can now also move beyond looking at the graphs and instead do some statistical model to better understand the relationships between our variables.</p>
+<p>For this, we will be using the <code>statsmodel</code> library.</p>
+<p>If you haven’t installed it yet, you can do so via <code>! pip install statsmodel</code> from the notebooks here!</p>
+<p>Once that done let’s load the library:</p>
+<div id="36e19dbe-25e8-42ad-a125-bf77c481f74c" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To make our modeling a bit easier, we’ll turn the <code>content_assessment</code> in to a binary variable for whether articles are highly ranked (e.g.&nbsp;are categories <code>FA</code>, <code>A</code>, <code>B</code> or <code>C</code>) or are just getting started (<code>Start</code> or <code>Stub</code>):</p>
+<div id="3081e9dd-654d-46d3-a0f2-bcde234870b4" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data[<span class="st">'highquality'</span>] <span class="op">=</span> df_all_page_data[<span class="st">'content_assessment'</span>].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="bu">int</span>(x <span class="kw">in</span> [<span class="st">'C'</span>, <span class="st">'B'</span>, <span class="st">'FA'</span>, <span class="st">'A'</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we’ll also convert the contributor counts to the <code>log</code>:</p>
+<div id="b6860e79-4349-464a-aeee-e9f3713d09df" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>df_all_page_data[<span class="st">'contributor_count'</span>] <span class="op">=</span> df_all_page_data[<span class="st">'contributor_count'</span>].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="bu">int</span>(x))</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>df_all_page_data[<span class="st">'contributor_count_log'</span>] <span class="op">=</span> df_all_page_data[<span class="st">'contributor_count'</span>].<span class="bu">map</span>(<span class="kw">lambda</span> x: np.log1p(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And with this all done, we can now run our model:</p>
+<div id="818cb772-1ff1-4b13-bf7e-65870dc54b30" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> smf.ols(<span class="st">'highquality ~ contributor_count_log + specialisation_score_no_bots + gender'</span>, data<span class="op">=</span>df_all_page_data).fit()</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:            highquality   R-squared:                       0.139
+Model:                            OLS   Adj. R-squared:                  0.135
+Method:                 Least Squares   F-statistic:                     34.48
+Date:                Mon, 25 May 2026   Prob (F-statistic):           1.13e-20
+Time:                        13:43:40   Log-Likelihood:                -74.086
+No. Observations:                 646   AIC:                             156.2
+Df Residuals:                     642   BIC:                             174.1
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+================================================================================================
+                                   coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------------------------
+Intercept                        0.0129      0.077      0.169      0.866      -0.137       0.163
+gender[T.male]                   0.0674      0.046      1.469      0.142      -0.023       0.157
+contributor_count_log            0.1313      0.013     10.062      0.000       0.106       0.157
+specialisation_score_no_bots    -0.5430      0.145     -3.739      0.000      -0.828      -0.258
+==============================================================================
+Omnibus:                      315.610   Durbin-Watson:                   2.214
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1265.555
+Skew:                           2.360   Prob(JB):                    1.54e-275
+Kurtosis:                       7.974   Cond. No.                         58.9
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
