@@ -4,13 +4,23 @@ title: "About"
 
 These materials are developed as part of the Wikimedia Research project [*Wikimedia at Summer Institutes in Computational Social Science*](https://meta.wikimedia.org/wiki/Research:Wikimedia_at_Summer_Institutes_in_Computational_Social_Science)
 
-## Authors
+## Re-use and licenses
 
+We want you to re-use and adapt these materials for your own teaching as much as possible.
+For this reason, they are dual licensed, depending on the content type:
+
+* These teaching materials themselves are openly licensed [under the *Creative Commons Attribution-Share Alike 4.0* (CC BY-SA 4.0) license](https://creativecommons.org/licenses/by-sa/4.0/). This means you can use, remix and republish those materials as long as they are under the same license and co-attribute us.
+* All the code for accessing and analysing the the Wiki data that is part of these materials is [released into the public domain using the *Creative Commons Zero* Deed (CC 0)](https://creativecommons.org/publicdomain/zero/1.0/). This means you can re-use and adapt the code in any way you want - without any requirements attached.
+
+### Translations
+
+We would love these materials to exist in more languages. If you translate them to teach using them in your own language context, please consider [contributing the materials back to us via GitHub](https://github.com/citizensandtech/sicss-wikipedia).
+
+## Authors
 
 ### Dr. Bastian Greshake Tzovaras
 
-[https://tzovar.as/](https://tzovar.as/)
-[@gedankenstuecke@scholar.social](https://scholar.social/@gedankenstuecke/)
+web: [https://tzovar.as/](https://tzovar.as/) | mastodon: [@gedankenstuecke@scholar.social](https://scholar.social/@gedankenstuecke/)
 
 Bastian (he/him) is an interdisciplinary researcher working on the theory and practice of co-created participatory science and peer production. His work intersects with open source/science technologies and how they can be in service of individuals & communities that want to engage in knowledge production, bringing together applied and theoretical methods from computer/data science, human-computer-interaction and critical science & technology studies.
 
