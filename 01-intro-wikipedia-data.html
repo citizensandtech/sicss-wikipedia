@@ -100,7 +100,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./02-pywikibot.html"> 
-<span class="menu-text">Accessing data from Wiki projects</span></a>
+<span class="menu-text">Basic data access</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./03-wikidata.html"> 
@@ -108,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./04-full-example.html"> 
-<span class="menu-text">Full example</span></a>
+<span class="menu-text">A study example</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
@@ -139,8 +139,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#considerations-for-accessing-wp-data" id="toc-considerations-for-accessing-wp-data" class="nav-link" data-scroll-target="#considerations-for-accessing-wp-data">Considerations for accessing WP data</a>
   <ul class="collapse">
   <li><a href="#what-resources-do-i-need" id="toc-what-resources-do-i-need" class="nav-link" data-scroll-target="#what-resources-do-i-need">What resources do I need</a></li>
-  </ul></li>
   <li><a href="#api-limits" id="toc-api-limits" class="nav-link" data-scroll-target="#api-limits">API limits</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -226,21 +226,23 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="considerations-for-accessing-wp-data" class="level2">
 <h2 class="anchored" data-anchor-id="considerations-for-accessing-wp-data">Considerations for accessing WP data</h2>
+<p>There are different ways of accessing data from Wikipedia, including different APIs, read-only database mirrors, and dumps of articles. They differ not only in how you can access the data, but also in what types of data they contain.</p>
+<p>To decide which types of data access work for your research project, you can think about some of these aspects below:</p>
 <section id="what-resources-do-i-need" class="level3">
 <h3 class="anchored" data-anchor-id="what-resources-do-i-need">What resources do I need</h3>
 <p>The answer to this depends a lot on your research question and how you aim to access Wikipedia.</p>
 <p>Generally, accessing text via the APIs that are provided is not computationally heavy and very doable on most consumer computers and laptops. The storage of the responses is equally not too complex.</p>
 <p>If you plan to work with the full dumps of Wikipedia, the resource requirements are a lot bigger, both for processing the amount of data and for storing it. Plus, downloading all the data will take some time.</p>
-<p>Lastly, Wikimedia offers <a href="https://wikitech.wikimedia.org/wiki/PAWS">a Jupyter Notebook environment called PAWS</a> that you can use to query data through your web browser, this can also help when you run into local API limits.</p>
+<p>Lastly, Wikimedia offers <a href="https://wikitech.wikimedia.org/wiki/PAWS">a Jupyter Notebook environment called PAWS</a> that you can use to query data through your web browser, this can also help when you run into local API limits. And as the data access runs on the servers of the Wikimedia Foundation, temporarily losing your internet connection is not a problem either. But, you will have to keep in mind that your code will be publicly accessible.</p>
 </section>
-</section>
-<section id="api-limits" class="level2">
-<h2 class="anchored" data-anchor-id="api-limits">API limits</h2>
+<section id="api-limits" class="level3">
+<h3 class="anchored" data-anchor-id="api-limits">API limits</h3>
 <p>Wikimedia <a href="https://www.mediawiki.org/wiki/Wikimedia_APIs/Rate_limits">enforces rate limits on the use of its API</a>, which differ depending on the level of authentication and how active a contributor people are. From your own computer you will run into limitations when using these methods. <em>PAWS</em> (see above) can help, by querying the Wiki replicas instead.</p>
 <p>But for really large data needs, options like the dumps might still be better.</p>
 <p>You can find a <a href="https://meta.wikimedia.org/wiki/Research:Data">list of all options on the Research section of the meta wiki</a></p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

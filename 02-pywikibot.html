@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Accessing data from Wiki projects – SICSS: Using Wikipedia</title>
+<title>Basic data access – SICSS: Using Wikipedia</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -116,7 +116,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./02-pywikibot.html" aria-current="page"> 
-<span class="menu-text">Accessing data from Wiki projects</span></a>
+<span class="menu-text">Basic data access</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./03-wikidata.html"> 
@@ -124,7 +124,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./04-full-example.html"> 
-<span class="menu-text">Full example</span></a>
+<span class="menu-text">A study example</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
@@ -153,9 +153,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li>
 <a href="#using-the-action-api-with-pywikibot" id="toc-using-the-action-api-with-pywikibot" class="nav-link" data-scroll-target="#using-the-action-api-with-pywikibot">Using the Action API with <em>PyWikiBot</em></a>
   <ul class="collapse">
-<li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+<li><a href="#local-setup" id="toc-local-setup" class="nav-link" data-scroll-target="#local-setup">Local setup</a></li>
+  <li><a href="#using-paws" id="toc-using-paws" class="nav-link" data-scroll-target="#using-paws">Using <em>PAWS</em></a></li>
   </ul>
 </li>
+  <li><a href="#getting-started-using-pywikibot" id="toc-getting-started-using-pywikibot" class="nav-link" data-scroll-target="#getting-started-using-pywikibot">Getting started using <em>PyWikiBot</em></a></li>
   <li>
 <a href="#exploring-a-page-object" id="toc-exploring-a-page-object" class="nav-link" data-scroll-target="#exploring-a-page-object">Exploring a page object</a>
   <ul class="collapse">
@@ -180,7 +182,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">Accessing data from Wiki projects</h1>
+<h1 class="title">Basic data access</h1>
 </div>
 
 
@@ -217,8 +219,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </h2>
 <p>The <em>Action API</em> can be used through any programming language by sending correctly formatted HTTP requests to it, but as the API is very feature-rich, this quickly becomes quite complex.</p>
 <p>Luckily, the Wikimedia Foundation maintains a Python library called <em><a href="https://doc.wikimedia.org/pywikibot/stable/index.html">Pywikibot</a></em> that can be used interact with the various endpoints the API offers and also wraps the responses into objects that are easier to work with. Importantly, it <strong>also ensures that we honor the rate limits</strong> of the API, to ensure we don’t overwhelm the server endpoints.</p>
-<section id="setup" class="level3"><h3 class="anchored" data-anchor-id="setup">Setup</h3>
-<p>The library can be installed through <code>pip</code> from the commandline:</p>
+<p>You can use this library either locally on your computer, or <a href="https://wikitech.wikimedia.org/wiki/PAWS">use it in the <strong>PAWS</strong> JupyterLab environment</a> that the Wikimedia Foundation offers.</p>
+<section id="local-setup" class="level3"><h3 class="anchored" data-anchor-id="local-setup">Local setup</h3>
+<p>If you want to use the library locally, can be installed through <code>pip</code> from the commandline:</p>
 <pre><code>pip install pywikibot</code></pre>
 <p>After the installation, we also need to create a user config, in which we need to add our username that we use to identify us as the user of the API. To create the file you can run the following from your terminal:</p>
 <pre><code>pwb generate_user_files</code></pre>
@@ -242,7 +245,20 @@ usernames['wikidata']['wikidata'] = 'Gedankenstuecke'
 password_file = None</code></pre>
 </div>
 </div>
-<p>We see the username details, here for the English language-version of Wikipedia.</p>
+<p>We see the username details, here for the English language-version of Wikipedia, as well as some further language versions and Wikidata.</p>
+</section><section id="using-paws" class="level3"><h3 class="anchored" data-anchor-id="using-paws">Using <em>PAWS</em>
+</h3>
+<p><a href="https://wikitech.wikimedia.org/wiki/PAWS">PAWS</a> is the <em>Jupyter Notebook/Lab</em> environment that is hosted on the servers of the Wikimedia Foundation (WMF). That means, you don’t have to locally install anything on your computers and all of the work is done in your browser, with the actual computations happening on the servers of the WMF.</p>
+<p>The virtual compute resources that PAWS provides to each user are 1 CPU, 2G RAM and 5G Storage, which should be enough for many research projects, especially to get started.</p>
+<p><strong>One important thing to keep in mind: All notebooks you write on <em>PAWS</em> <a href="https://wikitech.wikimedia.org/wiki/PAWS/About_Jupyter_notebooks_hosted_on_PAWS#Use_responsibly">are publicly accessible</a>, so don’t share passwords or other private information in it!</strong></p>
+<section id="accessing-paws" class="level4"><h4 class="anchored" data-anchor-id="accessing-paws">Accessing <em>PAWS</em>
+</h4>
+<p>To access <em>PAWS</em> you will need a <em>single user wikimedia</em> account. These accounts are shared between all Wikimedia projects, from the different Wikipedia language editions over Wikidata, to <em>PAWS</em>. If you don’t have an account yet, you can <a href="https://auth.wikimedia.org/mediawikiwiki/wiki/Special:CreateAccount">create one here</a>.</p>
+<p>Once you have an account you <a href="https://wikitech.wikimedia.org/wiki/PAWS">can login and launch your Jupyter environment</a>.</p>
+<p>Using <em>PAWS</em> has the additional benefit that it comes with <em>PyWikiBot</em> preconfigured to use your unified user account, so you don’t have to do any heavy lifting for setting it up.</p>
+<p>For this reason, we will be using <em>PAWS</em> for the rest of this course, ensuring that your development environment for accessing Wikipedia is pre-configured.</p>
+</section></section></section><section id="getting-started-using-pywikibot" class="level2"><h2 class="anchored" data-anchor-id="getting-started-using-pywikibot">Getting started using <em>PyWikiBot</em>
+</h2>
 <p>Now we can actually go ahead with loading the libary, confirming once more that the username was correctly set, and do our first query of Wikipedia through the library.</p>
 <p>For that, we create a <code>site</code> object, that tells <code>pywikibot</code> which Wikimedia project we want to interact with, by giving the same 2-letter acronym of the language, and the project itself.</p>
 <p>We can then use the site object to query through the <em>pywikibot</em>, for example for the page on computational social sciences:</p>
@@ -281,7 +297,7 @@ It has been applied in areas such as [[computational economics]], [[computationa
 </code></pre>
 </div>
 </div>
-</section></section><section id="exploring-a-page-object" class="level2"><h2 class="anchored" data-anchor-id="exploring-a-page-object">Exploring a page object</h2>
+</section><section id="exploring-a-page-object" class="level2"><h2 class="anchored" data-anchor-id="exploring-a-page-object">Exploring a page object</h2>
 <p>We now got the page on <em>Computational social science</em> in the <code>page</code> object and can access information from it, e.g. using a function like <code>page.title()</code> or accessing data like <code>page.text</code> above.</p>
 <p>To see the full list of methods and values associated with it, we can see all of them like this (<code>dir(page)</code> in itself would show all methods, including private ones that aren’t supposed to be used directly).</p>
 <div id="9212ef65-5baf-4510-b94d-0eab273a63d8" class="cell" data-execution_count="112">
