@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "À propos",
-    "section": "",
-    "text": "Ces ressources ont été élaborées dans le cadre du projet de recherche Wikimedia Wikimedia aux Summer Institutes in Computational Social Science"
-  },
-  {
     "objectID": "02-pywikibot.html",
     "href": "02-pywikibot.html",
     "title": "Accessing data from Wiki projects",
@@ -63,11 +56,11 @@
     "text": "Conclusions & Summary\nWe’ve seen how the MediaWiki Actions API can be interfaced with through the pywikibot library to get details about Wikipedia categories, individual pages along with their editing histories and contributors, and about contributors generally.\nWe have also explored how we can connect all of these to create a simple data set that we can re-use for more in-depth analyses later on.\nBut, we have also seen that our way of collecting this data maybe is not ideal yet, as our pages that we sourced from the Kenyan politicans page included unexpected pages, such as the Jomo Kenyatta International Airport. In the next bit, we’ll see how we can query Wikidata to find more specific pages, by filtering for the properties of the page subjects (e.g. if they are people or not)."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "SICSS : Utilisation de Wikipédia",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "À propos",
     "section": "",
-    "text": "Il s’agit d’une version provisoire de supports pédagogiques expliquant comment Wikipédia (et les projets frères de Wikimedia), ainsi que leurs API, peuvent être utilisés pour obtenir des données intéressantes destinées à la recherche en sciences sociales computationnelles."
+    "text": "Ces ressources ont été élaborées dans le cadre du projet de recherche Wikimedia Wikimedia aux Summer Institutes in Computational Social Science"
   },
   {
     "objectID": "03-wikidata.html",
@@ -110,5 +103,12 @@
     "title": "Using Wikidata",
     "section": "Querying using pywikibot",
     "text": "Querying using pywikibot\nLet’s now translate this into creating a SPARQL query that the pywikibot can run for us.\nFirst, we load the necessary library again, and then we write out the query using the SPARQL syntax:\nWe use SELECT DISTINCT to avoid returning duplicate items, and use ?item to get the whole Wikidata item returned for further processing.\nIn the WHERE clause, we add our three distinct property/value pairs that we all want to be present, and ultimately give a LIMIT of how many Wikidata items we’d like to get returned.\n\nimport pywikibot # load the whole library\n# then we specifically import the page generator so we can iterate over all returned items\nfrom pywikibot import pagegenerators as pg \n\n# we query Wikidata directly, not the english language Wikipedia\nwikidata_site = pywikibot.Site(\"wikidata\", \"wikidata\") \n\n# let's translate our query into SPARQL\nQUERY = \"\"\"\nSELECT DISTINCT ?item\nWHERE {\n    ?item wdt:P31 wd:Q5;  # Any instance of a human;\n          wdt:P106 wd:Q82955; # occupation politician;\n          wdt:P27 wd:Q114; # citizen of kenya;\n}\nLIMIT 5\n\"\"\"\n\nOnce we got this query written, we can now turn this into a generator, that will allow us to make a loop over all returned elements.\nWe will alrady look at some of the data we get back:\n\ngenerator = pg.WikidataSPARQLPageGenerator(QUERY, site=wikidata_site)\n\nfor item in generator:\n    print(\"item label (en): {}\".format(\n        item.labels['en']\n    ))\n    print(\"item description (en): {}\".format(\n        item.descriptions['en']\n    ))\n    print(\"sitelinks: {}\".format(list(\n        item.sitelinks\n    )))\n    print(\"sitelink to enwiki: {}\".format(\n        item.sitelinks[\"enwiki\"]))\n    print(\"----------\")\n\nitem label (en): David Lelei\nitem description (en): Kenyan distance runner (1971-2010)\nsitelinks: ['arzwiki', 'dewiki', 'enwiki', 'eswiki', 'frwiki', 'nlwiki', 'ptwiki']\nsitelink to enwiki: [[David Lelei]]\n----------\nitem label (en): Elijah Lagat\nitem description (en): Kenyan marathon runner and politician\nsitelinks: ['dewiki', 'enwiki', 'eswiki', 'itwiki', 'nlwiki', 'swwiki']\nsitelink to enwiki: [[Elijah Lagat]]\n----------\nitem label (en): Newton Kulundu\nitem description (en): Kenyan politician (1948-2010)\nsitelinks: ['dewiki', 'enwiki', 'ptwiki']\nsitelink to enwiki: [[Newton Kulundu]]\n----------\nitem label (en): Wesley Korir\nitem description (en): Kenyan marathon runner and politician\nsitelinks: ['arwiki', 'arzwiki', 'commonswiki', 'dewiki', 'enwiki', 'fawiki', 'frwiki', 'mlwiki', 'nlwiki', 'nowiki', 'ptwiki', 'ruwiki']\nsitelink to enwiki: [[Wesley Korir]]\n----------\nitem label (en): Grace Emily Akinyi Ogot\nitem description (en): Kenyan politician and writer (1930-2015)\nsitelinks: ['arwiki', 'arzwiki', 'dewiki', 'enwiki', 'enwikiquote', 'eowiki', 'fiwiki', 'frwiki', 'hawiki', 'hewiki', 'hywikisource', 'igwiki', 'igwikiquote', 'itwiki', 'lawiki', 'ptwiki', 'rowiki', 'sowiki', 'swwiki', 'tawiki', 'ukwiki', 'urwiki']\nsitelink to enwiki: [[Grace Ogot]]\n----------\n\n\nFor many items, the labels and descriptions will be available in multiple languages. Here, we printed only the English one.\nAnd as you see in the sitelinks, Wikidata also returns the cross-links to other Wiki projects, like the English (enwiki) and Swahili (swwiki) language editions of Wikipedia. This allows us now to switch to Wikipedia and read the articles as before:"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "SICSS : Utilisation de Wikipédia",
+    "section": "",
+    "text": "Il s’agit d’une version provisoire de supports pédagogiques expliquant comment Wikipédia (et les projets frères de Wikimedia), ainsi que leurs API, peuvent être utilisés pour obtenir des données intéressantes destinées à la recherche en sciences sociales computationnelles."
   }
 ]

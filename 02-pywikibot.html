@@ -63,7 +63,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/quarto.js" type="module"></script><script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script><script src="site_libs/quarto-html/popper.min.js"></script><script src="site_libs/quarto-html/tippy.umd.min.js"></script><script src="site_libs/quarto-html/anchor.min.js"></script><link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script><link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-3e7735b7b22659e5fa437aca0bb49075.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-94b323657c735dfe3b1bf6ebb2c33a55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -197,13 +197,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><p>Wikipedia, and virtually all other Wiki projects that are run under the umbrella of the <a href="https://wikimediafoundation.org/">Wikimedia Foundation</a>, are using an open-source software called <em><a href="https://www.mediawiki.org/">MediaWiki</a></em>. It is also used outside the Wikimedia universe, in a wide range of settings. For example, researchers are aggregating information about biochemical pathways in the <a href="https://www.wikipathways.org/">WikiPathways</a> project, German-speaking patients with cluster headaches use it for <a href="https://ck-wissen.de/ckwiki/index.php?title=Hauptseite">creating their own knowledge base</a>, and in the <a href="https://wiki.openhumans.org/wiki/Personal_Science_Wiki"><em>Personal Science Wiki</em></a> people are sharing their n-of-1 citizen science efforts.</p>
+<p>Here, we will mainly exploring using the default MediaWiki REST APIs as provided through the <em>PyWikiBot</em> Python library. But you can also read the <a href="https://meta.wikimedia.org/wiki/Research:Data">Wikimedia Research overview for how to access data</a>.</p>
 <section id="apis" class="level2"><h2 class="anchored" data-anchor-id="apis">APIs</h2>
 <p>To facilitate the programmatic and automatic access to the pages that people create, MediaWiki (and the Wikimedia Foundation) offer different APIs that can be used to access data and edit objects in Wikipedia and its many sister projects.</p>
 <p>Namely, there are three different API classes with different focuses on use cases, two of which based are on the <a href="https://en.wikipedia.org/wiki/REST">REST</a> style:</p>
 <ol type="1">
-<li><strong><a href="https://www.mediawiki.org/wiki/Wikimedia_REST_API">Wikimedia REST API</a></strong></li>
-<li><strong><a href="https://www.mediawiki.org/wiki/API:REST_API">MediaWiki REST API</a></strong></li>
-<li><strong><a href="https://www.mediawiki.org/wiki/API:Action_API">MediaWiki Action API</a></strong></li>
+<li>
+<strong><a href="https://www.mediawiki.org/wiki/Wikimedia_REST_API">Wikimedia REST API</a></strong> (pro: fast/simple access, con: limited to very narrow types of data necessary for content)</li>
+<li>
+<strong><a href="https://www.mediawiki.org/wiki/API:REST_API">MediaWiki REST API</a></strong> (pro: also simple/fast access, con: limited to certain types of data)</li>
+<li>
+<strong><a href="https://www.mediawiki.org/wiki/API:Action_API">MediaWiki Action API</a></strong> (pro: very powerful, gives access to virtually all types of data, con: harder to use, rate-limited when used remotely)</li>
 </ol>
 <section id="wikimedia-rest-api" class="level3"><h3 class="anchored" data-anchor-id="wikimedia-rest-api">Wikimedia REST API</h3>
 <p>This custom API that is particular to the Wikimedia projects is designed for delivering high-throughput access to the content and metadata of Wikimedia projects in different, machine-readable formats. As a result, it offers a very narrow and highly optimized access to ‘live’ pages and content.</p>
@@ -604,7 +608,7 @@ It has been applied in areas such as [[computational economics]], [[computationa
 </div>
 </section></section><section id="exploring-a-user-object" class="level2"><h2 class="anchored" data-anchor-id="exploring-a-user-object">Exploring a user object</h2>
 <p>Above, we have seen how we can access pages in Wikipedia and also get some details about how edited that given page. The API also offers method to dig a bit into who those contributors are and what edits they made.</p>
-<p>To access details about a single user, we can use <code>pywikibot.User</code> and then look at the methods that are accessible:</p>
+<p>To access details about a single user, we can use <code>pywikibot.User</code> and then look at the methods that are accessible. Here, we are using Bastian’s user name to be able to get some ‘real’ data for demonstration purposes, but of course you can replace <code>Gedankenstuecke</code> with any user name.</p>
 <div id="bb6dcf5b-f049-4f53-ad07-c8c621551b20" class="cell" data-execution_count="153">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>user <span class="op">=</span> pywikibot.User(site, <span class="st">"Gedankenstuecke"</span>) </span>
