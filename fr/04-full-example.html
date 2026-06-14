@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
 <head>
 <link rel="alternate" hreflang="en" href="https://citizensandtech.github.io/sicss-wikipedia/04-full-example.html" />
 <link rel="alternate" hreflang="fr" href="https://citizensandtech.github.io/sicss-wikipedia/fr/04-full-example.fr.html" />
@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>End-to-end example – SICSS: Using Wikipedia</title>
+<title>End-to-end example – SICSS : Utilisation de Wikipédia</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -78,17 +78,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
   }
 }</script><script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script><script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script><link rel="stylesheet" href="styles.css">
 </head>
@@ -98,17 +98,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">SICSS: Using Wikipedia</span>
+    <span class="navbar-title">SICSS : Utilisation de Wikipédia</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Recherche"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Basculer la navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
 <li class="nav-item"><div class="dropdown" id="languages-links-parent">
-<button class="btn btn-primary dropdown-toggle babelquarto-languages-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="languages-button"><i class="bi bi-globe2"></i> English</button><ul class="dropdown-menu" id="languages-links"><li><a class="dropdown-item" href="https://citizensandtech.github.io/sicss-wikipedia/fr/04-full-example.html" id="language-link-fr">Français</a></li></ul>
+<button class="btn btn-primary dropdown-toggle babelquarto-languages-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="languages-button"><i class="bi bi-globe2"></i> Français</button><ul class="dropdown-menu" id="languages-links"><li><a class="dropdown-item" href="https://citizensandtech.github.io/sicss-wikipedia/04-full-example.html" id="language-link-en">English</a></li></ul>
 </div></li>
 <li class="nav-item">
     <a class="nav-link" href="./01-intro-wikipedia-data.html"> 
@@ -132,7 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
-<span class="menu-text">About</span></a>
+<span class="menu-text">À propos</span></a>
   </li>  
 </ul>
 </div> <!-- /navcollapse -->
@@ -143,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Sur cette page</h2>
    
   <ul>
 <li><a href="#doing-a-full-small-study" id="toc-doing-a-full-small-study" class="nav-link active" data-scroll-target="#doing-a-full-small-study">Doing a ‘full’ small study</a></li>
@@ -284,7 +284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'contributor_count'</span>] <span class="op">=</span> <span class="bu">len</span>(contributors)</span>
 <span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>            politician_data[qid][<span class="st">'contributor_list'</span>] <span class="op">=</span> contributors</span>
 <span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> politician_data</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 </div>
 </section></section><section id="writing-our-queries-and-executing-them" class="level3"><h3 class="anchored" data-anchor-id="writing-our-queries-and-executing-them">Writing our queries and executing them</h3>
@@ -316,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>page_data_male <span class="op">=</span> run_query(male_query)</span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>page_data_female <span class="op">=</span> run_query(female_query)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 </div>
 <p>Now that we got our two dictionaries, we can merge them into a single <code>DataFrame</code>, as we’ve done before:</p>
@@ -325,7 +325,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>all_page_data <span class="op">=</span> page_data_male <span class="op">|</span> page_data_female</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_all_page_data <span class="op">=</span> pd.DataFrame(all_page_data).T</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df_all_page_data</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -451,7 +451,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="f2c4ce7b-2c64-4146-999c-08b130499511" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.groupby([<span class="st">'gender'</span>])[<span class="st">'name'</span>].count()</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>gender
@@ -494,7 +494,7 @@ Name: name, dtype: int64</code></pre>
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co"># let's convert it into a DF as well</span></span>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>df_editors <span class="op">=</span> pd.DataFrame(editors).T</span>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>df_editors</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div>
@@ -584,7 +584,7 @@ Name: name, dtype: int64</code></pre>
 <div id="e5a6ee32-2474-4121-891c-dc231a72e807" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_editors <span class="op">=</span> df_editors.infer_objects().fillna(<span class="dv">0</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 </div>
 <p>Now we can count the total number of pages the users edited (that is, pages in our sample, not the total pages they ever edited!) and then get the fraction of edits that went to male edits:</p>
@@ -592,13 +592,13 @@ Name: name, dtype: int64</code></pre>
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'total_pages'</span>] <span class="op">=</span> df_editors[<span class="st">'male'</span>] <span class="op">+</span> df_editors[<span class="st">'female'</span>]</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'percent_male'</span>] <span class="op">=</span> df_editors[<span class="st">'male'</span>] <span class="op">/</span>  df_editors[<span class="st">'total_pages'</span>]  </span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 </div>
 <div id="1f90215d-dcc5-4ed0-b248-58a0bd29cc00" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'percent_male'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -612,7 +612,7 @@ Name: name, dtype: int64</code></pre>
 <div id="09cb4b90-f856-4301-ad6b-809a6d8da8c4" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_editors[<span class="st">'total_pages'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>,bins<span class="op">=</span><span class="dv">100</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -626,7 +626,7 @@ Name: name, dtype: int64</code></pre>
 <div id="b4dc1d7a-568a-4032-9ae4-aa54479570b5" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_editors[df_editors[<span class="st">'total_pages'</span>]<span class="op">&gt;=</span><span class="dv">2</span>][<span class="st">'percent_male'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -667,7 +667,7 @@ Name: name, dtype: int64</code></pre>
 <span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>[filtered_editors])</span>
 <span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>df_all_page_data.head()</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <div>
@@ -744,7 +744,7 @@ Name: name, dtype: int64</code></pre>
 <div id="15ec78dd-164a-4065-b062-013cfd65e5d3" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(x<span class="op">=</span><span class="st">'contributor_count'</span>,y<span class="op">=</span><span class="st">'specialisation_score'</span>,kind<span class="op">=</span><span class="st">'scatter'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -758,7 +758,7 @@ Name: name, dtype: int64</code></pre>
 <div id="a7ccd0c4-4afe-4105-a737-1cb3ee529d65" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>specialisation_score    Axes(0.125,0.11;0.775x0.77)
@@ -775,7 +775,7 @@ dtype: object</code></pre>
 <div id="79c00bd1-6418-4649-9ec6-9ea1cd60e8ea" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'contributor_count'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>contributor_count    Axes(0.125,0.11;0.775x0.77)
@@ -805,7 +805,7 @@ dtype: object</code></pre>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>[filtered_editors])</span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(x<span class="op">=</span><span class="st">'contributor_count'</span>,y<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'scatter'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -819,7 +819,7 @@ dtype: object</code></pre>
 <div id="3ea2ee68-1aee-4883-9276-16eca03636c8" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(x<span class="op">=</span><span class="st">'specialisation_score'</span>,y<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'scatter'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -832,7 +832,7 @@ dtype: object</code></pre>
 <div id="2166bd29-8e98-4eb6-bd23-17c62f60a734" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
@@ -851,7 +851,7 @@ dtype: object</code></pre>
 <div id="17e74f0f-d277-4f39-b8a3-79f90f03b3e8" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data[df_all_page_data[<span class="st">'contributor_count'</span>] <span class="op">&lt;</span><span class="dv">2000</span> ].plot(by<span class="op">=</span>[<span class="st">'gender'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
@@ -870,7 +870,7 @@ dtype: object</code></pre>
 <div id="e2cf6316-96fe-43fd-947f-a7799115817a" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'gender'</span>],column<span class="op">=</span><span class="st">'contributor_count'</span>,kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>contributor_count    Axes(0.125,0.11;0.775x0.77)
@@ -889,7 +889,7 @@ dtype: object</code></pre>
 <div id="83264f3a-37b1-420d-ac3b-3ed8bd47708a" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'gender'</span>,<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>),title<span class="op">=</span><span class="st">'All contributors'</span>) <span class="co"># WITHOUT filter for articles with very large numbers of editors</span></span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
@@ -905,7 +905,7 @@ dtype: object</code></pre>
 <div id="2f5452f0-d225-4df7-ab28-ff6627f8ab36" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data[df_all_page_data[<span class="st">'contributor_count'</span>] <span class="op">&lt;</span><span class="dv">200</span> ].plot(by<span class="op">=</span>[<span class="st">'gender'</span>,<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'specialisation_score_no_bots'</span>,kind<span class="op">=</span><span class="st">'box'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>),title<span class="op">=</span><span class="st">"Only articles with 200 or fewer contributors"</span>) <span class="co"># filter for articles with very large numbers of editors</span></span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>specialisation_score_no_bots    Axes(0.125,0.11;0.775x0.77)
@@ -923,7 +923,7 @@ dtype: object</code></pre>
 <div id="4bafd8db-57ef-444d-b1ff-a8f1dffc689f" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.plot(by<span class="op">=</span>[<span class="st">'gender'</span>,<span class="st">'content_assessment'</span>],column<span class="op">=</span><span class="st">'contributor_count'</span>,kind<span class="op">=</span><span class="st">'box'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>)) <span class="co"># WITHOUT filter for articles with very large numbers of editors</span></span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>contributor_count    Axes(0.125,0.11;0.775x0.77)
@@ -952,7 +952,7 @@ dtype: object</code></pre>
 <div id="1f5a9796-5315-4637-a634-243d98cc4092" class="cell" data-execution_count="25">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> pip install statsmodels</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
@@ -999,14 +999,14 @@ Successfully installed patsy-1.0.2 statsmodels-0.14.6
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 </div>
 <p>To make our modeling a bit easier, we’ll turn the <code>content_assessment</code> in to a binary variable for whether articles are highly ranked (e.g. are categories <code>FA</code>, <code>A</code>, <code>B</code> or <code>C</code>) or are just getting started (<code>Start</code> or <code>Stub</code>):</p>
 <div id="3081e9dd-654d-46d3-a0f2-bcde234870b4" class="cell" data-execution_count="27">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data[<span class="st">'highquality'</span>] <span class="op">=</span> df_all_page_data[<span class="st">'content_assessment'</span>].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="bu">int</span>(x <span class="kw">in</span> [<span class="st">'C'</span>, <span class="st">'B'</span>, <span class="st">'FA'</span>, <span class="st">'A'</span>]))</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 </div>
 <p>Now we’ll also convert the contributor counts to the <code>log</code>:</p>
@@ -1015,7 +1015,7 @@ Successfully installed patsy-1.0.2 statsmodels-0.14.6
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>df_all_page_data[<span class="st">'contributor_count'</span>] <span class="op">=</span> df_all_page_data[<span class="st">'contributor_count'</span>].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="bu">int</span>(x))</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>df_all_page_data[<span class="st">'contributor_count_log'</span>] <span class="op">=</span> df_all_page_data[<span class="st">'contributor_count'</span>].<span class="bu">map</span>(<span class="kw">lambda</span> x: np.log1p(x))</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 </div>
 <p>And with this all done, we can now run our model:</p>
@@ -1023,7 +1023,7 @@ Successfully installed patsy-1.0.2 statsmodels-0.14.6
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> smf.ols(<span class="st">'highquality ~ contributor_count_log + specialisation_score_no_bots + gender'</span>, data<span class="op">=</span>df_all_page_data).fit()</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.summary())</span></code></pre></div>
-<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                            OLS Regression Results                            
@@ -1085,12 +1085,12 @@ Notes:
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "Copié");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "Copié");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -1133,7 +1133,7 @@ Notes:
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/citizensandtech\.github\.io\/sicss-wikipedia");
+        var filterRegex = new RegExp("https:\/\/citizensandtech\.github\.io\/sicss-wikipedia\/fr");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

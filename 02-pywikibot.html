@@ -63,7 +63,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/quarto.js" type="module"></script><script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script><script src="site_libs/quarto-html/popper.min.js"></script><script src="site_libs/quarto-html/tippy.umd.min.js"></script><script src="site_libs/quarto-html/anchor.min.js"></script><link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script><link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-94b323657c735dfe3b1bf6ebb2c33a55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-bba5ebae505b5c03f3f0d8040a416a6b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -124,7 +124,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./04-full-example.html"> 
-<span class="menu-text">A study example</span></a>
+<span class="menu-text">End-to-end example</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./05-projects.html"> 
+<span class="menu-text">Practical exercises</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
@@ -210,7 +214,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <strong><a href="https://www.mediawiki.org/wiki/API:Action_API">MediaWiki Action API</a></strong> (pro: very powerful, gives access to virtually all types of data, con: harder to use, rate-limited when used remotely)</li>
 </ol>
 <section id="wikimedia-rest-api" class="level3"><h3 class="anchored" data-anchor-id="wikimedia-rest-api">Wikimedia REST API</h3>
-<p>This custom API that is particular to the Wikimedia projects is designed for delivering high-throughput access to the content and metadata of Wikimedia projects in different, machine-readable formats. As a result, it offers a very narrow and highly optimized access to ‘live’ pages and content.</p>
+<p>This custom API – that is particular to the Wikimedia projects – is designed for delivering high-throughput access to the content and metadata of Wikimedia projects in different, machine-readable formats. As a result, it offers a very narrow and highly optimized access to ‘live’ pages and content.</p>
 <p>This focus makes it less relevant for research, where we might want to understand longitudinal changes in how articles have evolved.</p>
 </section><section id="mediawiki-rest-api" class="level3"><h3 class="anchored" data-anchor-id="mediawiki-rest-api">MediaWiki REST API</h3>
 <p>The standard REST API of MediaWiki is present in all MediaWiki installations and can be used to get data in JSON or HTML from them. Similar to the <em>Wikimedia</em>-specific API, this is mostly useful for accessing current data through simple API endpoints that return fast responses.</p>
@@ -225,13 +229,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Luckily, the Wikimedia Foundation maintains a Python library called <em><a href="https://doc.wikimedia.org/pywikibot/stable/index.html">Pywikibot</a></em> that can be used interact with the various endpoints the API offers and also wraps the responses into objects that are easier to work with. Importantly, it <strong>also ensures that we honor the rate limits</strong> of the API, to ensure we don’t overwhelm the server endpoints.</p>
 <p>You can use this library either locally on your computer, or <a href="https://wikitech.wikimedia.org/wiki/PAWS">use it in the <strong>PAWS</strong> JupyterLab environment</a> that the Wikimedia Foundation offers.</p>
 <section id="local-setup" class="level3"><h3 class="anchored" data-anchor-id="local-setup">Local setup</h3>
-<p>If you want to use the library locally, can be installed through <code>pip</code> from the commandline:</p>
+<p>If you want to use the library locally, it can be installed through <code>pip</code> from the commandline:</p>
 <pre><code>pip install pywikibot</code></pre>
 <p>After the installation, we also need to create a user config, in which we need to add our username that we use to identify us as the user of the API. To create the file you can run the following from your terminal:</p>
 <pre><code>pwb generate_user_files</code></pre>
 <p>It creates a small <code>user-config.py</code> file in which we add the configuration details. This file should be <strong>located in the same folder from which you will run your Python scripts</strong>.</p>
 <p>You can now start a Jupyter notebook and start interacting with the API.</p>
-<p>First, to confirm that the config is found in the notebook, we run the following.</p>
+<p>First, to confirm that the config is found in the notebook, we run the following:</p>
 <div id="8a6498ae-e76b-4e6c-bb53-119a6d587ba0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat user<span class="op">-</span>config.py</span></code></pre></div>
@@ -252,15 +256,15 @@ password_file = None</code></pre>
 <p>We see the username details, here for the English language-version of Wikipedia, as well as some further language versions and Wikidata.</p>
 </section><section id="using-paws" class="level3"><h3 class="anchored" data-anchor-id="using-paws">Using <em>PAWS</em>
 </h3>
-<p><a href="https://wikitech.wikimedia.org/wiki/PAWS">PAWS</a> is the <em>Jupyter Notebook/Lab</em> environment that is hosted on the servers of the Wikimedia Foundation (WMF). That means, you don’t have to locally install anything on your computers and all of the work is done in your browser, with the actual computations happening on the servers of the WMF.</p>
-<p>The virtual compute resources that PAWS provides to each user are 1 CPU, 2G RAM and 5G Storage, which should be enough for many research projects, especially to get started.</p>
+<p><a href="https://wikitech.wikimedia.org/wiki/PAWS">PAWS</a> is the <em>Jupyter Notebook/Lab</em> environment that is hosted on the servers of the Wikimedia Foundation (WMF). That means, you don’t have to install anything locally on your computers, and all of the actual computations are happening on the servers of the WMF. Instead, you can access the compute environment via your web browser.</p>
+<p>The virtual compute resources that PAWS provides to each user include 1 CPU, 2G of RAM and 5G of storage. This should be enough for many research projects, especially to get started.</p>
 <p><strong>One important thing to keep in mind: All notebooks you write on <em>PAWS</em> <a href="https://wikitech.wikimedia.org/wiki/PAWS/About_Jupyter_notebooks_hosted_on_PAWS#Use_responsibly">are publicly accessible</a>, so don’t share passwords or other private information in it!</strong></p>
 <section id="accessing-paws" class="level4"><h4 class="anchored" data-anchor-id="accessing-paws">Accessing <em>PAWS</em>
 </h4>
-<p>To access <em>PAWS</em> you will need a <em>single user wikimedia</em> account. These accounts are shared between all Wikimedia projects, from the different Wikipedia language editions over Wikidata, to <em>PAWS</em>. If you don’t have an account yet, you can <a href="https://auth.wikimedia.org/mediawikiwiki/wiki/Special:CreateAccount">create one here</a>.</p>
+<p>To access <em>PAWS</em> you will need a <em>single user wikimedia</em> account. These accounts are shared between all Wikimedia projects (like the different Wikipedia language editions and Wikidata), including <em>PAWS</em>. If you don’t have an account yet, you can <a href="https://auth.wikimedia.org/mediawikiwiki/wiki/Special:CreateAccount">create one here</a>.</p>
 <p>Once you have an account you <a href="https://wikitech.wikimedia.org/wiki/PAWS">can login and launch your Jupyter environment</a>.</p>
-<p>Using <em>PAWS</em> has the additional benefit that it comes with <em>PyWikiBot</em> preconfigured to use your unified user account, so you don’t have to do any heavy lifting for setting it up.</p>
-<p>For this reason, we will be using <em>PAWS</em> for the rest of this course, ensuring that your development environment for accessing Wikipedia is pre-configured.</p>
+<p>Using <em>PAWS</em> has the additional benefit that it comes with <em>PyWikiBot</em> preconfigured to use your <em>unified user account</em>, so you don’t have to do any heavy lifting for setting it up.</p>
+<p>For this reason, <strong>we will be using <em>PAWS</em> for the rest of this course, ensuring that your development environment for accessing Wikipedia is pre-configured</strong>.</p>
 </section></section></section><section id="getting-started-using-pywikibot" class="level2"><h2 class="anchored" data-anchor-id="getting-started-using-pywikibot">Getting started using <em>PyWikiBot</em>
 </h2>
 <p>Now we can actually go ahead with loading the libary, confirming once more that the username was correctly set, and do our first query of Wikipedia through the library.</p>
@@ -303,7 +307,7 @@ It has been applied in areas such as [[computational economics]], [[computationa
 </div>
 </section><section id="exploring-a-page-object" class="level2"><h2 class="anchored" data-anchor-id="exploring-a-page-object">Exploring a page object</h2>
 <p>We now got the page on <em>Computational social science</em> in the <code>page</code> object and can access information from it, e.g. using a function like <code>page.title()</code> or accessing data like <code>page.text</code> above.</p>
-<p>To see the full list of methods and values associated with it, we can see all of them like this (<code>dir(page)</code> in itself would show all methods, including private ones that aren’t supposed to be used directly).</p>
+<p>To see the full list of methods and values associated with it, we can see all of them like this below (we use the filtering approach, as <code>dir(page)</code> in itself would show all methods, including private ones that aren’t supposed to be used directly).</p>
 <div id="9212ef65-5baf-4510-b94d-0eab273a63d8" class="cell" data-execution_count="112">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>[i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">dir</span>(page) <span class="cf">if</span> <span class="kw">not</span> i.startswith(<span class="st">"_"</span>)]</span></code></pre></div>
@@ -425,7 +429,7 @@ It has been applied in areas such as [[computational economics]], [[computationa
 </div>
 <p>We can see that both registered accounts (<code>MattiMelimarkka</code>) as well as anonymous contributors have made edits. In the past, anonymous contributions were saved under the IP address from which edits were made (e.g. <code>2605:E000:1521:DB:B1CE:3E73:4742:6DD8</code> or <code>46.233.116.47</code>), while today temporary user names are assigned (e.g. <code>~2025-34400-27</code>).</p>
 </section><section id="contributors" class="level3"><h3 class="anchored" data-anchor-id="contributors">Contributors</h3>
-<p>Instead of just looking at the latest version, we can also get the list of all people who ever contributed and their number of edits, using the <code>contributors</code> method, which will give us a tuple containing the username and the number of edits:</p>
+<p>Instead of just looking at the latest version, we can also get the list of all people who ever contributed and their number of edits, using the <code>contributors</code> method. This will give us a tuple containing the username and the number of edits:</p>
 <div id="4b2248d6-7d37-445a-869c-8f79dabb41fc" class="cell" data-execution_count="138">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(page.contributors())</span></code></pre></div>
@@ -516,7 +520,7 @@ It has been applied in areas such as [[computational economics]], [[computationa
 <p>With this, we now also see some of the service bots that identify as such in their name already, like the <code>WikiCleanerBot</code> or the <code>InternetArchiveBot</code>.</p>
 </section><section id="page-revisions" class="level3"><h3 class="anchored" data-anchor-id="page-revisions">Page revisions</h3>
 <p>If we want to understand the actual editing history of the page, we can get a list of all revisions, which allows us to see how the page evolved over time.</p>
-<p>Note: We’ll just look at the 10 most recent edits to keep the notebook a bit cleaner, but in principle you can see all edits:</p>
+<p><em>Note: We’ll just look at the 10 most recent edits to keep the notebook a bit cleaner, but in principle you can see all edits by not using <code>break</code></em></p>
 <div id="e41197ac-42fb-422a-8b4e-9d9536b1b115" class="cell" data-execution_count="124">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"This page has </span><span class="sc">{}</span><span class="st"> revisions"</span>.<span class="bu">format</span>(page.revision_count()))</span>
@@ -788,7 +792,8 @@ user contributions:
 </div>
 </div>
 </section><section id="accessing-categories" class="level2"><h2 class="anchored" data-anchor-id="accessing-categories">Accessing categories</h2>
-<p>We have already seen that pages can be in different categories that group pages that belong together. We can also use categories as a starting point to get a collection of related pages. To do that, we use the <code>pywikibot.Category</code> method, using the <em>Kenyan politicians</em> category as a starting point:</p>
+<p>We have already seen that pages can be in different categories. Categories are a particular type of <em>page</em> that is used to group pages that belong together.</p>
+<p>We can also use categories as a starting point to get a collection of related pages. To do that, we use the <code>pywikibot.Category</code> method, using the <em>Kenyan politicians</em> category as a starting point:</p>
 <div id="44cb5840-c600-4d20-bc0f-c627d759d28a" class="cell" data-execution_count="166">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>site <span class="op">=</span> pywikibot.Site(<span class="st">'en'</span>, <span class="st">'wikipedia'</span>) <span class="co"># select the wikimedia project we want to interact with</span></span>
@@ -805,7 +810,8 @@ user contributions:
 <pre><code>There are 102 pages in the 'Kenyan politicians' category</code></pre>
 </div>
 </div>
-<p>By iterating over the category, we find 102 pages that are part of it. A good starting point, but in reality, the English language edition of Wikipedia has more pages about Kenyan politicians and who aren’t listed in this category, due to how sub-categories in Wikipedia work.</p>
+<p>By iterating over the category, we find 102 pages that are part of it.</p>
+<p>While this is a good starting point, in reality the English language edition of Wikipedia has more pages about Kenyan politicians and who aren’t listed in this category, due to how sub-categories in Wikipedia work.</p>
 <p>If we go to the Category on Wikipedia, we see 12 sub-categories for e.g. <em>Kenyan politicians by party</em>, <em>stubs</em> (new/short articles) and more.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><img src="02-pywikibot_files/figure-html/e7e46c24-b78b-47e1-9789-734e0bc8bddb-1-3e410b66-4ef3-4309-ac82-02ceba1fbadd.png" class="img-fluid figure-img"></p>
@@ -827,9 +833,9 @@ user contributions:
 <p>This now gives us a substantially larger number of pages about Kenyan politicians to work with.</p>
 </section><section id="aggregating-and-exploring-the-data" class="level2"><h2 class="anchored" data-anchor-id="aggregating-and-exploring-the-data">Aggregating and Exploring the data</h2>
 <p>Now that we have seen the different ways that we can access this data, let’s start to aggregate and visually explore this data a bit.</p>
-<p>Ultimately, we would like to have a large <code>DataFrame</code> or table, that contains the full edit history for all the pages in our category of interest.</p>
+<p>Maybe we would ultimately like to have a large <code>DataFrame</code> or table, that contains the full edit history for all the pages in our category of interest, to explore how pages changed over time..</p>
 <section id="using-a-single-page-as-an-example" class="level3"><h3 class="anchored" data-anchor-id="using-a-single-page-as-an-example">Using a single page as an example</h3>
-<p>But, for a start, let’s demonstrate the process by using a single page of the category for demonstration purposes - and then plot the contributions per user to this article – as measured by the number of submitted revisions and the total of added/removed characters as well.</p>
+<p>To get started, we will go through the process by using a single page of the category for demonstration purposes - and then plot the contributions per user to this article – as measured by the number of submitted revisions and the total of added/removed characters as well.</p>
 <p>We then:</p>
 <ol type="1">
 <li>get all the revisions into a dataframe</li>
@@ -1027,8 +1033,8 @@ user contributions:
 </div>
 </div>
 </section><section id="plotting-the-overall-size-change-made-by-the-editor" class="level4"><h4 class="anchored" data-anchor-id="plotting-the-overall-size-change-made-by-the-editor">Plotting the overall size change made by the editor</h4>
-<p>The number of revisions of course does not tell us everything. Some editors might make big edits in a single change, while others might break their edits in many small changes. And some might mostly add new information, while others delete outdated/wrong details. So let’s look at the ‘article szie changes’ per editor:</p>
-<p>Note: A user could show up as “zero” edits, if they added and removed text of the same volume</p>
+<p>Of course, the number of revisions does not tell us everything. Some editors might make big edits in a single change, while others might break their edits in many small changes. And some might mostly add new information, while others delete outdated/wrong details. So let’s look at the ‘article size changes’ per editor:</p>
+<p><em>Note: A user could show up as “zero” edits, if they added and removed text of the same volume</em></p>
 <div id="75e4597f-5d13-425a-90bb-13adf9ec3f08" class="cell" data-execution_count="178">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">'user'</span>)[<span class="st">'size_difference'</span>].<span class="bu">sum</span>().plot(kind<span class="op">=</span><span class="st">'bar'</span>, figsize<span class="op">=</span>(<span class="dv">20</span>,<span class="dv">10</span>))</span></code></pre></div>
@@ -1238,7 +1244,7 @@ user contributions:
 </div>
 </div>
 </div>
-<p>Seems like there’s one article with a huge number of edits compared to all others, plus some more that stand out. Let’s try to find those:</p>
+<p>Seems like there’s one article with a huge number of edits compared to all others. Plus, there are some more that stand out. Let’s try to find those:</p>
 <div id="df8132fe-f6c1-4a89-a97b-7b9611ced8a2" class="cell" data-execution_count="191">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df_politicians.groupby([<span class="st">'page_title'</span>]).count().sort_values(by<span class="op">=</span>[<span class="st">'revid'</span>], ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">9</span>)</span></code></pre></div>
@@ -1522,12 +1528,12 @@ user contributions:
 </div>
 </div>
 </div>
-<p>If we look closely, there seems to be something noteworthy with those search results: Why did the “Elizabeth II” <strong>and</strong> “Jomo Kenyatta International Airport” make our list of politicians?! Let’s hold that thought for a bit longer, when we’ll explore an alternative way to narrow down our pages of interest.</p>
+<p>If we look closely, there seems to be something noteworthy with those search results: Why did the pages for <em>“Elizabeth II”</em> and <em>“Jomo Kenyatta International Airport”</em> make our list of politicians?! Let’s hold that thought for a bit longer, when we’ll explore an alternative way to narrow down our pages of interest.</p>
 </section></section><section id="creating-a-dataframe-for-editor-details" class="level3"><h3 class="anchored" data-anchor-id="creating-a-dataframe-for-editor-details">Creating a dataframe for editor details</h3>
 <p>For now, let’s do a similar approach for saving the details of the editors that have touched those pages that we have identified.</p>
 <p>For a start, let’s just save the basic statistics for them, namely their total edit counts, gender (if entered), and whether they are registered users and/or bots.</p>
 <p>Bots in Wikimedia are marked by the user group they belong to, so we can use the <code>.groups()</code> method and check if the account is part of it.</p>
-<p>Getting all those user details will take a long while, given that it’s &gt; 20.000, so for demonstration purposes, the code below only does it for the first 100 users.</p>
+<p><em>Note: Getting all those user details will take a long while, given that it’s &gt; 20.000, so for demonstration purposes, the code below only does it for the first 100 users. The graphs below are actually looking at the full set of editors though</em></p>
 <div id="7d44193d-85ae-4c48-91a1-51ef8d6826e3" class="cell">
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df_users <span class="op">=</span> pd.DataFrame()</span>
@@ -1582,7 +1588,7 @@ user contributions:
 </div>
 </div>
 <section id="plotting-the-edit-per-user" class="level4"><h4 class="anchored" data-anchor-id="plotting-the-edit-per-user">Plotting the edit per user</h4>
-<p>Now, we can look at the editing behaviour of all of those users, across all articles they edited, by starting to make some plots.</p>
+<p>Now, we can look at the editing behaviour of all of those users – across all articles they edited – by starting to make some plots.</p>
 <p>Let’s start with a basic histogram over the edit counts. The x-axis will show us the number of edits in bins, the y-axis how many users made that many edits:</p>
 <div id="27a3dedb-828f-4f19-ad1d-bd9cadc133e5" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold">
@@ -1627,7 +1633,7 @@ user contributions:
 </div>
 </div>
 </div>
-<p>We can see that amongst the bots, there are more accounts with very large numbers of edits, as one would expect for automated editing. But: Even among the human editors, there are a few outliers that made between 300,000 and nearly 700,000 edits!</p>
+<p>We can see that amongst the bots, there are more accounts with very large numbers of edits, as one would expect for automated editing. But: Even among the human editors, there are a few outliers that made between 3,000,000 and nearly 7,000,000 edits!</p>
 <p>We can now also try to split the graph by the user-provided gender information, after exploring the distribution of responses by users:</p>
 <div id="5db855fd-b7f2-4db6-9f46-093ea557af5c" class="cell" data-execution_count="225">
 <div class="code-copy-outer-scaffold">

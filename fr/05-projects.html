@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+<head>
+<link rel="alternate" hreflang="en" href="https://citizensandtech.github.io/sicss-wikipedia/05-projects.html" />
+<link rel="alternate" hreflang="fr" href="https://citizensandtech.github.io/sicss-wikipedia/fr/05-projects.fr.html" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="description" content="Five hands-on projects for measuring gender gaps in Wikipedia coverage of politicians, ordered from beginner to advanced.">
+<title>Practical projects on analysing gender-gaps – SICSS : Utilisation de Wikipédia</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+<script src="site_libs/quarto-nav/quarto-nav.js"></script><script src="site_libs/quarto-nav/headroom.min.js"></script><script src="site_libs/clipboard/clipboard.min.js"></script><script src="site_libs/quarto-search/autocomplete.umd.js"></script><script src="site_libs/quarto-search/fuse.min.js"></script><script src="site_libs/quarto-search/quarto-search.js"></script><meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script><script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script><script src="site_libs/quarto-html/popper.min.js"></script><script src="site_libs/quarto-html/tippy.umd.min.js"></script><script src="site_libs/quarto-html/anchor.min.js"></script><link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script><link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-21dfb6f5b24708782b3851273225b992.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script><link rel="stylesheet" href="styles.css">
+</head>
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">SICSS : Utilisation de Wikipédia</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Recherche"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Basculer la navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item"><div class="dropdown" id="languages-links-parent">
+<button class="btn btn-primary dropdown-toggle babelquarto-languages-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="languages-button"><i class="bi bi-globe2"></i> Français</button><ul class="dropdown-menu" id="languages-links"><li><a class="dropdown-item" href="https://citizensandtech.github.io/sicss-wikipedia/05-projects.html" id="language-link-en">English</a></li></ul>
+</div></li>
+<li class="nav-item">
+    <a class="nav-link" href="./01-intro-wikipedia-data.html"> 
+<span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./02-pywikibot.html"> 
+<span class="menu-text">Basic data access</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./03-wikidata.html"> 
+<span class="menu-text">Using Wikidata</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./04-full-example.html"> 
+<span class="menu-text">End-to-end example</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./05-projects.html" aria-current="page"> 
+<span class="menu-text">Practical exercises</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">À propos</span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Sur cette page</h2>
+   
+  <ul>
+<li><a href="#what-you-will-do" id="toc-what-you-will-do" class="nav-link active" data-scroll-target="#what-you-will-do">What you will do</a></li>
+  <li><a href="#how-this-section-is-organized" id="toc-how-this-section-is-organized" class="nav-link" data-scroll-target="#how-this-section-is-organized">How this section is organized</a></li>
+  <li><a href="#topics" id="toc-topics" class="nav-link" data-scroll-target="#topics">Topics</a></li>
+  <li><a href="#not-sure-which-to-pick" id="toc-not-sure-which-to-pick" class="nav-link" data-scroll-target="#not-sure-which-to-pick">Not sure which to pick?</a></li>
+  <li>
+<a href="#how-to-interpret-the-results-carefully-and-responsibly" id="toc-how-to-interpret-the-results-carefully-and-responsibly" class="nav-link" data-scroll-target="#how-to-interpret-the-results-carefully-and-responsibly">How to interpret the results (carefully and responsibly)</a>
+  <ul class="collapse">
+<li><a href="#a-worked-example-reading-too-much-into-co-editing-project-5" id="toc-a-worked-example-reading-too-much-into-co-editing-project-5" class="nav-link" data-scroll-target="#a-worked-example-reading-too-much-into-co-editing-project-5">A worked example: reading too much into co-editing (Project 5)</a></li>
+  <li><a href="#common-inferential-mistakes-with-simple-wikipedia-data" id="toc-common-inferential-mistakes-with-simple-wikipedia-data" class="nav-link" data-scroll-target="#common-inferential-mistakes-with-simple-wikipedia-data">Common inferential mistakes with simple Wikipedia data</a></li>
+  </ul>
+</li>
+  <li><a href="#before-you-start-setup" id="toc-before-you-start-setup" class="nav-link" data-scroll-target="#before-you-start-setup">Before you start (setup)</a></li>
+  <li><a href="#project-1.-plot-the-edit-history-of-one-article" id="toc-project-1.-plot-the-edit-history-of-one-article" class="nav-link" data-scroll-target="#project-1.-plot-the-edit-history-of-one-article">Project 1. Plot the edit history of one article</a></li>
+  <li><a href="#project-2.-compare-gender-coverage-in-two-countries" id="toc-project-2.-compare-gender-coverage-in-two-countries" class="nav-link" data-scroll-target="#project-2.-compare-gender-coverage-in-two-countries">Project 2. Compare gender coverage in two countries</a></li>
+  <li><a href="#project-3.-did-coverage-grow-faster-after-2015" id="toc-project-3.-did-coverage-grow-faster-after-2015" class="nav-link" data-scroll-target="#project-3.-did-coverage-grow-faster-after-2015">Project 3. Did coverage grow faster after 2015?</a></li>
+  <li><a href="#project-4.-account-for-editors-with-a-mixed-effects-model" id="toc-project-4.-account-for-editors-with-a-mixed-effects-model" class="nav-link" data-scroll-target="#project-4.-account-for-editors-with-a-mixed-effects-model">Project 4. Account for editors with a mixed-effects model</a></li>
+  <li><a href="#project-5.-find-communities-of-co-editors" id="toc-project-5.-find-communities-of-co-editors" class="nav-link" data-scroll-target="#project-5.-find-communities-of-co-editors">Project 5. Find communities of co-editors</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></nav>
+</div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">Practical projects on analysing gender-gaps</h1>
+</div>
+
+<div>
+  <div class="description">
+    Five hands-on projects for measuring gender gaps in Wikipedia coverage of politicians, ordered from beginner to advanced.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>In this section you will pick one short project that measures part of the gender gap in Wikipedia’s coverage of politicians. Across many language editions, Wikipedia has fewer biographies of women than of men, and the biographies that do exist can differ in length, detail, and editing history.</p>
+<p>The projects below let you measure pieces of that gap with real data that you pull live from Wikipedia and Wikidata, while getting some more practice in using the APIs.</p>
+<section id="what-you-will-do" class="level2"><h2 class="anchored" data-anchor-id="what-you-will-do">What you will do</h2>
+<ul>
+<li>
+<strong>Pull live data</strong> from Wikipedia and Wikidata with Python.</li>
+<li>
+<strong>Work with timestamps and tables</strong> using <code>pandas</code>.</li>
+<li>
+<strong>Summarise a gender gap</strong> as a number, a chart, or a model.</li>
+<li>
+<strong>Read your result critically</strong> and say what it does and does not show.</li>
+</ul></section><section id="how-this-section-is-organized" class="level2"><h2 class="anchored" data-anchor-id="how-this-section-is-organized">How this section is organized</h2>
+<p>Each project has a difficulty rating from 1 (no coding experience needed) to 5 (comfortable with Python and statistics). Every project follows the same layout:</p>
+<ul>
+<li>
+<strong>The question</strong> you will answer.</li>
+<li>
+<strong>You will be comfortable here if</strong> you have a certain background.</li>
+<li><strong>What you will practise.</strong></li>
+<li>
+<strong>Tools</strong> (the packages you need).</li>
+<li>
+<strong>Starter code</strong> you can copy and adapt.</li>
+<li>
+<strong>Try next</strong> for an optional extension.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="A few terms used below">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>A few terms used below
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <em>revision</em> is a single saved edit to a page. An <em>editor</em> is the user account that made a revision. A <em>QID</em> is Wikidata’s identifier for a thing (for example, Germany is <code>Q183</code>). <em>SPARQL</em> is the query language used to ask Wikidata questions, similar to SQL for databases.</p>
+</div>
+</div>
+</section><section id="topics" class="level2"><h2 class="anchored" data-anchor-id="topics">Topics</h2>
+<p>These five projects each measure one part of the gender gap. They are ordered by difficulty, from 1 to 5.</p>
+<ul>
+<li>
+<strong>Project 1. Plot the edit history of one article</strong> (1 / 5). Pull one biography’s revisions and chart when it was edited.</li>
+<li>
+<strong>Project 2. Compare gender coverage in two countries</strong> (2 / 5). Query Wikidata and compare the share of women and men politicians who have an article.</li>
+<li>
+<strong>Project 3. Did coverage grow faster after 2015?</strong> (3 / 5). Compare article growth before and after the rise of gender-gap edit-a-thons.</li>
+<li>
+<strong>Project 4. Account for editors with a mixed-effects model</strong> (4 / 5). Test whether women politicians’ articles are shorter once you account for prolific editors.</li>
+<li>
+<strong>Project 5. Find communities of co-editors</strong> (5 / 5). Build an editor network, detect communities, and ask whether they focus on one gender.</li>
+</ul></section><section id="not-sure-which-to-pick" class="level2"><h2 class="anchored" data-anchor-id="not-sure-which-to-pick">Not sure which to pick?</h2>
+<p>Use this as a rough guide:</p>
+<ul>
+<li>
+<strong>I have never written Python.</strong> Start with <strong>Project 1</strong>.</li>
+<li>
+<strong>I can use <code>pandas</code> a little.</strong> Try <strong>Project 2</strong> or <strong>Project 3</strong>.</li>
+<li>
+<strong>I have taken a statistics course.</strong> <strong>Project 4</strong> will stretch you in a good way.</li>
+<li>
+<strong>I like algorithms and graphs.</strong> Go for <strong>Project 5</strong>.</li>
+</ul>
+<p>Whatever you choose, finish with one short paragraph that states your result as a number and one sentence on what your result does <em>not</em> prove. Being clear about the limits of your data is part of doing this well.</p>
+</section><section id="how-to-interpret-the-results-carefully-and-responsibly" class="level2"><h2 class="anchored" data-anchor-id="how-to-interpret-the-results-carefully-and-responsibly">How to interpret the results (carefully and responsibly)</h2>
+<p>Each project produces a number, a chart, or a model coefficient. On its own, none of them explains why a gap exists. A measured difference is closer to the start of a question than to an answer. Understanding a root cause usually means looking more closely at the edit history of the specific pages involved and at the cultural and institutional context around them.</p>
+<p>A useful habit is to keep two things separate: what you actually measured, and what you would like to infer from it. The example and the checklist below show where that separation tends to break down, and why.</p>
+<section id="a-worked-example-reading-too-much-into-co-editing-project-5" class="level3"><h3 class="anchored" data-anchor-id="a-worked-example-reading-too-much-into-co-editing-project-5">A worked example: reading too much into co-editing (Project 5)</h3>
+<p>Project 5 finds groups of editors who tend to work on the same articles. It is tempting to read a tight community as evidence that its members coordinate, or that they are pushing a shared agenda. Editing patterns like this have been at the center of real disputes on Wikipedia, where overlapping activity was presented as proof that a group was acting together to control a set of articles, sometimes alongside allegations of misconduct.</p>
+<p>That reading is tempting, but it skips a question worth asking: what else could produce the same pattern? Co-occurrence in editing usually has ordinary explanations. Editing the same articles does not require that the editors know one another, and being placed in the same detected community does not imply a personal connection between its members. Often the most likely explanation is a shared interest in the same topics, since people who care about, say, Kenyan politicians will tend to edit the same pages. A detected community, then, describes a pattern of activity, which is not the same thing as evidence of coordination, collusion, or manipulation.</p>
+<p>So what can the method actually support? It shows that a set of editors overlaps in their activity more than chance alone would predict. Going beyond that, to intent or wrongdoing, calls for independent evidence, and it is worth seeing why. The first reason is statistical: an overlap tells you that editing co-occurs, not why it co-occurs, so on its own it cannot establish intent. The second reason is ethical: editors are real, identifiable people, so describing their work as coordination or manipulation is an accusation rather than a neutral summary of the data. Both reasons support the same conclusion, which is that a pattern by itself does not establish misconduct.</p>
+</section><section id="common-inferential-mistakes-with-simple-wikipedia-data" class="level3"><h3 class="anchored" data-anchor-id="common-inferential-mistakes-with-simple-wikipedia-data">Common inferential mistakes with simple Wikipedia data</h3>
+<p>Each item below pairs a tempting reading with the reason it can mislead. As you work, it can help to ask which of these might apply to your own result.</p>
+<ul>
+<li>
+<strong>Confusing a coverage gap with its cause.</strong> Suppose you find fewer articles about women than about men. Several different things could produce that same number: who editors choose to write about, who Wikipedia’s notability rules let in, the fact that historically fewer women have held political office (so there are fewer of them to write about in the first place), or missing records in the Wikidata you queried. The count tells you that a gap exists; it does not tell you which of these produced it.</li>
+<li>
+<strong>Treating missing data as a measured zero.</strong> In Project 2, a person with no linked article may genuinely lack one, or the Wikidata link may simply be absent. Missing from the data is not the same as missing from the world.</li>
+<li>
+<strong>Reading byte count as quality.</strong> A longer article does not necessarily mean a better or fairer one. Length is a rough proxy, and it can reflect the amount of edits, but not how much thinking the editor put into it, or the amount of time they spent on it, or the final quality of the article.</li>
+<li>
+<strong>Mistaking correlation for causation, especially around a date.</strong> In Project 3, a change after 2015 does not prove that edit-a-thons <strong>caused</strong> it, because many other things changed over the same years that you can explore further.</li>
+<li>
+<strong>Over-reading the gender variable.</strong> The gender in these projects comes from Wikidata’s <code>P21</code> property, labelled “sex or gender”. For most people it records a single value, and in practice that value is usually “male” or “female”. That is a strong simplification: it can be missing, it can be out of date, and one recorded category may not match how a person describes themselves. A gap you measure is a gap in this recorded variable, which is not the same as gender as people live it.</li>
+<li>
+<strong>Generalising from English Wikipedia.</strong> Coverage and gaps differ across language editions. A result from <code>en</code> is a result about <code>en</code>, not about Wikipedia as a whole.</li>
+<li>
+<strong>Confusing editors with subjects.</strong> The people who write articles are not the people the articles are about. A finding about editor communities says nothing direct about the politicians themselves.</li>
+</ul>
+<p>A result becomes easier to trust when the write-up names the context it came from and is explicit about what it does and does not show. That care is not caution for its own sake; it is what lets someone else rely on what you found.</p>
+<p>If you want to read more about interpreting Wikipedia and Wikidata data responsibly, two starting points are:</p>
+<ul>
+<li>
+<strong><a href="https://arxiv.org/abs/1501.06307">“It’s a Man’s Wikipedia? Assessing Gender Inequality in an Online Encyclopedia”</a></strong> (Wagner, Garcia, Jadidi, and Strohmaier, 2015). The study finds that women can be covered well in raw counts while still being portrayed differently from men, a reminder that a coverage count does not capture how a subject is written about.</li>
+<li>
+<strong><a href="https://www.callingbullshit.org/">Calling Bullshit: Data Reasoning in a Digital World</a></strong> (Bergstrom and West). Free course material on the reasoning errors in the checklist above, such as mistaking correlation for causation and overlooking selection bias.</li>
+</ul></section></section><section id="before-you-start-setup" class="level2"><h2 class="anchored" data-anchor-id="before-you-start-setup">Before you start (setup)</h2>
+<p>Install the shared packages:</p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pywikibot pandas matplotlib requests scipy statsmodels networkx python-louvain</span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p>The first time you use <code>pywikibot</code> it will ask you to create a small <code>user-config.py</code> file. Run <code>pywikibot generate_user_files.py</code> and choose the English Wikipedia (<code>en</code>) when prompted. Projects 2 does not need <code>pywikibot</code> at all; it talks to Wikidata directly with <code>requests</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Astuce
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Start with Project 1. It is one page, one chart, and no statistics.</p>
+</div>
+</div>
+<hr></section><section id="project-1.-plot-the-edit-history-of-one-article" class="level2"><h2 class="anchored" data-anchor-id="project-1.-plot-the-edit-history-of-one-article">Project 1. Plot the edit history of one article</h2>
+<p><strong>Difficulty: 1 / 5 (Beginner)</strong></p>
+<p><strong>The question.</strong> When was a politician’s biography edited, and were there bursts of activity?</p>
+<p><strong>You will be comfortable here if</strong> you can run a Python script. No prior data experience needed.</p>
+<p><strong>What you will practise.</strong> Calling an API, reading timestamps, drawing a bar chart.</p>
+<p><strong>Tools.</strong> <code>pywikibot</code>, <code>pandas</code>, <code>matplotlib</code>.</p>
+<p><strong>Starter code.</strong></p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot, pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> edit_timeline(title, lang<span class="op">=</span><span class="st">"en"</span>, total<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> pywikibot.Site(lang, <span class="st">"wikipedia"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    page <span class="op">=</span> pywikibot.Page(site, title)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Each revision has a timestamp. content=False keeps it fast.</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    revisions <span class="op">=</span> <span class="bu">list</span>(page.revisions(total<span class="op">=</span>total, content<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    times <span class="op">=</span> pd.to_datetime([r.timestamp <span class="cf">for</span> r <span class="kw">in</span> revisions])</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Count edits per month and plot them.</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    edits_per_month <span class="op">=</span> pd.Series(<span class="dv">1</span>, index<span class="op">=</span>times).sort_index().resample(<span class="st">"ME"</span>).<span class="bu">sum</span>()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    edits_per_month.plot(kind<span class="op">=</span><span class="st">"bar"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"number of edits"</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f"Edit activity for </span><span class="sc">{</span>title<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> edits_per_month</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>edit_timeline(<span class="st">"Wangari Maathai"</span>)</span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p><strong>Try next.</strong> Compare the timelines of two politicians of different genders side by side. Do you notice a difference in when their pages became active?</p>
+<hr></section><section id="project-2.-compare-gender-coverage-in-two-countries" class="level2"><h2 class="anchored" data-anchor-id="project-2.-compare-gender-coverage-in-two-countries">Project 2. Compare gender coverage in two countries</h2>
+<p><strong>Difficulty: 2 / 5 (Beginner to Intermediate)</strong></p>
+<p><strong>The question.</strong> What share of a country’s politicians have an English Wikipedia article, and does that share differ for women and men? Does the gap look different in another country?</p>
+<p><strong>You will be comfortable here if</strong> you can read a table and are willing to try one SPARQL query (we give it to you).</p>
+<p><strong>What you will practise.</strong> Querying Wikidata, grouping data, comparing proportions.</p>
+<p><strong>Tools.</strong> <code>requests</code>, <code>pandas</code>. Useful QIDs: Germany <code>Q183</code>, Kenya <code>Q114</code>, “politician” <code>Q82955</code>.</p>
+<p><strong>Starter code.</strong></p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests, pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> politicians(country_qid):</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># P106 = occupation, P27 = country of citizenship, P21 = sex or gender.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    query <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ss">    SELECT ?person ?genderLabel ?article WHERE </span><span class="ch">{{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ss">      ?person wdt:P106 wd:Q82955 ;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P27  wd:</span><span class="sc">{</span>country_qid<span class="sc">}</span><span class="ss"> ;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P21  ?gender .</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ss">      OPTIONAL </span><span class="ch">{{</span><span class="ss"> ?article schema:about ?person ;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ss">                          schema:isPartOf &lt;https://en.wikipedia.org/&gt; . </span><span class="ch">}}</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ss">      SERVICE wikibase:label </span><span class="ch">{{</span><span class="ss"> bd:serviceParam wikibase:language "en". </span><span class="ch">}}</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">"""</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://query.wikidata.org/sparql"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        params<span class="op">=</span>{<span class="st">"query"</span>: query, <span class="st">"format"</span>: <span class="st">"json"</span>},</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        headers<span class="op">=</span>{<span class="st">"User-Agent"</span>: <span class="st">"summer-school-project/1.0"</span>},</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> response.json()[<span class="st">"results"</span>][<span class="st">"bindings"</span>]</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame([</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"gender"</span>: r[<span class="st">"genderLabel"</span>][<span class="st">"value"</span>], <span class="st">"has_article"</span>: <span class="st">"article"</span> <span class="kw">in</span> r}</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> rows</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coverage_by_gender(df):</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Share of each gender that has an English Wikipedia article.</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.groupby(<span class="st">"gender"</span>)[<span class="st">"has_article"</span>].mean()</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>germany <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q183"</span>))</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>kenya   <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q114"</span>))</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(germany)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kenya)</span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p><strong>Try next.</strong> Add a simple test of whether the gap is larger than chance with <code>scipy.stats.chi2_contingency</code>. Pick two countries from different regions and write one paragraph comparing them.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Larger countries (like Germany) return many more results, which can be slow. If the query times out, add <code>LIMIT 2000</code> to the end and mention that limit in your write-up.</p>
+</div>
+</div>
+<hr></section><section id="project-3.-did-coverage-grow-faster-after-2015" class="level2"><h2 class="anchored" data-anchor-id="project-3.-did-coverage-grow-faster-after-2015">Project 3. Did coverage grow faster after 2015?</h2>
+<p><strong>Difficulty: 3 / 5 (Intermediate)</strong></p>
+<p><strong>The question.</strong> Many Wikipedia gender-gap edit-a-thons began around 2015. Did biographies of women politicians grow faster after that year than before?</p>
+<p><strong>You will be comfortable here if</strong> you can write a loop and use <code>pandas</code> group-by.</p>
+<p><strong>What you will practise.</strong> Aggregating many pages, working with dates, comparing groups across time periods.</p>
+<p><strong>Tools.</strong> <code>pywikibot</code>, <code>pandas</code>, and <code>statsmodels</code> for the comparison.</p>
+<p><strong>Starter code.</strong></p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot, pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> growth_pre_post_2015(title, lang<span class="op">=</span><span class="st">"en"</span>):</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> pywikibot.Site(lang, <span class="st">"wikipedia"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    page <span class="op">=</span> pywikibot.Page(site, title)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># r.size is the article length in bytes after each revision.</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame([{<span class="st">"ts"</span>: r.timestamp, <span class="st">"size"</span>: r.size}</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> r <span class="kw">in</span> page.revisions(content<span class="op">=</span><span class="va">False</span>)])</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"year"</span>] <span class="op">=</span> pd.DatetimeIndex(df[<span class="st">"ts"</span>]).year</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"era"</span>] <span class="op">=</span> (df[<span class="st">"year"</span>] <span class="op">&gt;=</span> <span class="dv">2015</span>).<span class="bu">map</span>({<span class="va">True</span>: <span class="st">"post"</span>, <span class="va">False</span>: <span class="st">"pre"</span>})</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Net bytes added in each era, a simple growth measure.</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.groupby(<span class="st">"era"</span>)[<span class="st">"size"</span>].agg(<span class="kw">lambda</span> s: s.<span class="bu">max</span>() <span class="op">-</span> s.<span class="bu">min</span>())</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(growth_pre_post_2015(<span class="st">"Wangari Maathai"</span>))</span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p>To answer the real question, run this for many female and male politician articles (reuse the list from Project 2), then compare the four groups (gender by era). A clean way to test it is a regression with an interaction term:</p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df_all: one row per article-era with columns bytes_added, gender, era</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.ols(<span class="st">"bytes_added ~ C(gender) * C(era)"</span>, data<span class="op">=</span>df_all).fit()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.summary())</span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p><strong>Try next.</strong> Plot average article size by year for women and men on the same chart and mark 2015 with a vertical line.</p>
+<hr></section><section id="project-4.-account-for-editors-with-a-mixed-effects-model" class="level2"><h2 class="anchored" data-anchor-id="project-4.-account-for-editors-with-a-mixed-effects-model">Project 4. Account for editors with a mixed-effects model</h2>
+<p><strong>Difficulty: 4 / 5 (Intermediate to Advanced)</strong></p>
+<p><strong>The question.</strong> Are women politicians’ articles shorter than men’s, once we account for the fact that the same editors create many articles?</p>
+<p><strong>You will be comfortable here if</strong> you have seen linear regression before. The code is short, but the statistics take some thought.</p>
+<p><strong>What you will practise.</strong> Building a tidy dataset, fitting a model with a random effect, and interpreting it.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="New idea: a random effect">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>New idea: a random effect
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If one editor creates many biographies, those articles are not independent observations; they share the editor’s style and habits. A <em>random effect for editor</em> lets the model absorb that shared influence so your gender estimate is not fooled by a few prolific editors.</p>
+</div>
+</div>
+<p><strong>Tools.</strong> <code>statsmodels</code> (Python) or <code>lme4</code> (R). For each article, assign it to its creator (the user who made the first revision):</p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>creator <span class="op">=</span> <span class="bu">list</span>(page.revisions(reverse<span class="op">=</span><span class="va">True</span>, total<span class="op">=</span><span class="dv">1</span>))[<span class="dv">0</span>].user</span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p>Build one row per article with <code>length</code> (try <code>len(page.text)</code>), <code>gender</code> (from Project 2), and <code>creator</code>. Then fit the model:</p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># df: columns length, gender, creator</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.mixedlm(<span class="st">"length ~ C(gender)"</span>, data<span class="op">=</span>df, groups<span class="op">=</span>df[<span class="st">"creator"</span>])</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> model.fit()</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.summary())</span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p>The same model in R, which many statisticians prefer for this:</p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">lmer</span>(length <span class="sc">~</span> gender <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> creator), <span class="at">data =</span> df)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)</span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p><strong>Try next.</strong> Real articles are edited by many people, not just their creator, so editors and articles are <em>crossed</em>, not strictly nested. Read about crossed random effects and explain in two sentences why assigning each article to one creator is a simplification.</p>
+<hr></section><section id="project-5.-find-communities-of-co-editors" class="level2"><h2 class="anchored" data-anchor-id="project-5.-find-communities-of-co-editors">Project 5. Find communities of co-editors</h2>
+<p><strong>Difficulty: 5 / 5 (Advanced)</strong></p>
+<p><strong>The question.</strong> Do editors who work on the same articles form communities, and do those communities focus on one gender more than the other?</p>
+<p><strong>You will be comfortable here if</strong> you enjoy Python, are happy installing extra packages, and want to learn some network analysis.</p>
+<p><strong>What you will practise.</strong> Building a graph, detecting communities, and testing whether a community is associated with an attribute.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="New idea: a bipartite graph">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>New idea: a bipartite graph
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <em>bipartite</em> graph has two kinds of nodes, here editors and articles, with a link whenever an editor edited an article. <em>Projecting</em> it onto editors links two editors whenever they edited the same article. Community detection then finds clusters of editors who tend to work together.</p>
+</div>
+</div>
+<p><strong>Tools.</strong> <code>networkx</code>, <code>python-louvain</code> (installs as <code>python-louvain</code>, imported as <code>community</code>), <code>pandas</code>, <code>scipy</code>.</p>
+<p><strong>Starter code.</strong></p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot, pandas <span class="im">as</span> pd</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> networkx.algorithms <span class="im">import</span> bipartite</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> community <span class="im">as</span> community_louvain</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> collect_edits(titles, lang<span class="op">=</span><span class="st">"en"</span>):</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> pywikibot.Site(lang, <span class="st">"wikipedia"</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> []</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> title <span class="kw">in</span> titles:</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> pywikibot.Page(site, title)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> page.revisions(content<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> r.user:                      <span class="co"># skip deleted or hidden users</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                rows.append((r.user, title))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows, columns<span class="op">=</span>[<span class="st">"editor"</span>, <span class="st">"article"</span>])</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coeditor_communities(edits):</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> nx.Graph()</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    B.add_nodes_from(edits[<span class="st">"editor"</span>].unique(), bipartite<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    B.add_nodes_from(edits[<span class="st">"article"</span>].unique(), bipartite<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    B.add_edges_from(edits[[<span class="st">"editor"</span>, <span class="st">"article"</span>]].itertuples(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    editors <span class="op">=</span> edits[<span class="st">"editor"</span>].unique()</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    coeditor_graph <span class="op">=</span> bipartite.weighted_projected_graph(B, editors)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> community_louvain.best_partition(coeditor_graph)   <span class="co"># {editor: community}</span></span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p>To answer the question, label each article with its politician’s gender (from Project 2), then for each community look at the gender mix of the articles its members edit. Test whether the mix differs across communities with a chi-square test:</p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># table: rows = communities, columns = counts of female / male articles edited</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>chi2, p, dof, expected <span class="op">=</span> stats.chi2_contingency(table)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"chi-square p-value: </span><span class="sc">{</span>p<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div>
+<button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p><strong>Try next.</strong> Draw the co-editor graph with <code>nx.draw</code> and color each node by its community. Describe one community in words.</p>
+<hr></section><section id="conclusion" class="level2"><h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Whichever project you choose, you will have taken a real question about Wikipedia’s gender gap, pulled live data, and turned it into a result you can explain and defend. The goal is not only to produce a number but to understand what it means and where its limits lie.</p>
+<p>A few things to carry forward:</p>
+<ul>
+<li>
+<strong>Start small and build up.</strong> Project 1 is one page and one chart. Each later project reuses ideas from the earlier ones, so you are rarely starting from nothing.</li>
+<li>
+<strong>Keep your work reproducible.</strong> Record the date you pulled the data, any <code>LIMIT</code> you applied, and the QIDs or page titles you used. Wikipedia changes daily, so every result is tied to the moment you ran it.</li>
+<li>
+<strong>Let the question lead.</strong> The methods exist to answer a question about coverage and fairness, so choose the project whose question you genuinely care about.</li>
+<li>
+<strong>Interpret responsibly.</strong> Reread “How to interpret the results” before writing up your findings. The most valuable sentence in a write-up is often the one that states what the result does not show.</li>
+</ul>
+<p>If you want to go further, try a language edition other than English, add a second attribute alongside gender, or compare your findings with published research on the same topic.</p>
+
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copié");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copié");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/citizensandtech\.github\.io\/sicss-wikipedia\/fr");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body>
+</html>
