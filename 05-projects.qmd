@@ -92,6 +92,8 @@ If you want to read more about interpreting Wikipedia and Wikidata data responsi
 
 ## Before you start (setup)
 
+### Local install
+
 Install the shared packages:
 
 ```bash
@@ -99,6 +101,14 @@ pip install pywikibot pandas matplotlib requests scipy statsmodels networkx pyth
 ```
 
 The first time you use `pywikibot` it will ask you to create a small `user-config.py` file. Run `pywikibot generate_user_files.py` and choose the English Wikipedia (`en`) when prompted. Projects 2 does not need `pywikibot` at all; it talks to Wikidata directly with `requests`.
+
+### Using PAWS
+
+If you aim to continue using *PAWS*, you will need to install the following packages, using this code in a Python cell:
+
+```
+! pip install statsmodels networkx python-louvain
+```
 
 ::: {.callout-tip}
 Start with Project 1. It is one page, one chart, and no statistics.
