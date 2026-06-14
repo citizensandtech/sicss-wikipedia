@@ -186,7 +186,7 @@
     "href": "05-projects.html#before-you-start-setup",
     "title": "Practical projects on analysing gender-gaps",
     "section": "Before you start (setup)",
-    "text": "Before you start (setup)\nInstall the shared packages:\npip install pywikibot pandas matplotlib requests scipy statsmodels networkx python-louvain\nThe first time you use pywikibot it will ask you to create a small user-config.py file. Run pywikibot generate_user_files.py and choose the English Wikipedia (en) when prompted. Projects 2 does not need pywikibot at all; it talks to Wikidata directly with requests.\n\n\n\n\n\n\nTip\n\n\n\nStart with Project 1. It is one page, one chart, and no statistics."
+    "text": "Before you start (setup)\n\nLocal install\nInstall the shared packages:\npip install pywikibot pandas matplotlib requests scipy statsmodels networkx python-louvain\nThe first time you use pywikibot it will ask you to create a small user-config.py file. Run pywikibot generate_user_files.py and choose the English Wikipedia (en) when prompted. Projects 2 does not need pywikibot at all; it talks to Wikidata directly with requests.\n\n\nUsing PAWS\nIf you aim to continue using PAWS, you will need to install the following packages, using this code in a Python cell:\n! pip install statsmodels networkx python-louvain\n\n\n\n\n\n\nTip\n\n\n\nStart with Project 1. It is one page, one chart, and no statistics."
   },
   {
     "objectID": "05-projects.html#project-1.-plot-the-edit-history-of-one-article",

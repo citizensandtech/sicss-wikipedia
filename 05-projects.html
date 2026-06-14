@@ -158,7 +158,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#common-inferential-mistakes-with-simple-wikipedia-data" id="toc-common-inferential-mistakes-with-simple-wikipedia-data" class="nav-link" data-scroll-target="#common-inferential-mistakes-with-simple-wikipedia-data">Common inferential mistakes with simple Wikipedia data</a></li>
   </ul>
 </li>
-  <li><a href="#before-you-start-setup" id="toc-before-you-start-setup" class="nav-link" data-scroll-target="#before-you-start-setup">Before you start (setup)</a></li>
+  <li>
+<a href="#before-you-start-setup" id="toc-before-you-start-setup" class="nav-link" data-scroll-target="#before-you-start-setup">Before you start (setup)</a>
+  <ul class="collapse">
+<li><a href="#local-install" id="toc-local-install" class="nav-link" data-scroll-target="#local-install">Local install</a></li>
+  <li><a href="#using-paws" id="toc-using-paws" class="nav-link" data-scroll-target="#using-paws">Using PAWS</a></li>
+  </ul>
+</li>
   <li><a href="#project-1.-plot-the-edit-history-of-one-article" id="toc-project-1.-plot-the-edit-history-of-one-article" class="nav-link" data-scroll-target="#project-1.-plot-the-edit-history-of-one-article">Project 1. Plot the edit history of one article</a></li>
   <li><a href="#project-2.-compare-gender-coverage-in-two-countries" id="toc-project-2.-compare-gender-coverage-in-two-countries" class="nav-link" data-scroll-target="#project-2.-compare-gender-coverage-in-two-countries">Project 2. Compare gender coverage in two countries</a></li>
   <li><a href="#project-3.-did-coverage-grow-faster-after-2015" id="toc-project-3.-did-coverage-grow-faster-after-2015" class="nav-link" data-scroll-target="#project-3.-did-coverage-grow-faster-after-2015">Project 3. Did coverage grow faster after 2015?</a></li>
@@ -287,12 +293,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>
 <strong><a href="https://www.callingbullshit.org/">Calling Bullshit: Data Reasoning in a Digital World</a></strong> (Bergstrom and West). Free course material on the reasoning errors in the checklist above, such as mistaking correlation for causation and overlooking selection bias.</li>
 </ul></section></section><section id="before-you-start-setup" class="level2"><h2 class="anchored" data-anchor-id="before-you-start-setup">Before you start (setup)</h2>
+<section id="local-install" class="level3"><h3 class="anchored" data-anchor-id="local-install">Local install</h3>
 <p>Install the shared packages:</p>
 <div class="code-copy-outer-scaffold">
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pywikibot pandas matplotlib requests scipy statsmodels networkx python-louvain</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p>The first time you use <code>pywikibot</code> it will ask you to create a small <code>user-config.py</code> file. Run <code>pywikibot generate_user_files.py</code> and choose the English Wikipedia (<code>en</code>) when prompted. Projects 2 does not need <code>pywikibot</code> at all; it talks to Wikidata directly with <code>requests</code>.</p>
+</section><section id="using-paws" class="level3"><h3 class="anchored" data-anchor-id="using-paws">Using PAWS</h3>
+<p>If you aim to continue using <em>PAWS</em>, you will need to install the following packages, using this code in a Python cell:</p>
+<pre><code>! pip install statsmodels networkx python-louvain</code></pre>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -306,7 +316,7 @@ Tip
 <p>Start with Project 1. It is one page, one chart, and no statistics.</p>
 </div>
 </div>
-<hr></section><section id="project-1.-plot-the-edit-history-of-one-article" class="level2"><h2 class="anchored" data-anchor-id="project-1.-plot-the-edit-history-of-one-article">Project 1. Plot the edit history of one article</h2>
+<hr></section></section><section id="project-1.-plot-the-edit-history-of-one-article" class="level2"><h2 class="anchored" data-anchor-id="project-1.-plot-the-edit-history-of-one-article">Project 1. Plot the edit history of one article</h2>
 <p><strong>Difficulty: 1 / 5 (Beginner)</strong></p>
 <p><strong>The question.</strong> When was a politician’s biography edited, and were there bursts of activity?</p>
 <p><strong>You will be comfortable here if</strong> you can run a Python script. No prior data experience needed.</p>
@@ -314,27 +324,27 @@ Tip
 <p><strong>Tools.</strong> <code>pywikibot</code>, <code>pandas</code>, <code>matplotlib</code>.</p>
 <p><strong>Starter code.</strong></p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot, pandas <span class="im">as</span> pd</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> edit_timeline(title, lang<span class="op">=</span><span class="st">"en"</span>, total<span class="op">=</span><span class="dv">100</span>):</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> pywikibot.Site(lang, <span class="st">"wikipedia"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    page <span class="op">=</span> pywikibot.Page(site, title)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Each revision has a timestamp. content=False keeps it fast.</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    revisions <span class="op">=</span> <span class="bu">list</span>(page.revisions(total<span class="op">=</span>total, content<span class="op">=</span><span class="va">False</span>))</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    times <span class="op">=</span> pd.to_datetime([r.timestamp <span class="cf">for</span> r <span class="kw">in</span> revisions])</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Count edits per month and plot them.</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    edits_per_month <span class="op">=</span> pd.Series(<span class="dv">1</span>, index<span class="op">=</span>times).sort_index().resample(<span class="st">"ME"</span>).<span class="bu">sum</span>()</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    edits_per_month.plot(kind<span class="op">=</span><span class="st">"bar"</span>)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"number of edits"</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f"Edit activity for </span><span class="sc">{</span>title<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> edits_per_month</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>edit_timeline(<span class="st">"Wangari Maathai"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot, pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> edit_timeline(title, lang<span class="op">=</span><span class="st">"en"</span>, total<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> pywikibot.Site(lang, <span class="st">"wikipedia"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    page <span class="op">=</span> pywikibot.Page(site, title)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Each revision has a timestamp. content=False keeps it fast.</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    revisions <span class="op">=</span> <span class="bu">list</span>(page.revisions(total<span class="op">=</span>total, content<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    times <span class="op">=</span> pd.to_datetime([r.timestamp <span class="cf">for</span> r <span class="kw">in</span> revisions])</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Count edits per month and plot them.</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    edits_per_month <span class="op">=</span> pd.Series(<span class="dv">1</span>, index<span class="op">=</span>times).sort_index().resample(<span class="st">"ME"</span>).<span class="bu">sum</span>()</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    edits_per_month.plot(kind<span class="op">=</span><span class="st">"bar"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"number of edits"</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f"Edit activity for </span><span class="sc">{</span>title<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> edits_per_month</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>edit_timeline(<span class="st">"Wangari Maathai"</span>)</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p><strong>Try next.</strong> Compare the timelines of two politicians of different genders side by side. Do you notice a difference in when their pages became active?</p>
@@ -346,38 +356,38 @@ Tip
 <p><strong>Tools.</strong> <code>requests</code>, <code>pandas</code>. Useful QIDs: Germany <code>Q183</code>, Kenya <code>Q114</code>, “politician” <code>Q82955</code>.</p>
 <p><strong>Starter code.</strong></p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests, pandas <span class="im">as</span> pd</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> politicians(country_qid):</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># P106 = occupation, P27 = country of citizenship, P21 = sex or gender.</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    query <span class="op">=</span> <span class="ss">f"""</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ss">    SELECT ?person ?genderLabel ?article WHERE </span><span class="ch">{{</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ss">      ?person wdt:P106 wd:Q82955 ;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P27  wd:</span><span class="sc">{</span>country_qid<span class="sc">}</span><span class="ss"> ;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P21  ?gender .</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ss">      OPTIONAL </span><span class="ch">{{</span><span class="ss"> ?article schema:about ?person ;</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ss">                          schema:isPartOf &lt;https://en.wikipedia.org/&gt; . </span><span class="ch">}}</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ss">      SERVICE wikibase:label </span><span class="ch">{{</span><span class="ss"> bd:serviceParam wikibase:language "en". </span><span class="ch">}}</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">"""</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://query.wikidata.org/sparql"</span>,</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        params<span class="op">=</span>{<span class="st">"query"</span>: query, <span class="st">"format"</span>: <span class="st">"json"</span>},</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        headers<span class="op">=</span>{<span class="st">"User-Agent"</span>: <span class="st">"summer-school-project/1.0"</span>},</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> response.json()[<span class="st">"results"</span>][<span class="st">"bindings"</span>]</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame([</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"gender"</span>: r[<span class="st">"genderLabel"</span>][<span class="st">"value"</span>], <span class="st">"has_article"</span>: <span class="st">"article"</span> <span class="kw">in</span> r}</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> rows</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    ])</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coverage_by_gender(df):</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Share of each gender that has an English Wikipedia article.</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.groupby(<span class="st">"gender"</span>)[<span class="st">"has_article"</span>].mean()</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>germany <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q183"</span>))</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>kenya   <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q114"</span>))</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(germany)</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kenya)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests, pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> politicians(country_qid):</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># P106 = occupation, P27 = country of citizenship, P21 = sex or gender.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    query <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ss">    SELECT ?person ?genderLabel ?article WHERE </span><span class="ch">{{</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ss">      ?person wdt:P106 wd:Q82955 ;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P27  wd:</span><span class="sc">{</span>country_qid<span class="sc">}</span><span class="ss"> ;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P21  ?gender .</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ss">      OPTIONAL </span><span class="ch">{{</span><span class="ss"> ?article schema:about ?person ;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ss">                          schema:isPartOf &lt;https://en.wikipedia.org/&gt; . </span><span class="ch">}}</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ss">      SERVICE wikibase:label </span><span class="ch">{{</span><span class="ss"> bd:serviceParam wikibase:language "en". </span><span class="ch">}}</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">"""</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://query.wikidata.org/sparql"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        params<span class="op">=</span>{<span class="st">"query"</span>: query, <span class="st">"format"</span>: <span class="st">"json"</span>},</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        headers<span class="op">=</span>{<span class="st">"User-Agent"</span>: <span class="st">"summer-school-project/1.0"</span>},</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> response.json()[<span class="st">"results"</span>][<span class="st">"bindings"</span>]</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame([</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"gender"</span>: r[<span class="st">"genderLabel"</span>][<span class="st">"value"</span>], <span class="st">"has_article"</span>: <span class="st">"article"</span> <span class="kw">in</span> r}</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> rows</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coverage_by_gender(df):</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Share of each gender that has an English Wikipedia article.</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.groupby(<span class="st">"gender"</span>)[<span class="st">"has_article"</span>].mean()</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>germany <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q183"</span>))</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>kenya   <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q114"</span>))</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(germany)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kenya)</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p><strong>Try next.</strong> Add a simple test of whether the gap is larger than chance with <code>scipy.stats.chi2_contingency</code>. Pick two countries from different regions and write one paragraph comparing them.</p>
@@ -402,30 +412,30 @@ Note
 <p><strong>Tools.</strong> <code>pywikibot</code>, <code>pandas</code>, and <code>statsmodels</code> for the comparison.</p>
 <p><strong>Starter code.</strong></p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot, pandas <span class="im">as</span> pd</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> growth_pre_post_2015(title, lang<span class="op">=</span><span class="st">"en"</span>):</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> pywikibot.Site(lang, <span class="st">"wikipedia"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    page <span class="op">=</span> pywikibot.Page(site, title)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># r.size is the article length in bytes after each revision.</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame([{<span class="st">"ts"</span>: r.timestamp, <span class="st">"size"</span>: r.size}</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> r <span class="kw">in</span> page.revisions(content<span class="op">=</span><span class="va">False</span>)])</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"year"</span>] <span class="op">=</span> pd.DatetimeIndex(df[<span class="st">"ts"</span>]).year</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"era"</span>] <span class="op">=</span> (df[<span class="st">"year"</span>] <span class="op">&gt;=</span> <span class="dv">2015</span>).<span class="bu">map</span>({<span class="va">True</span>: <span class="st">"post"</span>, <span class="va">False</span>: <span class="st">"pre"</span>})</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Net bytes added in each era, a simple growth measure.</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.groupby(<span class="st">"era"</span>)[<span class="st">"size"</span>].agg(<span class="kw">lambda</span> s: s.<span class="bu">max</span>() <span class="op">-</span> s.<span class="bu">min</span>())</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(growth_pre_post_2015(<span class="st">"Wangari Maathai"</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot, pandas <span class="im">as</span> pd</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> growth_pre_post_2015(title, lang<span class="op">=</span><span class="st">"en"</span>):</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> pywikibot.Site(lang, <span class="st">"wikipedia"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    page <span class="op">=</span> pywikibot.Page(site, title)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># r.size is the article length in bytes after each revision.</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame([{<span class="st">"ts"</span>: r.timestamp, <span class="st">"size"</span>: r.size}</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> r <span class="kw">in</span> page.revisions(content<span class="op">=</span><span class="va">False</span>)])</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"year"</span>] <span class="op">=</span> pd.DatetimeIndex(df[<span class="st">"ts"</span>]).year</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"era"</span>] <span class="op">=</span> (df[<span class="st">"year"</span>] <span class="op">&gt;=</span> <span class="dv">2015</span>).<span class="bu">map</span>({<span class="va">True</span>: <span class="st">"post"</span>, <span class="va">False</span>: <span class="st">"pre"</span>})</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Net bytes added in each era, a simple growth measure.</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.groupby(<span class="st">"era"</span>)[<span class="st">"size"</span>].agg(<span class="kw">lambda</span> s: s.<span class="bu">max</span>() <span class="op">-</span> s.<span class="bu">min</span>())</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(growth_pre_post_2015(<span class="st">"Wangari Maathai"</span>))</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p>To answer the real question, run this for many female and male politician articles (reuse the list from Project 2), then compare the four groups (gender by era). A clean way to test it is a regression with an interaction term:</p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df_all: one row per article-era with columns bytes_added, gender, era</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.ols(<span class="st">"bytes_added ~ C(gender) * C(era)"</span>, data<span class="op">=</span>df_all).fit()</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.summary())</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df_all: one row per article-era with columns bytes_added, gender, era</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.ols(<span class="st">"bytes_added ~ C(gender) * C(era)"</span>, data<span class="op">=</span>df_all).fit()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.summary())</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p><strong>Try next.</strong> Plot average article size by year for women and men on the same chart and mark 2015 with a vertical line.</p>
@@ -449,24 +459,24 @@ Note
 </div>
 <p><strong>Tools.</strong> <code>statsmodels</code> (Python) or <code>lme4</code> (R). For each article, assign it to its creator (the user who made the first revision):</p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>creator <span class="op">=</span> <span class="bu">list</span>(page.revisions(reverse<span class="op">=</span><span class="va">True</span>, total<span class="op">=</span><span class="dv">1</span>))[<span class="dv">0</span>].user</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>creator <span class="op">=</span> <span class="bu">list</span>(page.revisions(reverse<span class="op">=</span><span class="va">True</span>, total<span class="op">=</span><span class="dv">1</span>))[<span class="dv">0</span>].user</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p>Build one row per article with <code>length</code> (try <code>len(page.text)</code>), <code>gender</code> (from Project 2), and <code>creator</code>. Then fit the model:</p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># df: columns length, gender, creator</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.mixedlm(<span class="st">"length ~ C(gender)"</span>, data<span class="op">=</span>df, groups<span class="op">=</span>df[<span class="st">"creator"</span>])</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> model.fit()</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.summary())</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># df: columns length, gender, creator</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.mixedlm(<span class="st">"length ~ C(gender)"</span>, data<span class="op">=</span>df, groups<span class="op">=</span>df[<span class="st">"creator"</span>])</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> model.fit()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.summary())</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p>The same model in R, which many statisticians prefer for this:</p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">lmer</span>(length <span class="sc">~</span> gender <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> creator), <span class="at">data =</span> df)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">lmer</span>(length <span class="sc">~</span> gender <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> creator), <span class="at">data =</span> df)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p><strong>Try next.</strong> Real articles are edited by many people, not just their creator, so editors and articles are <em>crossed</em>, not strictly nested. Read about crossed random effects and explain in two sentences why assigning each article to one creator is a simplification.</p>
@@ -491,38 +501,38 @@ Note
 <p><strong>Tools.</strong> <code>networkx</code>, <code>python-louvain</code> (installs as <code>python-louvain</code>, imported as <code>community</code>), <code>pandas</code>, <code>scipy</code>.</p>
 <p><strong>Starter code.</strong></p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot, pandas <span class="im">as</span> pd</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> networkx.algorithms <span class="im">import</span> bipartite</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> community <span class="im">as</span> community_louvain</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> collect_edits(titles, lang<span class="op">=</span><span class="st">"en"</span>):</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> pywikibot.Site(lang, <span class="st">"wikipedia"</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> []</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> title <span class="kw">in</span> titles:</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> pywikibot.Page(site, title)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> page.revisions(content<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> r.user:                      <span class="co"># skip deleted or hidden users</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                rows.append((r.user, title))</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows, columns<span class="op">=</span>[<span class="st">"editor"</span>, <span class="st">"article"</span>])</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coeditor_communities(edits):</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> nx.Graph()</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    B.add_nodes_from(edits[<span class="st">"editor"</span>].unique(), bipartite<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    B.add_nodes_from(edits[<span class="st">"article"</span>].unique(), bipartite<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    B.add_edges_from(edits[[<span class="st">"editor"</span>, <span class="st">"article"</span>]].itertuples(index<span class="op">=</span><span class="va">False</span>))</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    editors <span class="op">=</span> edits[<span class="st">"editor"</span>].unique()</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    coeditor_graph <span class="op">=</span> bipartite.weighted_projected_graph(B, editors)</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> community_louvain.best_partition(coeditor_graph)   <span class="co"># {editor: community}</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot, pandas <span class="im">as</span> pd</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> networkx.algorithms <span class="im">import</span> bipartite</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> community <span class="im">as</span> community_louvain</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> collect_edits(titles, lang<span class="op">=</span><span class="st">"en"</span>):</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> pywikibot.Site(lang, <span class="st">"wikipedia"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> []</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> title <span class="kw">in</span> titles:</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> pywikibot.Page(site, title)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> page.revisions(content<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> r.user:                      <span class="co"># skip deleted or hidden users</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                rows.append((r.user, title))</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows, columns<span class="op">=</span>[<span class="st">"editor"</span>, <span class="st">"article"</span>])</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coeditor_communities(edits):</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> nx.Graph()</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    B.add_nodes_from(edits[<span class="st">"editor"</span>].unique(), bipartite<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    B.add_nodes_from(edits[<span class="st">"article"</span>].unique(), bipartite<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    B.add_edges_from(edits[[<span class="st">"editor"</span>, <span class="st">"article"</span>]].itertuples(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    editors <span class="op">=</span> edits[<span class="st">"editor"</span>].unique()</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    coeditor_graph <span class="op">=</span> bipartite.weighted_projected_graph(B, editors)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> community_louvain.best_partition(coeditor_graph)   <span class="co"># {editor: community}</span></span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p>To answer the question, label each article with its politician’s gender (from Project 2), then for each community look at the gender mix of the articles its members edit. Test whether the mix differs across communities with a chi-square test:</p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># table: rows = communities, columns = counts of female / male articles edited</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>chi2, p, dof, expected <span class="op">=</span> stats.chi2_contingency(table)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"chi-square p-value: </span><span class="sc">{</span>p<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># table: rows = communities, columns = counts of female / male articles edited</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>chi2, p, dof, expected <span class="op">=</span> stats.chi2_contingency(table)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"chi-square p-value: </span><span class="sc">{</span>p<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p><strong>Try next.</strong> Draw the co-editor graph with <code>nx.draw</code> and color each node by its community. Describe one community in words.</p>
