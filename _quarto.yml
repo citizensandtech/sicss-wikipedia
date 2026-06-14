@@ -13,7 +13,10 @@ website:
       - 02-pywikibot.ipynb
       - 03-wikidata.ipynb
       - 04-full-example.ipynb
+      - href: 05-projects.qmd
+        text: Practical exercises
       - about.qmd
+
 
 format:
   html:

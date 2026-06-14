@@ -2,4 +2,19 @@
 title: "SICSS: Using Wikipedia"
 ---
 
-This is a work-in-progress version of teaching materials which explain how Wikipedia (and the sister Wikimedia-projects) along with their APIs can be used to get interesting data for use in Computational Social Sciences research.
+These materials were designed to provide early career researchers working in computational social science with hands-on experience on how data from Wikipedia and Wikidata can be accessed and used.
+
+Particularly, for the use in the annual, two-week-long *Summer Institutes in Computational Social Science* as part of an [ongoing community project](about), which brings researchers from diverse backgrounds, from people who are new to programming to technical experts, together with Wikimedians.
+
+These materials are a follow-up to introductory lectures about Wikipedia/Wikimedia, how the Wiki model works, and how the data has successfully be used for research before.
+
+The materials cover the following: 
+
+1. [Introduction](01-intro-wikipedia-data.html): A quick recap of what Wikipedia/Wikidata is, how to ethically use it, and common misconceptions
+2. [Basic data access](02-pywikibot.html): What are different ways of accessing data from Wikis and getting started with `PyWikiBot` and `PAWS`)
+3. [Using Wikidata](03-wikidata.html): An intro to the Wikidata data model and how to query Wikidata
+4. [End-to-end example](04-full-example.html): A full example combining Wikidata and getting data from Wiki pages
+5. [Practical exercises](05-projects.hmtl): Five practical exercises for different technical levels
+
+The first four interactive units are expected to fill around 3 hours.
+

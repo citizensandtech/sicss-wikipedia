@@ -1,0 +1,366 @@
+---
+title: "Practical projects on analysing gender-gaps"
+description: "Five hands-on projects for measuring gender gaps in Wikipedia coverage of politicians, ordered from beginner to advanced."
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-copy: true
+execute:
+  enabled: false
+---
+
+In this section you will pick one short project that measures part of the gender gap in Wikipedia's coverage of politicians. Across many language editions, Wikipedia has fewer biographies of women than of men, and the biographies that do exist can differ in length, detail, and editing history. 
+
+The projects below let you measure pieces of that gap with real data that you pull live from Wikipedia and Wikidata, while getting some more practice in using the APIs.
+
+## What you will do
+
+- **Pull live data** from Wikipedia and Wikidata with Python.
+- **Work with timestamps and tables** using `pandas`.
+- **Summarise a gender gap** as a number, a chart, or a model.
+- **Read your result critically** and say what it does and does not show.
+
+## How this section is organized
+
+Each project has a difficulty rating from 1 (no coding experience needed) to 5 (comfortable with Python and statistics). Every project follows the same layout:
+
+- **The question** you will answer.
+- **You will be comfortable here if** you have a certain background.
+- **What you will practise.**
+- **Tools** (the packages you need).
+- **Starter code** you can copy and adapt.
+- **Try next** for an optional extension.
+
+::: {.callout-note title="A few terms used below"}
+A *revision* is a single saved edit to a page. An *editor* is the user account that made a revision. A *QID* is Wikidata's identifier for a thing (for example, Germany is `Q183`). *SPARQL* is the query language used to ask Wikidata questions, similar to SQL for databases.
+:::
+
+## Topics
+
+These five projects each measure one part of the gender gap. They are ordered by difficulty, from 1 to 5.
+
+- **Project 1. Plot the edit history of one article** (1 / 5). Pull one biography's revisions and chart when it was edited.
+- **Project 2. Compare gender coverage in two countries** (2 / 5). Query Wikidata and compare the share of women and men politicians who have an article.
+- **Project 3. Did coverage grow faster after 2015?** (3 / 5). Compare article growth before and after the rise of gender-gap edit-a-thons.
+- **Project 4. Account for editors with a mixed-effects model** (4 / 5). Test whether women politicians' articles are shorter once you account for prolific editors.
+- **Project 5. Find communities of co-editors** (5 / 5). Build an editor network, detect communities, and ask whether they focus on one gender.
+
+## Not sure which to pick?
+
+Use this as a rough guide:
+
+- **I have never written Python.** Start with **Project 1**.
+- **I can use `pandas` a little.** Try **Project 2** or **Project 3**.
+- **I have taken a statistics course.** **Project 4** will stretch you in a good way.
+- **I like algorithms and graphs.** Go for **Project 5**.
+
+Whatever you choose, finish with one short paragraph that states your result as a number and one sentence on what your result does *not* prove. Being clear about the limits of your data is part of doing this well.
+
+## How to interpret the results (carefully and responsibly)
+
+Each project produces a number, a chart, or a model coefficient. On its own, none of them explains why a gap exists. A measured difference is closer to the start of a question than to an answer. Understanding a root cause usually means looking more closely at the edit history of the specific pages involved and at the cultural and institutional context around them.
+
+A useful habit is to keep two things separate: what you actually measured, and what you would like to infer from it. The example and the checklist below show where that separation tends to break down, and why.
+
+### A worked example: reading too much into co-editing (Project 5)
+
+Project 5 finds groups of editors who tend to work on the same articles. It is tempting to read a tight community as evidence that its members coordinate, or that they are pushing a shared agenda. Editing patterns like this have been at the center of real disputes on Wikipedia, where overlapping activity was presented as proof that a group was acting together to control a set of articles, sometimes alongside allegations of misconduct.
+
+That reading is tempting, but it skips a question worth asking: what else could produce the same pattern? Co-occurrence in editing usually has ordinary explanations. Editing the same articles does not require that the editors know one another, and being placed in the same detected community does not imply a personal connection between its members. Often the most likely explanation is a shared interest in the same topics, since people who care about, say, Kenyan politicians will tend to edit the same pages. A detected community, then, describes a pattern of activity, which is not the same thing as evidence of coordination, collusion, or manipulation.
+
+So what can the method actually support? It shows that a set of editors overlaps in their activity more than chance alone would predict. Going beyond that, to intent or wrongdoing, calls for independent evidence, and it is worth seeing why. The first reason is statistical: an overlap tells you that editing co-occurs, not why it co-occurs, so on its own it cannot establish intent. The second reason is ethical: editors are real, identifiable people, so describing their work as coordination or manipulation is an accusation rather than a neutral summary of the data. Both reasons support the same conclusion, which is that a pattern by itself does not establish misconduct.
+
+### Common inferential mistakes with simple Wikipedia data
+
+Each item below pairs a tempting reading with the reason it can mislead. As you work, it can help to ask which of these might apply to your own result.
+
+- **Confusing a coverage gap with its cause.** Suppose you find fewer articles about women than about men. Several different things could produce that same number: who editors choose to write about, who Wikipedia's notability rules let in, the fact that historically fewer women have held political office (so there are fewer of them to write about in the first place), or missing records in the Wikidata you queried. The count tells you that a gap exists; it does not tell you which of these produced it.
+- **Treating missing data as a measured zero.** In Project 2, a person with no linked article may genuinely lack one, or the Wikidata link may simply be absent. Missing from the data is not the same as missing from the world.
+- **Reading byte count as quality.** A longer article does not necessarily mean a better or fairer one. Length is a rough proxy, and it can reflect the amount of edits, but not how much thinking the editor put into it, or the amount of time they spent on it, or the final quality of the article.
+- **Mistaking correlation for causation, especially around a date.** In Project 3, a change after 2015 does not prove that edit-a-thons **caused** it, because many other things changed over the same years that you can explore further.
+- **Over-reading the gender variable.** The gender in these projects comes from Wikidata's `P21` property, labelled "sex or gender". For most people it records a single value, and in practice that value is usually "male" or "female". That is a strong simplification: it can be missing, it can be out of date, and one recorded category may not match how a person describes themselves. A gap you measure is a gap in this recorded variable, which is not the same as gender as people live it.
+- **Generalising from English Wikipedia.** Coverage and gaps differ across language editions. A result from `en` is a result about `en`, not about Wikipedia as a whole.
+- **Confusing editors with subjects.** The people who write articles are not the people the articles are about. A finding about editor communities says nothing direct about the politicians themselves.
+
+A result becomes easier to trust when the write-up names the context it came from and is explicit about what it does and does not show. That care is not caution for its own sake; it is what lets someone else rely on what you found.
+
+If you want to read more about interpreting Wikipedia and Wikidata data responsibly, two starting points are:
+
+- **["It's a Man's Wikipedia? Assessing Gender Inequality in an Online Encyclopedia"](https://arxiv.org/abs/1501.06307)** (Wagner, Garcia, Jadidi, and Strohmaier, 2015). The study finds that women can be covered well in raw counts while still being portrayed differently from men, a reminder that a coverage count does not capture how a subject is written about.
+- **[Calling Bullshit: Data Reasoning in a Digital World](https://www.callingbullshit.org/)** (Bergstrom and West). Free course material on the reasoning errors in the checklist above, such as mistaking correlation for causation and overlooking selection bias.
+
+## Before you start (setup)
+
+Install the shared packages:
+
+```bash
+pip install pywikibot pandas matplotlib requests scipy statsmodels networkx python-louvain
+```
+
+The first time you use `pywikibot` it will ask you to create a small `user-config.py` file. Run `pywikibot generate_user_files.py` and choose the English Wikipedia (`en`) when prompted. Projects 2 does not need `pywikibot` at all; it talks to Wikidata directly with `requests`.
+
+::: {.callout-tip}
+Start with Project 1. It is one page, one chart, and no statistics.
+:::
+
+---
+
+## Project 1. Plot the edit history of one article
+
+**Difficulty: 1 / 5 (Beginner)**
+
+**The question.** When was a politician's biography edited, and were there bursts of activity?
+
+**You will be comfortable here if** you can run a Python script. No prior data experience needed.
+
+**What you will practise.** Calling an API, reading timestamps, drawing a bar chart.
+
+**Tools.** `pywikibot`, `pandas`, `matplotlib`.
+
+**Starter code.**
+
+```python
+import pywikibot, pandas as pd
+import matplotlib.pyplot as plt
+
+def edit_timeline(title, lang="en", total=100):
+    site = pywikibot.Site(lang, "wikipedia")
+    page = pywikibot.Page(site, title)
+
+    # Each revision has a timestamp. content=False keeps it fast.
+    revisions = list(page.revisions(total=total, content=False))
+    times = pd.to_datetime([r.timestamp for r in revisions])
+
+    # Count edits per month and plot them.
+    edits_per_month = pd.Series(1, index=times).sort_index().resample("ME").sum()
+    edits_per_month.plot(kind="bar")
+    plt.ylabel("number of edits")
+    plt.title(f"Edit activity for {title}")
+    plt.tight_layout()
+    plt.show()
+    return edits_per_month
+
+edit_timeline("Wangari Maathai")
+```
+
+**Try next.** Compare the timelines of two politicians of different genders side by side. Do you notice a difference in when their pages became active?
+
+---
+
+## Project 2. Compare gender coverage in two countries
+
+**Difficulty: 2 / 5 (Beginner to Intermediate)**
+
+**The question.** What share of a country's politicians have an English Wikipedia article, and does that share differ for women and men? Does the gap look different in another country?
+
+**You will be comfortable here if** you can read a table and are willing to try one SPARQL query (we give it to you).
+
+**What you will practise.** Querying Wikidata, grouping data, comparing proportions.
+
+**Tools.** `requests`, `pandas`. Useful QIDs: Germany `Q183`, Kenya `Q114`, "politician" `Q82955`.
+
+**Starter code.**
+
+```python
+import requests, pandas as pd
+
+def politicians(country_qid):
+    # P106 = occupation, P27 = country of citizenship, P21 = sex or gender.
+    query = f"""
+    SELECT ?person ?genderLabel ?article WHERE {{
+      ?person wdt:P106 wd:Q82955 ;
+              wdt:P27  wd:{country_qid} ;
+              wdt:P21  ?gender .
+      OPTIONAL {{ ?article schema:about ?person ;
+                          schema:isPartOf <https://en.wikipedia.org/> . }}
+      SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
+    }}"""
+    response = requests.get(
+        "https://query.wikidata.org/sparql",
+        params={"query": query, "format": "json"},
+        headers={"User-Agent": "summer-school-project/1.0"},
+    )
+    rows = response.json()["results"]["bindings"]
+    return pd.DataFrame([
+        {"gender": r["genderLabel"]["value"], "has_article": "article" in r}
+        for r in rows
+    ])
+
+def coverage_by_gender(df):
+    # Share of each gender that has an English Wikipedia article.
+    return df.groupby("gender")["has_article"].mean()
+
+germany = coverage_by_gender(politicians("Q183"))
+kenya   = coverage_by_gender(politicians("Q114"))
+print(germany)
+print(kenya)
+```
+
+**Try next.** Add a simple test of whether the gap is larger than chance with `scipy.stats.chi2_contingency`. Pick two countries from different regions and write one paragraph comparing them.
+
+::: {.callout-note}
+Larger countries (like Germany) return many more results, which can be slow. If the query times out, add `LIMIT 2000` to the end and mention that limit in your write-up.
+:::
+
+---
+
+## Project 3. Did coverage grow faster after 2015?
+
+**Difficulty: 3 / 5 (Intermediate)**
+
+**The question.** Many Wikipedia gender-gap edit-a-thons began around 2015. Did biographies of women politicians grow faster after that year than before?
+
+**You will be comfortable here if** you can write a loop and use `pandas` group-by.
+
+**What you will practise.** Aggregating many pages, working with dates, comparing groups across time periods.
+
+**Tools.** `pywikibot`, `pandas`, and `statsmodels` for the comparison.
+
+**Starter code.**
+
+```python
+import pywikibot, pandas as pd
+
+def growth_pre_post_2015(title, lang="en"):
+    site = pywikibot.Site(lang, "wikipedia")
+    page = pywikibot.Page(site, title)
+
+    # r.size is the article length in bytes after each revision.
+    df = pd.DataFrame([{"ts": r.timestamp, "size": r.size}
+                       for r in page.revisions(content=False)])
+    df["year"] = pd.DatetimeIndex(df["ts"]).year
+    df["era"] = (df["year"] >= 2015).map({True: "post", False: "pre"})
+
+    # Net bytes added in each era, a simple growth measure.
+    return df.groupby("era")["size"].agg(lambda s: s.max() - s.min())
+
+print(growth_pre_post_2015("Wangari Maathai"))
+```
+
+To answer the real question, run this for many female and male politician articles (reuse the list from Project 2), then compare the four groups (gender by era). A clean way to test it is a regression with an interaction term:
+
+```python
+import statsmodels.formula.api as smf
+# df_all: one row per article-era with columns bytes_added, gender, era
+model = smf.ols("bytes_added ~ C(gender) * C(era)", data=df_all).fit()
+print(model.summary())
+```
+
+**Try next.** Plot average article size by year for women and men on the same chart and mark 2015 with a vertical line.
+
+---
+
+## Project 4. Account for editors with a mixed-effects model
+
+**Difficulty: 4 / 5 (Intermediate to Advanced)**
+
+**The question.** Are women politicians' articles shorter than men's, once we account for the fact that the same editors create many articles?
+
+**You will be comfortable here if** you have seen linear regression before. The code is short, but the statistics take some thought.
+
+**What you will practise.** Building a tidy dataset, fitting a model with a random effect, and interpreting it.
+
+::: {.callout-note title="New idea: a random effect"}
+If one editor creates many biographies, those articles are not independent observations; they share the editor's style and habits. A *random effect for editor* lets the model absorb that shared influence so your gender estimate is not fooled by a few prolific editors.
+:::
+
+**Tools.** `statsmodels` (Python) or `lme4` (R). For each article, assign it to its creator (the user who made the first revision):
+
+```python
+creator = list(page.revisions(reverse=True, total=1))[0].user
+```
+
+Build one row per article with `length` (try `len(page.text)`), `gender` (from Project 2), and `creator`. Then fit the model:
+
+```python
+import statsmodels.formula.api as smf
+
+# df: columns length, gender, creator
+model = smf.mixedlm("length ~ C(gender)", data=df, groups=df["creator"])
+result = model.fit()
+print(result.summary())
+```
+
+The same model in R, which many statisticians prefer for this:
+
+```r
+library(lme4)
+m <- lmer(length ~ gender + (1 | creator), data = df)
+summary(m)
+```
+
+**Try next.** Real articles are edited by many people, not just their creator, so editors and articles are *crossed*, not strictly nested. Read about crossed random effects and explain in two sentences why assigning each article to one creator is a simplification.
+
+---
+
+## Project 5. Find communities of co-editors
+
+**Difficulty: 5 / 5 (Advanced)**
+
+**The question.** Do editors who work on the same articles form communities, and do those communities focus on one gender more than the other?
+
+**You will be comfortable here if** you enjoy Python, are happy installing extra packages, and want to learn some network analysis.
+
+**What you will practise.** Building a graph, detecting communities, and testing whether a community is associated with an attribute.
+
+::: {.callout-note title="New idea: a bipartite graph"}
+A *bipartite* graph has two kinds of nodes, here editors and articles, with a link whenever an editor edited an article. *Projecting* it onto editors links two editors whenever they edited the same article. Community detection then finds clusters of editors who tend to work together.
+:::
+
+**Tools.** `networkx`, `python-louvain` (installs as `python-louvain`, imported as `community`), `pandas`, `scipy`.
+
+**Starter code.**
+
+```python
+import pywikibot, pandas as pd
+import networkx as nx
+from networkx.algorithms import bipartite
+import community as community_louvain
+
+def collect_edits(titles, lang="en"):
+    site = pywikibot.Site(lang, "wikipedia")
+    rows = []
+    for title in titles:
+        page = pywikibot.Page(site, title)
+        for r in page.revisions(content=False):
+            if r.user:                      # skip deleted or hidden users
+                rows.append((r.user, title))
+    return pd.DataFrame(rows, columns=["editor", "article"])
+
+def coeditor_communities(edits):
+    B = nx.Graph()
+    B.add_nodes_from(edits["editor"].unique(), bipartite=0)
+    B.add_nodes_from(edits["article"].unique(), bipartite=1)
+    B.add_edges_from(edits[["editor", "article"]].itertuples(index=False))
+
+    editors = edits["editor"].unique()
+    coeditor_graph = bipartite.weighted_projected_graph(B, editors)
+    return community_louvain.best_partition(coeditor_graph)   # {editor: community}
+```
+
+To answer the question, label each article with its politician's gender (from Project 2), then for each community look at the gender mix of the articles its members edit. Test whether the mix differs across communities with a chi-square test:
+
+```python
+import scipy.stats as stats
+# table: rows = communities, columns = counts of female / male articles edited
+chi2, p, dof, expected = stats.chi2_contingency(table)
+print(f"chi-square p-value: {p:.3f}")
+```
+
+**Try next.** Draw the co-editor graph with `nx.draw` and color each node by its community. Describe one community in words.
+
+---
+
+## Conclusion
+
+Whichever project you choose, you will have taken a real question about Wikipedia's gender gap, pulled live data, and turned it into a result you can explain and defend. The goal is not only to produce a number but to understand what it means and where its limits lie.
+
+A few things to carry forward:
+
+- **Start small and build up.** Project 1 is one page and one chart. Each later project reuses ideas from the earlier ones, so you are rarely starting from nothing.
+- **Keep your work reproducible.** Record the date you pulled the data, any `LIMIT` you applied, and the QIDs or page titles you used. Wikipedia changes daily, so every result is tied to the moment you ran it.
+- **Let the question lead.** The methods exist to answer a question about coverage and fairness, so choose the project whose question you genuinely care about.
+- **Interpret responsibly.** Reread "How to interpret the results" before writing up your findings. The most valuable sentence in a write-up is often the one that states what the result does not show.
+
+If you want to go further, try a language edition other than English, add a second attribute alongside gender, or compare your findings with published research on the same topic.
