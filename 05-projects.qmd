@@ -106,7 +106,7 @@ The first time you use `pywikibot` it will ask you to create a small `user-confi
 
 If you aim to continue using *PAWS*, you will need to install the following packages, using this code in a Python cell:
 
-```
+```bash
 ! pip install statsmodels networkx python-louvain
 ```
 
