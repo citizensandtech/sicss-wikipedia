@@ -296,7 +296,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="local-install" class="level3"><h3 class="anchored" data-anchor-id="local-install">Local install</h3>
 <p>Install the shared packages:</p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pywikibot pandas matplotlib requests scipy statsmodels networkx python-louvain</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pywikibot pandas matplotlib scipy statsmodels networkx python-louvain</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p>The first time you use <code>pywikibot</code> it will ask you to create a small <code>user-config.py</code> file. Run <code>pywikibot generate_user_files.py</code> and choose the English Wikipedia (<code>en</code>) when prompted. Projects 2 does not need <code>pywikibot</code> at all; it talks to Wikidata directly with <code>requests</code>.</p>
@@ -356,41 +356,40 @@ Tip
 <p><strong>The question.</strong> What share of a country’s politicians have an English Wikipedia article, and does that share differ for women and men? Does the gap look different in another country?</p>
 <p><strong>You will be comfortable here if</strong> you can read a table and are willing to try one SPARQL query (we give it to you).</p>
 <p><strong>What you will practise.</strong> Querying Wikidata, grouping data, comparing proportions.</p>
-<p><strong>Tools.</strong> <code>requests</code>, <code>pandas</code>. Useful QIDs: Germany <code>Q183</code>, Kenya <code>Q114</code>, “politician” <code>Q82955</code>.</p>
+<p><strong>Tools.</strong> <code>pywikibot</code>, <code>pandas</code>. Useful QIDs: Germany <code>Q183</code>, Kenya <code>Q114</code>, “politician” <code>Q82955</code>.</p>
 <p><strong>Starter code.</strong></p>
 <div class="code-copy-outer-scaffold">
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests, pandas <span class="im">as</span> pd</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> politicians(country_qid):</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># P106 = occupation, P27 = country of citizenship, P21 = sex or gender.</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    query <span class="op">=</span> <span class="ss">f"""</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ss">    SELECT ?person ?genderLabel ?article WHERE </span><span class="ch">{{</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ss">      ?person wdt:P106 wd:Q82955 ;</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P27  wd:</span><span class="sc">{</span>country_qid<span class="sc">}</span><span class="ss"> ;</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P21  ?gender .</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ss">      OPTIONAL </span><span class="ch">{{</span><span class="ss"> ?article schema:about ?person ;</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ss">                          schema:isPartOf &lt;https://en.wikipedia.org/&gt; . </span><span class="ch">}}</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ss">      SERVICE wikibase:label </span><span class="ch">{{</span><span class="ss"> bd:serviceParam wikibase:language "en". </span><span class="ch">}}</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">"""</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://query.wikidata.org/sparql"</span>,</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        params<span class="op">=</span>{<span class="st">"query"</span>: query, <span class="st">"format"</span>: <span class="st">"json"</span>},</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        headers<span class="op">=</span>{<span class="st">"User-Agent"</span>: <span class="st">"summer-school-project/1.0"</span>},</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> response.json()[<span class="st">"results"</span>][<span class="st">"bindings"</span>]</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame([</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"gender"</span>: r[<span class="st">"genderLabel"</span>][<span class="st">"value"</span>], <span class="st">"has_article"</span>: <span class="st">"article"</span> <span class="kw">in</span> r}</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> rows</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    ])</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coverage_by_gender(df):</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Share of each gender that has an English Wikipedia article.</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.groupby(<span class="st">"gender"</span>)[<span class="st">"has_article"</span>].mean()</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>germany <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q183"</span>))</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>kenya   <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q114"</span>))</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(germany)</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kenya)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pywikibot.data <span class="im">import</span> sparql</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> politicians(country_qid):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># P106 = occupation, P27 = country of citizenship, P21 = sex or gender.</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    query <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ss">    SELECT ?person ?genderLabel ?article WHERE </span><span class="ch">{{</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ss">      ?person wdt:P106 wd:Q82955 ;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P27  wd:</span><span class="sc">{</span>country_qid<span class="sc">}</span><span class="ss"> ;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ss">              wdt:P21  ?gender .</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ss">      OPTIONAL </span><span class="ch">{{</span><span class="ss"> ?article schema:about ?person ;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ss">                          schema:isPartOf &lt;https://en.wikipedia.org/&gt; . </span><span class="ch">}}</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="ss">      SERVICE wikibase:label </span><span class="ch">{{</span><span class="ss"> bd:serviceParam wikibase:language "en". </span><span class="ch">}}</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">"""</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># SparqlQuery sends the query to the Wikidata Query Service for you.</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># .select() hands back a list of {column: value} dicts, one per person.</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> sparql.SparqlQuery().select(query)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame([</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># A person with no English article has no "article" value in their row.</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"gender"</span>: r[<span class="st">"genderLabel"</span>], <span class="st">"has_article"</span>: r.get(<span class="st">"article"</span>) <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>}</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> rows</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coverage_by_gender(df):</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Share of each gender that has an English Wikipedia article.</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.groupby(<span class="st">"gender"</span>)[<span class="st">"has_article"</span>].mean()</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>germany <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q183"</span>))</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>kenya   <span class="op">=</span> coverage_by_gender(politicians(<span class="st">"Q114"</span>))</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(germany)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kenya)</span></code></pre></div>
 <button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
 </div>
 <p><strong>Try next.</strong> Add a simple test of whether the gap is larger than chance with <code>scipy.stats.chi2_contingency</code>. Pick two countries from different regions and write one paragraph comparing them.</p>
