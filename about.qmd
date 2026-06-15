@@ -29,3 +29,11 @@ Bastian (he/him) is an interdisciplinary researcher working on the theory and pr
 Bastian’s prior academic postings include being a senior researcher at the Alan Turing Institute in London and being the team-lead of the Peer-Produced Research Lab as part of an INSERM unit at Université Paris Cité. His academic journey started in biology/bioinformatics, with a PhD on how symbiotic relationships influence genomic evolution. 
 
 In the realm of participatory science, he was the co-founder and lead of openSNP, a crowdsourced/citizen science open data project that ran between 2011-2025. Since 2017, he also acts as the Director of Research for Open Humans – a non-profit that provides digital & social infrastructures for individual & community-driven citizen science and self-research. 
+
+### Psyche Wanqing He
+
+web:[https://psychehe.github.io]| email:[wh385@cornell.edu]
+
+Psyche (she/her) is a cognitive scientist working at the intersection of human-AI interaction, psycholinguistics, and computational social science. Her research examines how AI is reshaping the way people communicate and connect with each other via conversation. She pairs applied and theoretical methods from cognitive psychology, NLP, and HCI, combining large-scale corpus and computational analysis with controlled human-subjects experiments and field studies.
+
+Psyche’s academic journey started in linguistics and psychology during her undergraduate training at UC Berkeley. She is completing her PhD in Information Science at Cornell University advised by Susan R. Fussell, following doctoral training in psychology and a minor in cognitive science. Her research shows how virtual settings disadvantages communication fluency, especially for speakers lack of language proficiency and domain expertise, and how just-in-time personalized AI mediation can effectively bridge such barriers to restore communication smoothness and confidence. In 2024, she founded XPLAIN, a proactive AI scaffold that supports non-native speakers in real-time online meetings, through Cornell's Entrepreneurship Lab startup accelerator. 
