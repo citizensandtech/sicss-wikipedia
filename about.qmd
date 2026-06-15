@@ -32,7 +32,7 @@ In the realm of participatory science, he was the co-founder and lead of openSNP
 
 ### Psyche Wanqing He
 
-web:[https://psychehe.github.io]| email:[wh385@cornell.edu]
+web:[https://psychehe.github.io](https://psychehe.github.io)| email:[wh385@cornell.edu](wh385@cornell.edu)
 
 Psyche (she/her) is a cognitive scientist working at the intersection of human-AI interaction, psycholinguistics, and computational social science. Her research examines how AI is reshaping the way people communicate and connect with each other via conversation. She pairs applied and theoretical methods from cognitive psychology, NLP, and HCI, combining large-scale corpus and computational analysis with controlled human-subjects experiments and field studies.
 
