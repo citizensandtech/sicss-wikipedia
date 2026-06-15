@@ -97,7 +97,7 @@ If you want to read more about interpreting Wikipedia and Wikidata data responsi
 Install the shared packages:
 
 ```bash
-pip install pywikibot pandas matplotlib requests scipy statsmodels networkx python-louvain
+pip install pywikibot pandas matplotlib scipy statsmodels networkx python-louvain
 ```
 
 The first time you use `pywikibot` it will ask you to create a small `user-config.py` file. Run `pywikibot generate_user_files.py` and choose the English Wikipedia (`en`) when prompted. Projects 2 does not need `pywikibot` at all; it talks to Wikidata directly with `requests`.
@@ -168,12 +168,13 @@ edit_timeline("Wangari Maathai")
 
 **What you will practise.** Querying Wikidata, grouping data, comparing proportions.
 
-**Tools.** `requests`, `pandas`. Useful QIDs: Germany `Q183`, Kenya `Q114`, "politician" `Q82955`.
+**Tools.** `pywikibot`, `pandas`. Useful QIDs: Germany `Q183`, Kenya `Q114`, "politician" `Q82955`.
 
 **Starter code.**
 
 ```python
-import requests, pandas as pd
+import pandas as pd
+from pywikibot.data import sparql
 
 def politicians(country_qid):
     # P106 = occupation, P27 = country of citizenship, P21 = sex or gender.
@@ -186,14 +187,12 @@ def politicians(country_qid):
                           schema:isPartOf <https://en.wikipedia.org/> . }}
       SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
     }}"""
-    response = requests.get(
-        "https://query.wikidata.org/sparql",
-        params={"query": query, "format": "json"},
-        headers={"User-Agent": "summer-school-project/1.0"},
-    )
-    rows = response.json()["results"]["bindings"]
+    # SparqlQuery sends the query to the Wikidata Query Service for you.
+    # .select() hands back a list of {column: value} dicts, one per person.
+    rows = sparql.SparqlQuery().select(query)
     return pd.DataFrame([
-        {"gender": r["genderLabel"]["value"], "has_article": "article" in r}
+        # A person with no English article has no "article" value in their row.
+        {"gender": r["genderLabel"], "has_article": r.get("article") is not None}
         for r in rows
     ])
 
