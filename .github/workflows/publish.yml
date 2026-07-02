@@ -1,4 +1,4 @@
-name: Render website 
+name: Render website
 permissions: write-all
 on:
   push:
@@ -15,15 +15,19 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
       - name: Set up R dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2 
-        with: 
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
           packages: |
             github::gedankenstuecke/babelquarto@20260513-ipynb-support
+            any::tidyverse
+            any::rvest
+            any::wordcloud
+            any::tidytext
       - name: Render website with babelquarto
         run: Rscript -e 'babelquarto::render_website()'
         env:
           BABELQUARTO_CI_URL: 'https://citizensandtech.github.io/sicss-wikipedia'
-      - name: upload artifacts 
+      - name: upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: website_render
