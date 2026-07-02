@@ -1,0 +1,270 @@
+---
+title: "Web scraping & NLP in R"
+editor: visual
+---
+
+We start by installing and loading the necessary libraries. We will use the `rvest`, which is part of the `tidyverse` set of libraries which you have likely already installed as part of the other SICSS instructions. If not, you can install just `rvest` using `install.packages("rvest")` before loading it. For other steps you'll also need the `wordcloud` and `tidytext` libraries, which you can install as below:
+
+```{r}
+# install.packages("wordcloud")
+# install.packages("tidytext")
+# install.packages("tidyverse")
+# install.packages("rvest")
+
+library(tidyverse)
+library(rvest)
+```
+
+In the [last instructions](https://citizensandtech.github.io/sicss-wikipedia/), we created a CSV file (`kenyan_politicians.csv`), which has the names of the Wikipedia pages we want to scrape. We start by loading this file:
+
+```{r}
+df_politicians <- read.csv("kenyan_politicians.csv")
+```
+
+Now we can use a single item of this data frame to use for scraping:
+
+```{r}
+url <- paste("https://en.wikipedia.org/wiki", 
+             str_replace(df_politicians$name[3],
+                         " ", "_"),
+              sep="/")
+print(url)
+```
+
+With the `url` we can now scrape and parse that single page:
+
+```{r}
+html <- read_html(url)
+print(html)
+```
+
+## Getting the references
+
+With the `html` now parsed, we can try to traverse the nodes of the file, to find the references of the page. If we look at an example of a Wiki page, we can see that those will be in a `<section>` tag, that will be labelled by `aria-labelledby="References"`. Let's try to see if we can get that section of the page:
+
+```{r}
+ref_section <- html %>% html_elements(xpath="//section[contains(@aria-labelledby, 'References')]")
+
+ref_section
+```
+
+With this one, we can now get the actual references by getting the nested cite object:
+
+```{r}
+references <- ref_section %>% html_elements(xpath="//ol/li//span[contains(@class, 'reference-text')]/.|cite") %>% html_text2()
+references
+```
+
+This gives us the citations, but you see that there is some HTML formatting left, due to the way Wikipedia citations work depending on the template being used. This would require further processing, but we can leave this for future improvements (and highlights the issue with web scraping generally).
+
+## Doing some basic NLP
+
+We can now use `tidytext` and `wordcloud` to first tokenize the references and explore what the most common words are for the given page:
+
+```{r}
+library(tidytext) # for NLP
+library(wordcloud) # to render wordclouds
+```
+
+```{r}
+tokens <- as.data.frame(references) %>% 
+  unnest_tokens(references, references) %>% 
+  count(references, sort = TRUE) %>% 
+  ungroup()
+head(tokens)
+```
+
+We can see that there's still a good number of *stop words* (e.g. *the*, *on*, *from* etc) which don't carry much information. We can remove those:
+
+```{r}
+data("stop_words")
+tokens_clean <- tokens %>%
+  anti_join(stop_words, join_by('references' == 'word'))
+head(tokens_clean)
+```
+
+There's still some of the problematic labels left from the way Wikipedia does the citation markup, we can manually remove some more by creating our own filter list:
+
+```{r}
+custom_stop_words <- data.frame(word = c("mw","output","parser", "lock", "cs1", "color", "skin","minerva", "timeless","commons","padding","0.1em","inherit","id"))
+
+tokens_clean <- tokens_clean %>%
+  anti_join(custom_stop_words, join_by('references' == 'word'))
+head(tokens_clean)
+```
+
+With this, we can now create a word cloud:
+
+```{r}
+# define a color palette to not just use black as uniform label
+pal <- brewer.pal(8,"Dark2")
+
+# plot the 20 most common words
+tokens_clean %>% 
+  with(wordcloud(references, n, random.order = FALSE, max.words = 20, colors=pal))
+```
+
+We see there's still some artifacts coming from the way we extracted the text, let's try to do better by re-doing the citation extraction, but this time making sure we don't end up with the markup text for some references:
+
+```{r}
+
+# get all references, including the ones that have the markup included:
+
+references <- ref_section %>% html_elements(xpath="//ol/li//span[contains(@class, 'reference-text')]") %>% html_text2()
+references <- as.data.frame(references)
+
+# ignore rows that contain MW output
+references <- references %>% filter(!str_detect(references, "mw-parser"))
+references
+```
+
+Now we get the ones with the correct citations:
+
+```{r}
+# now get rows with proper citation bit:
+references_html <- ref_section %>% html_elements(xpath="//ol/li//span[contains(@class, 'reference-text')]/cite") %>% html_text2()
+references_html <- as.data.frame(references_html)
+```
+
+And finally merge the two, removing duplicates:
+
+```{r}
+references_joined <- 
+  unique(
+    c(references$references, references_html$references_html
+    )
+  )
+
+references_joined <- as.data.frame(references_joined)
+references_joined
+```
+
+Now we can re-do the tokenization and make the word cloud:
+
+```{r}
+tokens <- references_joined %>% 
+  unnest_tokens(references_joined, references_joined) %>% 
+  count(references_joined, sort = TRUE) %>% 
+  ungroup()
+
+tokens_clean <- tokens %>%
+  anti_join(stop_words, join_by('references_joined' == 'word'))
+head(tokens_clean)
+
+# plot the 10 most common words
+tokens_clean %>% 
+  with(wordcloud(references_joined, n, random.order = FALSE, max.words = 20, colors=pal))
+```
+
+## Repeating it for multiple politicians
+
+Let's now re-do this, but for a sample of 20 female and 20 male politicians:
+
+```{r}
+male_politicians <- df_politicians %>% filter(gender=="male")
+female_politicians <- df_politicians %>% filter(gender=="female")
+male_politicians <- male_politicians[1:20, ]$name
+female_politicians <- female_politicians[1:20, ]$name
+```
+
+Let's write a function to get a dataframe of references for each of them:
+
+```{r}
+
+getReferences <- function(politician){
+  url <- paste("https://en.wikipedia.org/wiki", 
+               str_replace_all(politician,
+                               " ", "_"),
+               sep="/")
+  print(url)
+  html <- read_html(url)
+  
+  # get ref section
+  ref_section <- html %>% html_elements(xpath="//section[contains(@aria-labelledby, 'References')]")
+  
+  # get references that include the markup
+  references <- ref_section %>% html_elements(xpath="//ol/li//span[contains(@class, 'reference-text')]") %>% html_text2()
+  references <- as.data.frame(references)
+  
+  # ignore rows that contain MW output
+  references <- references %>% filter(!str_detect(references, "mw-parser"))
+  references
+  
+  # now get rows with proper citation bit:
+  references_html <- ref_section %>% html_elements(xpath="//ol/li//span[contains(@class, 'reference-text')]/cite") %>% html_text2()
+  references_html <- as.data.frame(references_html)
+  
+  # join references
+  references_joined <- 
+    unique(
+      c(references$references, references_html$references_html
+      )
+    )
+  
+  references_joined <- as.data.frame(references_joined)
+  as.data.frame(references_joined)
+}
+```
+
+Now we can create our reference lists:
+
+```{r}
+
+# get male refs
+male_references <- data.frame(references_joined=character())
+
+for (mp in male_politicians) {
+  male_references <- bind_rows(male_references, getReferences(mp))
+}
+
+# get female refs
+
+female_references <- data.frame(references_joined=character())
+
+for (fp in female_politicians) {
+  female_references <- bind_rows(female_references, getReferences(fp))
+}
+```
+
+Now, let's do the tokenization and make the word clouds:
+
+```{r}
+
+tokenize_df <- function(df){
+  tokens <- df %>% 
+    unnest_tokens(references_joined, references_joined) %>% 
+    count(references_joined, sort = TRUE) %>% 
+    ungroup()
+  
+  tokens_clean <- tokens %>%
+    anti_join(stop_words, join_by('references_joined' == 'word'))
+  
+  custom_stop_words <- data.frame(word = c("retrieved", "archived","wayback"))
+  
+  tokens_clean <- tokens_clean %>%
+    anti_join(custom_stop_words, join_by('references_joined' == 'word'))
+  tokens_clean
+}
+```
+
+### Top words in references of men
+
+```{r}
+
+# plot the 20 most common words for men
+tokens_clean_male <- tokenize_df(male_references)
+tokens_clean_male %>% 
+  with(wordcloud(references_joined, n, random.order = FALSE, max.words = 20, colors=pal))
+
+```
+
+### Top words in references of women
+
+```{r}
+# plot the 20 most common words for women
+
+tokens_clean_female <- tokenize_df(female_references)
+tokens_clean_female %>% 
+  with(wordcloud(references_joined, n, random.order = FALSE, max.words = 20, colors=pal))
+
+```

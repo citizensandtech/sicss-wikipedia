@@ -15,6 +15,8 @@ website:
       - 04-full-example.ipynb
       - href: 05-projects.qmd
         text: Practical exercises
+      - 06-nlp.ipynb
+      - 07-scraping-nlp.qmd
       - about.qmd
 
 
