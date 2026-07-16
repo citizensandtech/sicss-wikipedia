@@ -185,6 +185,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#top-words-in-references-of-men" id="toc-top-words-in-references-of-men" class="nav-link" data-scroll-target="#top-words-in-references-of-men">Top words in references of men</a></li>
   <li><a href="#top-words-in-references-of-women" id="toc-top-words-in-references-of-women" class="nav-link" data-scroll-target="#top-words-in-references-of-women">Top words in references of women</a></li>
   </ul></li>
+  <li><a href="#some-simple-sentiment-analysis" id="toc-some-simple-sentiment-analysis" class="nav-link" data-scroll-target="#some-simple-sentiment-analysis">Some simple sentiment analysis</a>
+  <ul class="collapse">
+  <li><a href="#potential-problems-and-ideassuggestions-for-sentiment-analysis" id="toc-potential-problems-and-ideassuggestions-for-sentiment-analysis" class="nav-link" data-scroll-target="#potential-problems-and-ideassuggestions-for-sentiment-analysis">Potential problems and Ideas/suggestions for sentiment analysis</a></li>
+  <li><a href="#more-information" id="toc-more-information" class="nav-link" data-scroll-target="#more-information">More information</a></li>
+  </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -656,6 +661,159 @@ The following object is masked from 'package:readr':
 </div>
 </div>
 </div>
+</section>
+</section>
+<section id="some-simple-sentiment-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="some-simple-sentiment-analysis">Some simple sentiment analysis</h2>
+<p>We can now do something similar, to explore the sentiment of the Wiki articles depending on whether those articles are about male or female politicians.</p>
+<p>Sentiment analysis works by assigning ‘emotional scores’ to different words, which can then be used to score larger texts. This can be used to figure out if texts have a positive, neutral or negative ‘opinion’ on a text. Or even to get some insights into the emotionality of a text.</p>
+<p>To achieve this, sentiment analysis is based on lexica, which have words scored in different ways, which can then be used for the scoring. The <code>textdata</code> package offers different lexica.</p>
+<p>For now, we will fetch the full articles, instead of trying to parse only parts of it. Let’s make a function for that:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>getBody <span class="ot">&lt;-</span> <span class="cf">function</span>(politician){</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"https://en.wikipedia.org/wiki"</span>, </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>               <span class="fu">str_replace_all</span>(politician,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                               <span class="st">" "</span>, <span class="st">"_"</span>),</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">sep=</span><span class="st">"/"</span>)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(url)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get ref section</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  paragraphs <span class="ot">&lt;-</span> html <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">"p"</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() <span class="co"># get all paragraphs</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove citations</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  paragraphs <span class="ot">&lt;-</span> paragraphs <span class="sc">%&gt;%</span> <span class="fu">str_replace_all</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">[[0-9]+]"</span>, <span class="st">''</span>)</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(paragraphs)</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we can iterate over our male &amp; female politicians as before to get the page content:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get male refs</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>male_paragraphs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">paragraphs=</span><span class="fu">character</span>())</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (mp <span class="cf">in</span> male_politicians) {</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  male_paragraphs <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(male_paragraphs, <span class="fu">getBody</span>(mp))</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "https://en.wikipedia.org/wiki/Agustino_Neto"
+[1] "https://en.wikipedia.org/wiki/Joseph_Lekuton"
+[1] "https://en.wikipedia.org/wiki/Moody_Awori"
+[1] "https://en.wikipedia.org/wiki/Bonaya_Godana"
+[1] "https://en.wikipedia.org/wiki/Koigi_wa_Wamwere"
+[1] "https://en.wikipedia.org/wiki/Ali_Sharif_Athman"
+[1] "https://en.wikipedia.org/wiki/Wilfred_Machage"
+[1] "https://en.wikipedia.org/wiki/Soita_Shitanda"
+[1] "https://en.wikipedia.org/wiki/Nzamba_Kitonga"
+[1] "https://en.wikipedia.org/wiki/Julius_Lekakeny_Sunkuli"
+[1] "https://en.wikipedia.org/wiki/Humphrey_Slade"
+[1] "https://en.wikipedia.org/wiki/Peter_Kiilu"
+[1] "https://en.wikipedia.org/wiki/Ali_Aden_Lord"
+[1] "https://en.wikipedia.org/wiki/Harrison_Kombe"
+[1] "https://en.wikipedia.org/wiki/Phelix_Odiwuor"
+[1] "https://en.wikipedia.org/wiki/Kilemi_Mwiria"
+[1] "https://en.wikipedia.org/wiki/Eugene_Wamalwa"
+[1] "https://en.wikipedia.org/wiki/John_Pesa_Dache"
+[1] "https://en.wikipedia.org/wiki/Mark_Lomunokol"
+[1] "https://en.wikipedia.org/wiki/Abdul_Rahim_Dawood"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get female refs</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>female_paragraphs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">paragraphs=</span><span class="fu">character</span>())</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (fp <span class="cf">in</span> female_politicians) {</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  female_paragraphs <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(female_paragraphs, <span class="fu">getBody</span>(fp))</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "https://en.wikipedia.org/wiki/Sonia_Birdi"
+[1] "https://en.wikipedia.org/wiki/Gathoni_Wa_Muchomba"
+[1] "https://en.wikipedia.org/wiki/Jayne_Kihara"
+[1] "https://en.wikipedia.org/wiki/Catherine_Wanjiku_Waruguru"
+[1] "https://en.wikipedia.org/wiki/Ann_Nderitu"
+[1] "https://en.wikipedia.org/wiki/Cynthia_Muge"
+[1] "https://en.wikipedia.org/wiki/Grace_Ogot"
+[1] "https://en.wikipedia.org/wiki/Jane_Anyango"
+[1] "https://en.wikipedia.org/wiki/Wambui_Otieno"
+[1] "https://en.wikipedia.org/wiki/Janet_Marania_Teyiaa"
+[1] "https://en.wikipedia.org/wiki/Veronica_Nduva"
+[1] "https://en.wikipedia.org/wiki/Hamisa_Zaja"
+[1] "https://en.wikipedia.org/wiki/Martha_Karua"
+[1] "https://en.wikipedia.org/wiki/Chelule_Liza"
+[1] "https://en.wikipedia.org/wiki/Scheaffer_Okore"
+[1] "https://en.wikipedia.org/wiki/Janet_Ong'era"
+[1] "https://en.wikipedia.org/wiki/Ikal_Angelei"
+[1] "https://en.wikipedia.org/wiki/Susan_Nakhumicha_Wafula"
+[1] "https://en.wikipedia.org/wiki/Faith_Gitau"
+[1] "https://en.wikipedia.org/wiki/Lucy_Kibaki"</code></pre>
+</div>
+</div>
+<p>For each of those two data frames, we can now convert them into tidy text, as before, including the removal of stop words:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write function to get the </span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>clean_words <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">%&gt;%</span> <span class="fu">unnest_tokens</span>(paragraphs, paragraphs) <span class="sc">%&gt;%</span> <span class="fu">anti_join</span>(stop_words, <span class="fu">join_by</span>(<span class="st">'paragraphs'</span> <span class="sc">==</span> <span class="st">'word'</span>))</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>male_tidytext <span class="ot">&lt;-</span> <span class="fu">clean_words</span>(male_paragraphs)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>female_tidytext <span class="ot">&lt;-</span> <span class="fu">clean_words</span>(female_paragraphs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we can now download a lexicon and get started with the sentiment analysis. Let’s use the <code>bing</code> data set, which scores each word as positive or negative.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages('textdata') # if necessary, install the libary on your computer</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>bing <span class="ot">&lt;-</span> <span class="fu">get_sentiments</span>(<span class="st">"bing"</span>) <span class="co"># load lexicon</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For simple demonstration purposes, we will now just create a summary score over the texts of the male and female politician articles:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>score_sentiment <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  sentiment_scores <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inner_join</span>(bing, <span class="fu">join_by</span>(<span class="st">"paragraphs"</span> <span class="sc">==</span><span class="st">"word"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(sentiment, <span class="at">sort=</span><span class="cn">TRUE</span>)</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  sentiment_scores</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">'male article sentiment:'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "male article sentiment:"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">score_sentiment</span>(male_tidytext))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sentiment   n
+1  negative 123
+2  positive 120</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">'female article sentiment:'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "female article sentiment:"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">score_sentiment</span>(female_tidytext))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sentiment   n
+1  positive 177
+2  negative 172</code></pre>
+</div>
+</div>
+<p>We can see, the sentiments for the selected articles don’t really differ too much between female politicians and male politicians, with both words appearing roughly in equal parts</p>
+<p>This just provides a very quick view into what can be done with these types of analyses</p>
+<section id="potential-problems-and-ideassuggestions-for-sentiment-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="potential-problems-and-ideassuggestions-for-sentiment-analysis">Potential problems and Ideas/suggestions for sentiment analysis</h3>
+<p>There are a few considerations to</p>
+<section id="alternative-lexica" class="level4">
+<h4 class="anchored" data-anchor-id="alternative-lexica">Alternative Lexica</h4>
+<p>We have used a very simple scoring-lexicon, but there are alternatives, e.g.&nbsp;the <code>afinn</code> lexicon, which scores words on a range from -5 (for negative sentiment) to +5 (for positive sentiments), and <code>nrc</code> not only gives positive and negative as categories but also anger, anticipation, disgust, fear, joy, sadness, surprise, and trust.</p>
+<p>Which lexicon you should, or can, use depends on your research question.</p>
+</section>
+<section id="negations" class="level4">
+<h4 class="anchored" data-anchor-id="negations">Negations</h4>
+<p>Currently, we do not take negations into account, e.g.&nbsp;it a sentence included not <code>not happy</code>, we would still count the <code>happy</code> as a positive sentiment. To get around this, you can use bigram analyses, where instead of tokenizing to the word-level, you look at the succession of two words, e.g using <code>unnest_tokens(bigram, text, token = "ngrams", n = 2)</code></p>
+</section>
+<section id="granularity" class="level4">
+<h4 class="anchored" data-anchor-id="granularity">Granularity</h4>
+<p>Currently, we only did a very basic summary statistic of a single number for all articles. You could break it down by looking at per-article statistics. Or even on a per-paragraph level, to see how sentiment differs between sections in an article.</p>
+</section>
+</section>
+<section id="more-information" class="level3">
+<h3 class="anchored" data-anchor-id="more-information">More information</h3>
+<p>There are <a href="https://rguides.dev/tutorials/r-text-mining/sentiment-analysis-r/">good beginner guides</a> for getting more into <a href="https://www.tidytextmining.com/sentiment.html">basic sentiment analysis</a> too.</p>
 </section>
 </section>
 <section id="references" class="level1">
