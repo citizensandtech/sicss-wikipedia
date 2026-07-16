@@ -3,6 +3,17 @@ title: "Web scraping & NLP in R"
 editor: visual
 ---
 
+While Wikipedia provides access to an API that simplifies researcher access to structured data, many online services do not offer such a easy-to-use information source. In those cases, you may need to *scrape* that information from the open web. In 2026 as we write this, the open web is declining in availability as news publishers and content delivery networks restrict access to evade AI bots. Yet scraping still remains a valuable tool for research.
+
+In this example, we use Wikipedia as an example for how to scrape information from the open web. In practice, we encourage you to use the Wikipedia APIs when querying information from Wikipedia.
+
+To continue our theme of studying how women and men politicians are depicted on Wikipedia, we now turn to the question of how Wikipedia relies on sources from other publishers in questions of representation. Based on [the Global Media Monitoring Project](https://waccglobal.org/our-work/global-media-monitoring-project-gmmp/), and research by an international group of scholars, Kenyan news publishers more often use words focused on leadership when describing male political leaders compared to female leaders and coverage toward women tends to be more negative. 
+
+In this analysis, we use the references section to investigate the headlines of articles cited in Wikipedia articles. This will require us to scrape those articles and then apply a number of NLP techniques to analyze the contents of those headlines.
+
+
+## Setting up software packages
+
 We start by installing and loading the necessary libraries. We will use the `rvest`, which is part of the `tidyverse` set of libraries which you have likely already installed as part of the other SICSS instructions. If not, you can install just `rvest` using `install.packages("rvest")` before loading it. For other steps you'll also need the `wordcloud` and `tidytext` libraries, which you can install as below:
 
 ```{r}
@@ -268,3 +279,6 @@ tokens_clean_female %>%
   with(wordcloud(references_joined, n, random.order = FALSE, max.words = 20, colors=pal))
 
 ```
+
+# References
+* Pair, E., Vicas, N., Weber, A. M., Meausoone, V., Zou, J., Njuguna, A., & Darmstadt, G. L. (2021). [Quantification of gender bias and sentiment toward political leaders over 20 years of Kenyan news using natural language processing](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.712646/full). Frontiers in Psychology, 12, 712646.
