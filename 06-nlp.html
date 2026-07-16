@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Doing basic NLP on Wikipedia articles – SICSS: Using Wikipedia</title>
+<title>Natural Language Processing with the Text of Wikipedia Articles – SICSS: Using Wikipedia</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-bba5ebae505b5c03f3f0d8040a416a6b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-c98d9d0b3b0a085d3ddf71e6e91476d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -154,7 +154,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./06-nlp.html" aria-current="page"> 
-<span class="menu-text">Doing basic NLP on Wikipedia articles</span></a>
+<span class="menu-text">Natural Language Processing with the Text of Wikipedia Articles</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./07-scraping-nlp.html"> 
@@ -180,8 +180,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#do-pages-include-a-section-about-a-persons-personal-life" id="toc-do-pages-include-a-section-about-a-persons-personal-life" class="nav-link active" data-scroll-target="#do-pages-include-a-section-about-a-persons-personal-life">Do pages include a section about a person’s <em>personal life</em>?</a></li>
+  <li><a href="#querying-wikipedia-article-text" id="toc-querying-wikipedia-article-text" class="nav-link active" data-scroll-target="#querying-wikipedia-article-text">Querying Wikipedia Article Text</a></li>
+  <li><a href="#do-pages-include-a-section-about-a-persons-personal-life" id="toc-do-pages-include-a-section-about-a-persons-personal-life" class="nav-link" data-scroll-target="#do-pages-include-a-section-about-a-persons-personal-life">Do pages include a section about a person’s <em>personal life</em>?</a></li>
   <li><a href="#exploring-references" id="toc-exploring-references" class="nav-link" data-scroll-target="#exploring-references">Exploring references</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -190,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Doing basic NLP on Wikipedia articles</h1>
+<h1 class="title">Natural Language Processing with the Text of Wikipedia Articles</h1>
 </div>
 
 
@@ -207,7 +209,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Let’s see first how we can get the basic Wiki text, its HTML version and section types using the <code>pywikibot</code> libraries before trying to dive into doing the same using R later on. We start by getting a single page to see what is available to us:</p>
+<p>Many questions that researchers have about Wikipedia rely on the contents of text within edits or entire articles. Answering these questions requires techniques of natural language processing—software for for analyzing textual data.</p>
+<p>Building on our analysis of women politicians in Wikipedia, we might want to look beyond the number of women to consider what kind of information Wikipedia tends to include about them. In analyses of women politicians in the US, researchers have found that US news publishers tend to prioritize coverage of the personal lives of women politicians—their hair, their husbands, and their fashion choices—more than that of men (Bauer &amp; Taylor 2023). Is that true for Wikipedia and for a wider range of countries? To answer this question, we need to examine the actual text of the Wikipedia articles.</p>
+<p>In this example, we illustrate how to access and analyze textual data from Wikipedia in Python using the <code>pywikibot</code> library. In a later unit, we show how to do this in R. If you would like to explore more techniques of natural language processing in Python, we recommend the book <a href="https://www.nltk.org/book/">Natural Language Processing with Python</a> by Steven Bird, Wean Klein, and Edward Loper.</p>
+<section id="querying-wikipedia-article-text" class="level2">
+<h2 class="anchored" data-anchor-id="querying-wikipedia-article-text">Querying Wikipedia Article Text</h2>
+<p>We start by getting a single page to see what is available to us:</p>
 <div id="19c38da9-e3a2-4a55-ab72-30af1d6f3032" class="cell" data-execution_count="48">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pywikibot</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pywikibot <span class="im">import</span> textlib <span class="co"># for parsing sections straight from the wiki pages</span></span>
@@ -263,6 +270,7 @@ start of html text:
 ==External links==</code></pre>
 </div>
 </div>
+</section>
 <section id="do-pages-include-a-section-about-a-persons-personal-life" class="level2">
 <h2 class="anchored" data-anchor-id="do-pages-include-a-section-about-a-persons-personal-life">Do pages include a section about a person’s <em>personal life</em>?</h2>
 <p>We can iterate over the different sections present in the raw Wiki text using this method, getting both the headings and the content. Using this, we can explore the question of whether male or female biographies are more likely to include a section about a politician’s <em>personal life</em>. Do do this, we make a simplified query of the one we used in the previous end-to-end example, to get the actual text and parse the section headings:</p>
@@ -541,6 +549,13 @@ start of html text:
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_all_page_data.to_csv(<span class="st">'kenyan_politicians.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>With this we can move on to the next step!</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<ul>
+<li>Bauer, N. M., &amp; Taylor, T. (2023). <a href="https://journals.sagepub.com/doi/full/10.1177/10659129221086024?casa_token=fFDf6qKzwM0AAAAA%3ArKwW4B0tFWhmZ2Yhs8ZKm8cnDZr4C1G0tBUaI00tAHBtUq0cdldsLotB7jShyqZsOQNJaGPIf-c_zw">Selling them short? Differences in news coverage of female and male candidate qualifications</a>. Political Research Quarterly, 76(1), 308-322.</li>
+<li>Wagner, C., Graells-Garrido, E., Garcia, D., &amp; Menczer, F. (2016). <a href="https://link.springer.com/content/pdf/10.1140/epjds/s13688-016-0066-4.pdf">Women through the glass ceiling: gender asymmetries in Wikipedia</a>. EPJ data science, 5(1), 5.</li>
+</ul>
 
 
 </section>

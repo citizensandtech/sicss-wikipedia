@@ -1,67 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/index.html</loc>
-    <lastmod>2026-07-02T16:13:05.552Z</lastmod>
-  </url>
-  <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/03-wikidata.html</loc>
-    <lastmod>2026-07-02T16:13:05.545Z</lastmod>
-  </url>
-  <url>
     <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/04-full-example.html</loc>
-    <lastmod>2026-07-02T16:13:05.545Z</lastmod>
-  </url>
-  <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/05-projects.html</loc>
-    <lastmod>2026-07-02T16:13:05.545Z</lastmod>
-  </url>
-  <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/01-intro-wikipedia-data.html</loc>
-    <lastmod>2026-07-02T16:13:05.543Z</lastmod>
+    <lastmod>2026-07-16T01:44:40.504Z</lastmod>
   </url>
   <url>
     <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/about.html</loc>
-    <lastmod>2026-07-02T16:13:05.548Z</lastmod>
+    <lastmod>2026-07-16T01:44:40.507Z</lastmod>
   </url>
   <url>
     <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/02-pywikibot.html</loc>
-    <lastmod>2026-07-02T16:13:05.544Z</lastmod>
+    <lastmod>2026-07-16T01:44:40.503Z</lastmod>
   </url>
   <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/index.html</loc>
-    <lastmod>2026-07-02T16:12:38.879Z</lastmod>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/03-wikidata.html</loc>
+    <lastmod>2026-07-16T01:44:40.504Z</lastmod>
   </url>
   <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/02-pywikibot.html</loc>
-    <lastmod>2026-07-02T16:12:38.875Z</lastmod>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/05-projects.html</loc>
+    <lastmod>2026-07-16T01:44:40.504Z</lastmod>
   </url>
   <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/03-wikidata.html</loc>
-    <lastmod>2026-07-02T16:12:38.875Z</lastmod>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/01-intro-wikipedia-data.html</loc>
+    <lastmod>2026-07-16T01:44:40.502Z</lastmod>
+  </url>
+  <url>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/fr/index.html</loc>
+    <lastmod>2026-07-16T01:44:40.510Z</lastmod>
   </url>
   <url>
     <loc>https://citizensandtech.github.io/sicss-wikipedia/04-full-example.html</loc>
-    <lastmod>2026-07-02T16:12:38.876Z</lastmod>
-  </url>
-  <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/05-projects.html</loc>
-    <lastmod>2026-07-02T16:12:38.876Z</lastmod>
-  </url>
-  <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/01-intro-wikipedia-data.html</loc>
-    <lastmod>2026-07-02T16:12:38.874Z</lastmod>
-  </url>
-  <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/about.html</loc>
-    <lastmod>2026-07-02T16:12:38.876Z</lastmod>
-  </url>
-  <url>
-    <loc>https://citizensandtech.github.io/sicss-wikipedia/06-nlp.html</loc>
-    <lastmod>2026-07-02T16:12:38.876Z</lastmod>
+    <lastmod>2026-07-16T01:44:05.652Z</lastmod>
   </url>
   <url>
     <loc>https://citizensandtech.github.io/sicss-wikipedia/07-scraping-nlp.html</loc>
-    <lastmod>2026-07-02T16:12:38.876Z</lastmod>
+    <lastmod>2026-07-16T01:44:05.652Z</lastmod>
+  </url>
+  <url>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/01-intro-wikipedia-data.html</loc>
+    <lastmod>2026-07-16T01:44:05.651Z</lastmod>
+  </url>
+  <url>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/05-projects.html</loc>
+    <lastmod>2026-07-16T01:44:05.652Z</lastmod>
+  </url>
+  <url>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/03-wikidata.html</loc>
+    <lastmod>2026-07-16T01:44:05.652Z</lastmod>
+  </url>
+  <url>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/06-nlp.html</loc>
+    <lastmod>2026-07-16T01:44:05.652Z</lastmod>
+  </url>
+  <url>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/02-pywikibot.html</loc>
+    <lastmod>2026-07-16T01:44:05.651Z</lastmod>
+  </url>
+  <url>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/about.html</loc>
+    <lastmod>2026-07-16T01:44:05.652Z</lastmod>
+  </url>
+  <url>
+    <loc>https://citizensandtech.github.io/sicss-wikipedia/index.html</loc>
+    <lastmod>2026-07-16T01:44:05.655Z</lastmod>
   </url>
 </urlset>

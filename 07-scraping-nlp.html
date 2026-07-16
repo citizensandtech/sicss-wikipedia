@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-bba5ebae505b5c03f3f0d8040a416a6b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-c98d9d0b3b0a085d3ddf71e6e91476d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -151,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./06-nlp.html"> 
-<span class="menu-text">Doing basic NLP on Wikipedia articles</span></a>
+<span class="menu-text">Natural Language Processing with the Text of Wikipedia Articles</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./07-scraping-nlp.html" aria-current="page"> 
@@ -177,13 +177,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#getting-the-references" id="toc-getting-the-references" class="nav-link active" data-scroll-target="#getting-the-references">Getting the references</a></li>
+  <li><a href="#setting-up-software-packages" id="toc-setting-up-software-packages" class="nav-link active" data-scroll-target="#setting-up-software-packages">Setting up software packages</a></li>
+  <li><a href="#getting-the-references" id="toc-getting-the-references" class="nav-link" data-scroll-target="#getting-the-references">Getting the references</a></li>
   <li><a href="#doing-some-basic-nlp" id="toc-doing-some-basic-nlp" class="nav-link" data-scroll-target="#doing-some-basic-nlp">Doing some basic NLP</a></li>
   <li><a href="#repeating-it-for-multiple-politicians" id="toc-repeating-it-for-multiple-politicians" class="nav-link" data-scroll-target="#repeating-it-for-multiple-politicians">Repeating it for multiple politicians</a>
   <ul class="collapse">
   <li><a href="#top-words-in-references-of-men" id="toc-top-words-in-references-of-men" class="nav-link" data-scroll-target="#top-words-in-references-of-men">Top words in references of men</a></li>
   <li><a href="#top-words-in-references-of-women" id="toc-top-words-in-references-of-women" class="nav-link" data-scroll-target="#top-words-in-references-of-women">Top words in references of women</a></li>
   </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -209,6 +211,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p>While Wikipedia provides access to an API that simplifies researcher access to structured data, many online services do not offer such a easy-to-use information source. In those cases, you may need to <em>scrape</em> that information from the open web. In 2026 as we write this, the open web is declining in availability as news publishers and content delivery networks restrict access to evade AI bots. Yet scraping still remains a valuable tool for research.</p>
+<p>In this example, we use Wikipedia as an example for how to scrape information from the open web. In practice, we encourage you to use the Wikipedia APIs when querying information from Wikipedia.</p>
+<p>To continue our theme of studying how women and men politicians are depicted on Wikipedia, we now turn to the question of how Wikipedia relies on sources from other publishers in questions of representation. Based on <a href="https://waccglobal.org/our-work/global-media-monitoring-project-gmmp/">the Global Media Monitoring Project</a>, and research by an international group of scholars, Kenyan news publishers more often use words focused on leadership when describing male political leaders compared to female leaders and coverage toward women tends to be more negative.</p>
+<p>In this analysis, we use the references section to investigate the headlines of articles cited in Wikipedia articles. This will require us to scrape those articles and then apply a number of NLP techniques to analyze the contents of those headlines.</p>
+<section id="setting-up-software-packages" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-software-packages">Setting up software packages</h2>
 <p>We start by installing and loading the necessary libraries. We will use the <code>rvest</code>, which is part of the <code>tidyverse</code> set of libraries which you have likely already installed as part of the other SICSS instructions. If not, you can install just <code>rvest</code> using <code>install.packages("rvest")</code> before loading it. For other steps you’ll also need the <code>wordcloud</code> and <code>tidytext</code> libraries, which you can install as below:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("wordcloud")</span></span>
@@ -265,6 +273,7 @@ The following object is masked from 'package:readr':
 [2] &lt;body class="skin--responsive skin-vector skin-vector-search-vue mediawik ...</code></pre>
 </div>
 </div>
+</section>
 <section id="getting-the-references" class="level2">
 <h2 class="anchored" data-anchor-id="getting-the-references">Getting the references</h2>
 <p>With the <code>html</code> now parsed, we can try to traverse the nodes of the file, to find the references of the page. If we look at an example of a Wiki page, we can see that those will be in a <code>&lt;section&gt;</code> tag, that will be labelled by <code>aria-labelledby="References"</code>. Let’s try to see if we can get that section of the page:</p>
@@ -647,9 +656,15 @@ The following object is masked from 'package:readr':
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<ul>
+<li>Pair, E., Vicas, N., Weber, A. M., Meausoone, V., Zou, J., Njuguna, A., &amp; Darmstadt, G. L. (2021). <a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.712646/full">Quantification of gender bias and sentiment toward political leaders over 20 years of Kenyan news using natural language processing</a>. Frontiers in Psychology, 12, 712646.</li>
+</ul>
+
+
 </section>
 
 </main> <!-- /main -->
