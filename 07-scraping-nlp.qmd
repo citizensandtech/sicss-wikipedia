@@ -7,10 +7,9 @@ While Wikipedia provides access to an API that simplifies researcher access to s
 
 In this example, we use Wikipedia as an example for how to scrape information from the open web. In practice, we encourage you to use the Wikipedia APIs when querying information from Wikipedia.
 
-To continue our theme of studying how women and men politicians are depicted on Wikipedia, we now turn to the question of how Wikipedia relies on sources from other publishers in questions of representation. Based on [the Global Media Monitoring Project](https://waccglobal.org/our-work/global-media-monitoring-project-gmmp/), and research by an international group of scholars, Kenyan news publishers more often use words focused on leadership when describing male political leaders compared to female leaders and coverage toward women tends to be more negative. 
+To continue our theme of studying how women and men politicians are depicted on Wikipedia, we now turn to the question of how Wikipedia relies on sources from other publishers in questions of representation. Based on [the Global Media Monitoring Project](https://waccglobal.org/our-work/global-media-monitoring-project-gmmp/), and research by an international group of scholars, Kenyan news publishers more often use words focused on leadership when describing male political leaders compared to female leaders and coverage toward women tends to be more negative.
 
 In this analysis, we use the references section to investigate the headlines of articles cited in Wikipedia articles. This will require us to scrape those articles and then apply a number of NLP techniques to analyze the contents of those headlines.
-
 
 ## Setting up software packages
 
@@ -280,5 +279,120 @@ tokens_clean_female %>%
 
 ```
 
+## Some simple sentiment analysis
+
+We can now do something similar, to explore the sentiment of the Wiki articles depending on whether those articles are about male or female politicians.
+
+Sentiment analysis works by assigning 'emotional scores' to different words, which can then be used to score larger texts. This can be used to figure out if texts have a positive, neutral or negative 'opinion' on a text. Or even to get some insights into the emotionality of a text.
+
+To achieve this, sentiment analysis is based on lexica, which have words scored in different ways, which can then be used for the scoring. The `textdata` package offers different lexica.
+
+For now, we will fetch the full articles, instead of trying to parse only parts of it. Let's make a function for that:
+
+```{r}
+
+getBody <- function(politician){
+  url <- paste("https://en.wikipedia.org/wiki", 
+               str_replace_all(politician,
+                               " ", "_"),
+               sep="/")
+  print(url)
+  html <- read_html(url)
+  
+  # get ref section
+  paragraphs <- html %>% html_elements("p") %>% html_text() # get all paragraphs
+
+  # remove citations
+  paragraphs <- paragraphs %>% str_replace_all("\\[[0-9]+]", '')
+  
+  as.data.frame(paragraphs)
+}
+```
+
+Now we can iterate over our male & female politicians as before to get the page content:
+
+```{r}
+
+# get male refs
+male_paragraphs <- data.frame(paragraphs=character())
+
+for (mp in male_politicians) {
+  male_paragraphs <- bind_rows(male_paragraphs, getBody(mp))
+}
+
+# get female refs
+
+female_paragraphs <- data.frame(paragraphs=character())
+
+for (fp in female_politicians) {
+  female_paragraphs <- bind_rows(female_paragraphs, getBody(fp))
+}
+```
+
+For each of those two data frames, we can now convert them into tidy text, as before, including the removal of stop words:
+
+```{r}
+
+# write function to get the 
+clean_words <- function(df) {
+  df %>% unnest_tokens(paragraphs, paragraphs) %>% anti_join(stop_words, join_by('paragraphs' == 'word'))
+}
+
+male_tidytext <- clean_words(male_paragraphs)
+female_tidytext <- clean_words(female_paragraphs)
+```
+
+Now we can now download a lexicon and get started with the sentiment analysis. Let's use the `bing` data set, which scores each word as positive or negative.
+
+```{r}
+# install.packages('textdata') # if necessary, install the libary on your computer
+bing <- get_sentiments("bing") # load lexicon
+```
+
+For simple demonstration purposes, we will now just create a summary score over the texts of the male and female politician articles:
+
+```{r}
+
+score_sentiment <- function(df) {
+  sentiment_scores <- df %>%
+    inner_join(bing, join_by("paragraphs" =="word")) %>%
+    count(sentiment, sort=TRUE)
+  sentiment_scores
+}
+
+print('male article sentiment:')
+print(score_sentiment(male_tidytext))
+
+print('female article sentiment:')
+print(score_sentiment(female_tidytext))
+```
+
+We can see, the sentiments for the selected articles don't really differ too much between female politicians and male politicians, with both words appearing roughly in equal parts
+
+This just provides a very quick view into what can be done with these types of analyses
+
+### Potential problems and Ideas/suggestions for sentiment analysis
+
+There are a few considerations to
+
+#### Alternative Lexica
+
+We have used a very simple scoring-lexicon, but there are alternatives, e.g. the `afinn` lexicon, which scores words on a range from -5 (for negative sentiment) to +5 (for positive sentiments), and `nrc` not only gives positive and negative as categories but also anger, anticipation, disgust, fear, joy, sadness, surprise, and trust.
+
+Which lexicon you should, or can, use depends on your research question.
+
+#### Negations
+
+Currently, we do not take negations into account, e.g. it a sentence included not `not happy`, we would still count the `happy` as a positive sentiment. To get around this, you can use bigram analyses, where instead of tokenizing to the word-level, you look at the succession of two words, e.g using `unnest_tokens(bigram, text, token = "ngrams", n = 2)`
+
+#### Granularity
+
+Currently, we only did a very basic summary statistic of a single number for all articles. You could break it down by looking at per-article statistics. Or even on a per-paragraph level, to see how sentiment differs between sections in an article.
+
+### More information
+
+There are [good beginner guides](https://rguides.dev/tutorials/r-text-mining/sentiment-analysis-r/) for getting more into [basic sentiment analysis](https://www.tidytextmining.com/sentiment.html) too.
+
 # References
-* Pair, E., Vicas, N., Weber, A. M., Meausoone, V., Zou, J., Njuguna, A., & Darmstadt, G. L. (2021). [Quantification of gender bias and sentiment toward political leaders over 20 years of Kenyan news using natural language processing](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.712646/full). Frontiers in Psychology, 12, 712646.
+
+- Pair, E., Vicas, N., Weber, A. M., Meausoone, V., Zou, J., Njuguna, A., & Darmstadt, G. L. (2021). [Quantification of gender bias and sentiment toward political leaders over 20 years of Kenyan news using natural language processing](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.712646/full). Frontiers in Psychology, 12, 712646.
